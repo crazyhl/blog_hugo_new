@@ -1,44 +1,46 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Let&#39;s Build a Forum With Laravel and TDD - 标签 - Miracle Hao</title>
+    <title>Let&#39;s Build a Forum With Laravel and TDD - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/lets-build-a-forum-with-laravel-and-tdd/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Thu, 07 Jun 2018 15:22:00 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Wed, 14 Jan 2026 21:50:30 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/lets-build-a-forum-with-laravel-and-tdd/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Let&#39;s Build A Forum with Laravel and TDD 笔记 004</title>
       <link>http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-004/</link>
-      <pubDate>Thu, 07 Jun 2018 15:22:00 +0000</pubDate>
+      <pubDate>Thu, 07 Jun 2018 15:22:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-004/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;http://localhost:1313/images9f89f6e8680d9c06d0661d13db.png&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;这一周纠结了一些其他的问题，所以依然停留在了第五集。不过有一些关于测试的想法，还是要梳理一下的。&lt;/p&gt;&#xA;&lt;p&gt;以前我总是纠结测试，比如说测试一个模型返回的字段是否齐全什么的，后来想想其实我们可以一个一个的assert。&lt;/p&gt;&#xA;&lt;p&gt;然后还有一个问题是，比如我们没有返回某些字段，那么我们在模型里面定义的一些衍生字段是否还有效，这个让我明天测试一下。&lt;/p&gt;&#xA;&lt;p&gt;然后依然继续学习如何做测试，就说到这吧，得去调整一下dns有些慢&lt;/p&gt;</description>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;http://localhost:1313/images9f89f6e8680d9c06d0661d13db.png&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;这一周纠结了一些其他的问题，所以依然停留在了第五集。不过有一些关于测试的想法，还是要梳理一下的。&lt;/p&gt;&#xA;&lt;p&gt;以前我总是纠结测试，比如说测试一个模型返回的字段是否齐全什么的，后来想想其实我们可以一个一个的assert。&lt;/p&gt;</description>
     </item>
     <item>
       <title>Let&#39;s Build A Forum with Laravel and TDD 笔记 003</title>
       <link>http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-003/</link>
-      <pubDate>Sat, 02 Jun 2018 15:09:00 +0000</pubDate>
+      <pubDate>Sat, 02 Jun 2018 15:09:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-003/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://www.cimple.ink/images/2018/05/30/89a4759f89f6e8680d9c06d0661d13db.png&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;今天学习了第三集和第四集，下面依然是个人总结&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;没错，第三集用到了单元测试也就是 &lt;code&gt;unit&lt;/code&gt; 的部分，跟我之前看其他文章了了解的差不多， &lt;code&gt;feature&lt;/code&gt; 主要用来测试面向用户的功能 &lt;code&gt;unit&lt;/code&gt; 是用来测试我们内部功能的，也就是一个个的最小单元，或者其他的合并单元，然后由这些单元组合成为 &lt;code&gt;controller&lt;/code&gt; 里面的代码最终呈现给用户，然后 &lt;code&gt;feature&lt;/code&gt; 再来测试 &lt;code&gt;controller&lt;/code&gt; 里面的代码。&lt;/li&gt;&#xA;&lt;li&gt;关于测试以前都是弄出一个数据然后我们自己调试页面然后观察数据，现在就可以用 &lt;code&gt;unit&lt;/code&gt; 和 &lt;code&gt;feature&lt;/code&gt; 来让机器帮我们判定了。我们期待什么值，就让他来断言一下就ok了，但是个人还是比较担心出问题，比如数据不全神马的，这个还得后期继续考虑一下&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;factory&lt;/code&gt; 中 &lt;code&gt;make&lt;/code&gt; 和 &lt;code&gt;create&lt;/code&gt; 的区别， &lt;code&gt;make&lt;/code&gt; 仅仅是生成了数据，&lt;code&gt;create&lt;/code&gt; 不仅仅是生成了数据，并且将数据保存到数据库中，所以 &lt;code&gt;create&lt;/code&gt; 可以理解为首先 &lt;code&gt;make&lt;/code&gt; 然后 &lt;code&gt;save&lt;/code&gt; 了。&lt;/li&gt;&#xA;&lt;li&gt;在测试文件中 &lt;code&gt;be&lt;/code&gt; 方法的作用，就是把当前我们生成的用户，设置为登录状态&lt;/li&gt;&#xA;&lt;li&gt;在测试的时候不仅要测试正常的情况，也要测试异常的情况&lt;/li&gt;&#xA;&lt;li&gt;功能职责要分清楚，比如发布 &lt;code&gt;Reply&lt;/code&gt; 的时候就应该把方法写入到 &lt;code&gt;ReplyController&lt;/code&gt; 中&lt;/li&gt;&#xA;&lt;li&gt;关联关系居然可以添加数据，详情参见这里吧 &lt;a href=&#34;https://laravel.com/docs/5.6/eloquent-relationships#the-create-method&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://laravel.com/docs/5.6/eloquent-relationships#the-create-method&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ol&gt;</description>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2018/05/30/89a4759f89f6e8680d9c06d0661d13db.png&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;今天学习了第三集和第四集，下面依然是个人总结&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;没错，第三集用到了单元测试也就是 &lt;code&gt;unit&lt;/code&gt; 的部分，跟我之前看其他文章了了解的差不多， &lt;code&gt;feature&lt;/code&gt; 主要用来测试面向用户的功能 &lt;code&gt;unit&lt;/code&gt; 是用来测试我们内部功能的，也就是一个个的最小单元，或者其他的合并单元，然后由这些单元组合成为 &lt;code&gt;controller&lt;/code&gt; 里面的代码最终呈现给用户，然后 &lt;code&gt;feature&lt;/code&gt; 再来测试 &lt;code&gt;controller&lt;/code&gt; 里面的代码。&lt;/li&gt;&#xA;&lt;li&gt;关于测试以前都是弄出一个数据然后我们自己调试页面然后观察数据，现在就可以用 &lt;code&gt;unit&lt;/code&gt; 和 &lt;code&gt;feature&lt;/code&gt; 来让机器帮我们判定了。我们期待什么值，就让他来断言一下就ok了，但是个人还是比较担心出问题，比如数据不全神马的，这个还得后期继续考虑一下&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;factory&lt;/code&gt; 中 &lt;code&gt;make&lt;/code&gt; 和 &lt;code&gt;create&lt;/code&gt; 的区别， &lt;code&gt;make&lt;/code&gt; 仅仅是生成了数据，&lt;code&gt;create&lt;/code&gt; 不仅仅是生成了数据，并且将数据保存到数据库中，所以 &lt;code&gt;create&lt;/code&gt; 可以理解为首先 &lt;code&gt;make&lt;/code&gt; 然后 &lt;code&gt;save&lt;/code&gt; 了。&lt;/li&gt;&#xA;&lt;li&gt;在测试文件中 &lt;code&gt;be&lt;/code&gt; 方法的作用，就是把当前我们生成的用户，设置为登录状态&lt;/li&gt;&#xA;&lt;li&gt;在测试的时候不仅要测试正常的情况，也要测试异常的情况&lt;/li&gt;&#xA;&lt;li&gt;功能职责要分清楚，比如发布 &lt;code&gt;Reply&lt;/code&gt; 的时候就应该把方法写入到 &lt;code&gt;ReplyController&lt;/code&gt; 中&lt;/li&gt;&#xA;&lt;li&gt;关联关系居然可以添加数据，详情参见这里吧 &lt;a href=&#34;https://laravel.com/docs/5.6/eloquent-relationships#the-create-method&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://laravel.com/docs/5.6/eloquent-relationships#the-create-method&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ol&gt;</description>
     </item>
     <item>
       <title>Let&#39;s Build A Forum with Laravel and TDD 笔记 002</title>
       <link>http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-002/</link>
-      <pubDate>Thu, 31 May 2018 15:12:00 +0000</pubDate>
+      <pubDate>Thu, 31 May 2018 15:12:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-002/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://www.cimple.ink/images/2018/05/30/89a4759f89f6e8680d9c06d0661d13db.png&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;今天学习了第二节，原以为一节课只有不到10分钟，一天可以学习好几节，但是呢，自己就得去学习不足的知识，结果不到一个10分钟的课程，自己就扩展到了将近40分钟，好了，说说今天的心得&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;在写功能之前，先做好测试用例，这样可以方便我们去实现功能，也可以提供思路&lt;/li&gt;&#xA;&lt;li&gt;在 laravel 的 test 文件夹中有两个字文件夹，分别是 &lt;code&gt;feature&lt;/code&gt; 和 &lt;code&gt;unit&lt;/code&gt; 这两个一个是功能测试一个是单元测试，就在这里我去查了一下东西，但是理解的也不是很好下面说说自己的理解&#xA;&lt;ul&gt;&#xA;&lt;li&gt;功能测试是面向用户的，也就是说我们需要测试代码中的 &lt;code&gt;controller&lt;/code&gt; 部分，为什么这么说呢，因为只有 &lt;code&gt;controller&lt;/code&gt; 部分才是面向用户的，不论这个功能有多大，这里面一个方法都是对用户的。&lt;/li&gt;&#xA;&lt;li&gt;单元测试就可以理解为其他的部分了，因为 &lt;code&gt;controller&lt;/code&gt; 里面的代码都是由剩余部分的代码组成的，所以这些都是一个个的子单元&lt;/li&gt;&#xA;&lt;li&gt;其他部分的代码也有可能由其他的部分一起组成，所以我个人觉得也应该写单元测试&lt;/li&gt;&#xA;&lt;li&gt;不知道上面说的对不对&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;写代码的时候应该划分好各自的职责&lt;/li&gt;&#xA;&lt;/ol&gt;</description>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2018/05/30/89a4759f89f6e8680d9c06d0661d13db.png&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;今天学习了第二节，原以为一节课只有不到10分钟，一天可以学习好几节，但是呢，自己就得去学习不足的知识，结果不到一个10分钟的课程，自己就扩展到了将近40分钟，好了，说说今天的心得&lt;/p&gt;</description>
     </item>
     <item>
       <title>Let&#39;s Build A Forum with Laravel and TDD 笔记 001</title>
       <link>http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-001/</link>
-      <pubDate>Wed, 30 May 2018 14:50:00 +0000</pubDate>
+      <pubDate>Wed, 30 May 2018 14:50:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-001/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://www.cimple.ink/images/2018/05/30/89a4759f89f6e8680d9c06d0661d13db.png&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;这个教程是 laracasts 上面的一个系列教程，对于我来说有很多比较多的东西没有接触过，所以起码看完第一集来说对我还是很有帮助的，在其他论坛也是有相关笔记的，我仔细想了一下如果也是想他们那样记录每一步的操作来说意义并不大，毕竟我可以直接看他们的文章。所以这里面还记录一些我个人的感悟&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;初步了解了 factory 的用法，比如在 thinker 虚拟数据，在测试的时候模拟数据，但是更多的东西还得看看文档才可以&lt;/li&gt;&#xA;&lt;li&gt;以后再使用 &lt;code&gt;php artisan&lt;/code&gt; 命令的时候多多看看 &lt;code&gt;--help&lt;/code&gt; 会有很多简便的方式让我们能少执行几个命令 比如 &lt;code&gt;php artisan make:model xxxModel -mr&lt;/code&gt; 这个命令就会帮助我们生成 resource 形式的 controller 以及迁移文件。&lt;/li&gt;&#xA;&lt;li&gt;在 laravel 5.6 中 factory 是分文件的，个人理解可能会比较清晰，不用全部都写在一个文件里面了。方便管理&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;最后，再说一句，弄这个东西，给我的docker完善了不少&lt;/p&gt;</description>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2018/05/30/89a4759f89f6e8680d9c06d0661d13db.png&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;这个教程是 laracasts 上面的一个系列教程，对于我来说有很多比较多的东西没有接触过，所以起码看完第一集来说对我还是很有帮助的，在其他论坛也是有相关笔记的，我仔细想了一下如果也是想他们那样记录每一步的操作来说意义并不大，毕竟我可以直接看他们的文章。所以这里面还记录一些我个人的感悟&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

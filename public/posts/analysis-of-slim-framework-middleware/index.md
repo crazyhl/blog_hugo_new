@@ -105,6 +105,6 @@ addMiddleware 这个方法是注册中间件用的，进入后会检测当前是
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/analysis-of-slim-framework-middleware/  
 

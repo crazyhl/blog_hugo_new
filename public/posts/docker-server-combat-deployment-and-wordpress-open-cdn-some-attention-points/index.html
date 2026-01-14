@@ -1,81 +1,77 @@
 <!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <title>Docker服务器实战部署以及wordpress开启cdn的一些注意点 - Miracle Hao</title><meta name="author" content="">
+    <title>Docker服务器实战部署以及wordpress开启cdn的一些注意点 - 觅睿克</title><meta name="author" content="M1racleHao">
 <meta name="description" content="虽然本地docker已经弄完了好几个月了，在最近也在持续的优化中，包括把能配置的部分转移到 env文件中。 上周把自己的博客系统废弃了，因为当时写这个系统也仅仅是为了 laravel的学习而已，用了将近2年，虽然很稳定，但是也有很多不满意的地方，虽然现在换到了 wordpress也有一些不满意的地方，但是还好插件丰富，周边也很多，可以慢慢改造成自己满意的样子，下面主要就是记录一下这次服务器实战部署的踏坑情况。
-mysql如果使用 8及以上的版本的时候，需要进入 msyql容器内部，修改一下密码方案，否则数据库连不上 注意代码文件夹写入权限问题，目前 docker设置的用户是 www，所有如果不是 www用户的话，可能会导致无法写入文件的 wordpress开启又拍 cdn以后样式无法加载，在又拍后台设置 缓存控制-&amp;gt;参数跟随-&amp;gt;全程跟随后之后就ok了。 目前写代码还是比较习惯 markdown，所以目前日志都会在印象笔记写好，然后在转换，由于代码高亮方便跟 wordpress还有点不一致，所以自己写了个简单的转换器。 现在还有的小问题就是图片上传了，慢慢在弄一个图片上传工具就ok了。
 "><meta name="keywords" content='docker'>
   <meta itemprop="name" content="docker服务器实战部署以及wordpress开启cdn的一些注意点">
-  <meta itemprop="description" content="虽然本地docker已经弄完了好几个月了，在最近也在持续的优化中，包括把能配置的部分转移到 env文件中。 上周把自己的博客系统废弃了，因为当时写这个系统也仅仅是为了 laravel的学习而已，用了将近2年，虽然很稳定，但是也有很多不满意的地方，虽然现在换到了 wordpress也有一些不满意的地方，但是还好插件丰富，周边也很多，可以慢慢改造成自己满意的样子，下面主要就是记录一下这次服务器实战部署的踏坑情况。
-mysql如果使用 8及以上的版本的时候，需要进入 msyql容器内部，修改一下密码方案，否则数据库连不上 注意代码文件夹写入权限问题，目前 docker设置的用户是 www，所有如果不是 www用户的话，可能会导致无法写入文件的 wordpress开启又拍 cdn以后样式无法加载，在又拍后台设置 缓存控制-&amp;gt;参数跟随-&amp;gt;全程跟随后之后就ok了。 目前写代码还是比较习惯 markdown，所以目前日志都会在印象笔记写好，然后在转换，由于代码高亮方便跟 wordpress还有点不一致，所以自己写了个简单的转换器。 现在还有的小问题就是图片上传了，慢慢在弄一个图片上传工具就ok了。">
+  <meta itemprop="description" content="虽然本地docker已经弄完了好几个月了，在最近也在持续的优化中，包括把能配置的部分转移到 env文件中。 上周把自己的博客系统废弃了，因为当时写这个系统也仅仅是为了 laravel的学习而已，用了将近2年，虽然很稳定，但是也有很多不满意的地方，虽然现在换到了 wordpress也有一些不满意的地方，但是还好插件丰富，周边也很多，可以慢慢改造成自己满意的样子，下面主要就是记录一下这次服务器实战部署的踏坑情况。">
   <meta itemprop="datePublished" content="2019-03-23T17:53:44+00:00">
-  <meta itemprop="dateModified" content="2019-03-23T17:53:44+00:00">
-  <meta itemprop="wordCount" content="19">
+  <meta itemprop="dateModified" content="2021-09-04T12:13:51+08:00">
+  <meta itemprop="wordCount" content="495">
   <meta itemprop="keywords" content="Docker"><meta property="og:url" content="http://localhost:1313/posts/docker-server-combat-deployment-and-wordpress-open-cdn-some-attention-points/">
-  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:site_name" content="觅睿克">
   <meta property="og:title" content="docker服务器实战部署以及wordpress开启cdn的一些注意点">
-  <meta property="og:description" content="虽然本地docker已经弄完了好几个月了，在最近也在持续的优化中，包括把能配置的部分转移到 env文件中。 上周把自己的博客系统废弃了，因为当时写这个系统也仅仅是为了 laravel的学习而已，用了将近2年，虽然很稳定，但是也有很多不满意的地方，虽然现在换到了 wordpress也有一些不满意的地方，但是还好插件丰富，周边也很多，可以慢慢改造成自己满意的样子，下面主要就是记录一下这次服务器实战部署的踏坑情况。
-mysql如果使用 8及以上的版本的时候，需要进入 msyql容器内部，修改一下密码方案，否则数据库连不上 注意代码文件夹写入权限问题，目前 docker设置的用户是 www，所有如果不是 www用户的话，可能会导致无法写入文件的 wordpress开启又拍 cdn以后样式无法加载，在又拍后台设置 缓存控制-&amp;gt;参数跟随-&amp;gt;全程跟随后之后就ok了。 目前写代码还是比较习惯 markdown，所以目前日志都会在印象笔记写好，然后在转换，由于代码高亮方便跟 wordpress还有点不一致，所以自己写了个简单的转换器。 现在还有的小问题就是图片上传了，慢慢在弄一个图片上传工具就ok了。">
-  <meta property="og:locale" content="zh_cn">
+  <meta property="og:description" content="虽然本地docker已经弄完了好几个月了，在最近也在持续的优化中，包括把能配置的部分转移到 env文件中。 上周把自己的博客系统废弃了，因为当时写这个系统也仅仅是为了 laravel的学习而已，用了将近2年，虽然很稳定，但是也有很多不满意的地方，虽然现在换到了 wordpress也有一些不满意的地方，但是还好插件丰富，周边也很多，可以慢慢改造成自己满意的样子，下面主要就是记录一下这次服务器实战部署的踏坑情况。">
+  <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2019-03-23T17:53:44+00:00">
-    <meta property="article:modified_time" content="2019-03-23T17:53:44+00:00">
+    <meta property="article:modified_time" content="2021-09-04T12:13:51+08:00">
     <meta property="article:tag" content="Docker">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="docker服务器实战部署以及wordpress开启cdn的一些注意点">
-  <meta name="twitter:description" content="虽然本地docker已经弄完了好几个月了，在最近也在持续的优化中，包括把能配置的部分转移到 env文件中。 上周把自己的博客系统废弃了，因为当时写这个系统也仅仅是为了 laravel的学习而已，用了将近2年，虽然很稳定，但是也有很多不满意的地方，虽然现在换到了 wordpress也有一些不满意的地方，但是还好插件丰富，周边也很多，可以慢慢改造成自己满意的样子，下面主要就是记录一下这次服务器实战部署的踏坑情况。
-mysql如果使用 8及以上的版本的时候，需要进入 msyql容器内部，修改一下密码方案，否则数据库连不上 注意代码文件夹写入权限问题，目前 docker设置的用户是 www，所有如果不是 www用户的话，可能会导致无法写入文件的 wordpress开启又拍 cdn以后样式无法加载，在又拍后台设置 缓存控制-&amp;gt;参数跟随-&amp;gt;全程跟随后之后就ok了。 目前写代码还是比较习惯 markdown，所以目前日志都会在印象笔记写好，然后在转换，由于代码高亮方便跟 wordpress还有点不一致，所以自己写了个简单的转换器。 现在还有的小问题就是图片上传了，慢慢在弄一个图片上传工具就ok了。">
-<meta name="application-name" content="FixIt">
-<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+  <meta name="twitter:description" content="虽然本地docker已经弄完了好几个月了，在最近也在持续的优化中，包括把能配置的部分转移到 env文件中。 上周把自己的博客系统废弃了，因为当时写这个系统也仅仅是为了 laravel的学习而已，用了将近2年，虽然很稳定，但是也有很多不满意的地方，虽然现在换到了 wordpress也有一些不满意的地方，但是还好插件丰富，周边也很多，可以慢慢改造成自己满意的样子，下面主要就是记录一下这次服务器实战部署的踏坑情况。">
+<meta name="application-name" content="觅睿克">
+<meta name="apple-mobile-web-app-title" content="觅睿克"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/docker-server-combat-deployment-and-wordpress-open-cdn-some-attention-points/" title="docker服务器实战部署以及wordpress开启cdn的一些注意点 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/slim-framework/" title="slim framework 定时任务" /><link rel="next" type="text/html" href="http://localhost:1313/posts/march-23-2019-gongwangfu-houhai/" title="2019年03月23日 恭王府后海" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/docker-server-combat-deployment-and-wordpress-open-cdn-some-attention-points/index.md" title="docker服务器实战部署以及wordpress开启cdn的一些注意点 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/docker-server-combat-deployment-and-wordpress-open-cdn-some-attention-points/" title="docker服务器实战部署以及wordpress开启cdn的一些注意点 - 觅睿克" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/slim-framework/" title="slim framework 定时任务" /><link rel="next" type="text/html" href="http://localhost:1313/posts/march-23-2019-gongwangfu-houhai/" title="2019年03月23日 恭王府后海" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/docker-server-combat-deployment-and-wordpress-open-cdn-some-attention-points/index.md" title="docker服务器实战部署以及wordpress开启cdn的一些注意点 - 觅睿克"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
     "@context": "http://schema.org",
     "@type": "BlogPosting",
     "headline": "docker服务器实战部署以及wordpress开启cdn的一些注意点",
-    "inLanguage": "zh-cn",
+    "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/posts\/docker-server-combat-deployment-and-wordpress-open-cdn-some-attention-points\/"
-    },"genre": "posts","keywords": "docker","wordcount":  19 ,
-    "url": "http:\/\/localhost:1313\/posts\/docker-server-combat-deployment-and-wordpress-open-cdn-some-attention-points\/","datePublished": "2019-03-23T17:53:44+00:00","dateModified": "2019-03-23T17:53:44+00:00","publisher": {
+    },"genre": "posts","keywords": "docker","wordcount":  495 ,
+    "url": "http:\/\/localhost:1313\/posts\/docker-server-combat-deployment-and-wordpress-open-cdn-some-attention-points\/","datePublished": "2019-03-23T17:53:44+00:00","dateModified": "2021-09-04T12:13:51+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
-        "name": "作者"
+        "name": "M1racleHao"
       },"description": ""
   }
   </script><script src="/js/head/color-scheme.min.js"></script></head>
   <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper">
     <div class="header-title">
-      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <a href="/" title="觅睿克"><span class="header-title-text">觅睿克</span></a><span class="header-subtitle"></span></div>
     <nav>
       <ul class="menu"><li class="menu-item">
-              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
-              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
-              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
     </nav>
   </div>
 </header><header class="mobile animate__faster" id="header-mobile">
   <div class="header-container">
     <div class="header-wrapper">
       <div class="header-title">
-        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+        <a href="/" title="觅睿克"><span class="header-title-text">觅睿克</span></a><span class="header-subtitle"></span></div>
       <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
       <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
         <span></span><span></span><span></span>
       </div>
     </div>
     <nav>
-      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item menu-system"></li>
       </ul>
     </nav>
   </div>
@@ -84,8 +80,8 @@ mysql如果使用 8及以上的版本的时候，需要进入 msyql容器内部�
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Docker服务器实战部署以及wordpress开启cdn的一些注意点</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
-      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%8A%80%E5%B7%A7/" class="post-category" title="分类 - 技巧"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 技巧</a></span></div><div class="post-meta-line"><span title="发布于 2019-03-23 17:53:44"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2019-03-23">2019-03-23</time></span>&nbsp;<span title="19 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/crazyhl" title="作者" target="_blank" rel="external nofollow noopener noreferrer author" class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+    M1racleHao</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%8A%80%E5%B7%A7/" class="post-category" title="分类 - 技巧"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 技巧</a></span></div><div class="post-meta-line"><span title="发布于 2019-03-23 17:53:44"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2019-03-23">2019-03-23</time></span>&nbsp;<span title="更新于 2021-09-04 12:13:51"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2021-09-04">2021-09-04</time></span>&nbsp;<span title="495 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 500 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
     </div><div class="content" id="content"><p>虽然本地docker已经弄完了好几个月了，在最近也在持续的优化中，包括把能配置的部分转移到 <code>env</code>文件中。
 上周把自己的博客系统废弃了，因为当时写这个系统也仅仅是为了 <code>laravel</code>的学习而已，用了将近2年，虽然很稳定，但是也有很多不满意的地方，虽然现在换到了 <code>wordpress</code>也有一些不满意的地方，但是还好插件丰富，周边也很多，可以慢慢改造成自己满意的样子，下面主要就是记录一下这次服务器实战部署的踏坑情况。</p>
 <ul>
@@ -98,7 +94,7 @@ mysql如果使用 8及以上的版本的时候，需要进入 msyql容器内部�
 </div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2019-03-23 17:53:44">更新于 2019-03-23&nbsp;</span>
+      <div class="post-info-mod"><span title="更新于 2021-09-04 12:13:51">更新于 2021-09-04&nbsp;</span>
       </div><div class="post-info-license">
             <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
           </div></div><div class="post-info-line">
@@ -123,7 +119,7 @@ mysql如果使用 8及以上的版本的时候，需要进入 msyql容器内部�
     <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
-              <a href="/"></a></span></div></div>
+              <a href="https://github.com/crazyhl" target="_blank" rel="external nofollow noopener noreferrer">M1racleHao</a></span></div></div>
   </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
     <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>

@@ -103,6 +103,6 @@ k8s 单集群部署相关的到这就结束了。毕竟在这个单机运行程�
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/ubuntu-k8s-stateful-mysql/  
 

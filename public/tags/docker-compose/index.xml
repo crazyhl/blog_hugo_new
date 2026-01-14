@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Docker-Compose - 标签 - Miracle Hao</title>
+    <title>Docker-Compose - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/docker-compose/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Sat, 13 Apr 2019 16:35:19 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Sat, 04 Sep 2021 12:13:51 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/docker-compose/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>docker-comopse 使用小总结</title>
       <link>http://localhost:1313/posts/dockercomopse-uses-a-small-summary/</link>
-      <pubDate>Sat, 13 Apr 2019 16:35:19 +0000</pubDate>
+      <pubDate>Sat, 13 Apr 2019 16:35:19 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/dockercomopse-uses-a-small-summary/</guid>
       <category domain="http://localhost:1313/categories/%E6%8A%80%E5%B7%A7/">技巧</category>
-      <description>&lt;p&gt;说句题外话，东西还得多用才能越来越明白啊。话说，今天休息在家用windows 的台式机弄docker，用来配置在台式机的开发环境，这次在台式机的配置目的就是在本地主机尽量不装任何开发用的相关软件，比如nginx、mysql、php这种。对了，这还得说句题外话，如果啥都不装，我连博客都写不了，不过为了台式机的干净，我依然选择在打开笔记本写博客。&lt;/p&gt;&#xA;&lt;p&gt;本地学习到的知识，主要原因是我我加了个node镜像用来编译vue写的代码。原本我都是使用&lt;code&gt;dokcer-compose up --build&lt;/code&gt; 这种方式编译加启动容器的，以前看 &lt;code&gt;laradock&lt;/code&gt; 文档的时候里面就没用过&lt;code&gt;docker-compose --build&lt;/code&gt; 编译加启动的方案，而是用 &lt;code&gt;docker-compose build xxx&lt;/code&gt; 然后在&lt;code&gt;docker-compose up xxx&lt;/code&gt; 这种方式，我以前始终不解，今天终于明白了，如果用 &lt;code&gt;dokcer-compose up --build&lt;/code&gt; 这种方式操作，会由于 &lt;code&gt;node&lt;/code&gt; 镜像不会持久化启动而反复报错，如果先 &lt;code&gt;build&lt;/code&gt; 在根据需要 &lt;code&gt;up&lt;/code&gt; 就不会造成这种问题了。当然如果配置了&lt;code&gt;restart: &amp;quot;no&amp;quot;&lt;/code&gt;之后也就启动一次然后退出，也并没有什么关系，不过为我还是选择遵从&lt;code&gt;laradock&lt;/code&gt;的方案，毕竟那么多人的经验还是值得参考的。&lt;/p&gt;&#xA;&lt;p&gt;当我们需要使用&lt;code&gt;node&lt;/code&gt; 的时候，就是用 &lt;code&gt;docker-compose run --rm node bash&lt;/code&gt; 这种就可以进入到容器内部了，加&lt;code&gt;--rm&lt;/code&gt;的原因是启动以后我们还得手工销毁，加了以后当我们退出的时候就自动销毁&lt;code&gt;container&lt;/code&gt;了，而且我们在&lt;code&gt;compose&lt;/code&gt; 的文件中配置了 &lt;code&gt;node&lt;/code&gt; 的 &lt;code&gt;restart: &amp;quot;no&amp;quot;&lt;/code&gt; 这样当我们停止以后也不会自己在跑起来。&lt;/p&gt;&#xA;&lt;p&gt;最后还得吐槽一下windows 的 crlf会让docker启动失败啊，很难受，把sublime配置为lf之后才解决。&lt;/p&gt;</description>
+      <description>&lt;p&gt;说句题外话，东西还得多用才能越来越明白啊。话说，今天休息在家用windows 的台式机弄docker，用来配置在台式机的开发环境，这次在台式机的配置目的就是在本地主机尽量不装任何开发用的相关软件，比如nginx、mysql、php这种。对了，这还得说句题外话，如果啥都不装，我连博客都写不了，不过为了台式机的干净，我依然选择在打开笔记本写博客。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

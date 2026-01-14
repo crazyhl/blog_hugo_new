@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>权限 - 标签 - Miracle Hao</title>
+    <title>权限 - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/%E6%9D%83%E9%99%90/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Sat, 07 Jan 2017 13:56:00 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Sat, 04 Sep 2021 12:13:51 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/%E6%9D%83%E9%99%90/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>从权限控制到合理分解系统的思考</title>
       <link>http://localhost:1313/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/</link>
-      <pubDate>Sat, 07 Jan 2017 13:56:00 +0000</pubDate>
+      <pubDate>Sat, 07 Jan 2017 13:56:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
-      <description>&lt;p&gt;本来这篇文章想写一个不利用轮子在laravel上实现rbac的东西的，其实也就是自己造一个rbac的轮子。&lt;/p&gt;&#xA;&lt;p&gt;但是，最后自己还是懒了，不想写代码，所以呢，聊聊从权限管理让我思考的分解系统的一些东西吧，其实也不算是分解系统，仅仅就是想说说松耦合的事情。&lt;/p&gt;&#xA;&lt;p&gt;曾经我以为我自己了解的不够多，但是通过这半年换工作以后我才意识到我了解的很多了，只不过有很多东西仅仅就是了解的程度而已，没有实践经验并没有什么卵用，而且了解的越多，不知道的就越多，就包括这次的权限控制这些东西，以前我总是认为这是个很高大上的东西，后面的学习我知道了rbac就是角色权限这些东西，现在我又认识到，这些东西应该是可以热插拔的可替换的，不应该对现有系统造成任何影响，也就是说我撤除掉权限相关的东西系统应该可以正常运行下去，还有，其实造一个轮子很难啊，因为可能需要我们为不同的框架去做相应的适配。&lt;/p&gt;&#xA;&lt;p&gt;学习，永远都停不下来，我也不知道我上面说的东西对不对。就这样吧，看东西去了&lt;/p&gt;&#xA;&lt;p&gt;对了，最重要的东西没说，说说思路。&lt;/p&gt;&#xA;&lt;p&gt;首先我们应该有一个baseModel，所有的model对象都继承自baseModel，baseModel里面有hasRole，hasPermission，can ,cannot等这些方法用于权限的验证，然后blade那边我们也应该有相应的控制，至于角色权限相关，就按照自己的思路定义就可以了。&lt;/p&gt;&#xA;&lt;p&gt;一些都应该是可替换的&lt;/p&gt;</description>
+      <description>&lt;p&gt;本来这篇文章想写一个不利用轮子在laravel上实现rbac的东西的，其实也就是自己造一个rbac的轮子。&lt;/p&gt;&#xA;&lt;p&gt;但是，最后自己还是懒了，不想写代码，所以呢，聊聊从权限管理让我思考的分解系统的一些东西吧，其实也不算是分解系统，仅仅就是想说说松耦合的事情。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

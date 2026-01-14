@@ -8,7 +8,7 @@ updated: 2016-08-30 11:33:00
 toc: false
 ---
 
-![图片alt](https://www.cimple.ink/images/2019/03/06/0664506a46a7649adc31545165d08f41.jpg)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/0664506a46a7649adc31545165d08f41.jpg)
 
 配图与文章无关，仅仅是最近十分喜欢这个图片而已
 

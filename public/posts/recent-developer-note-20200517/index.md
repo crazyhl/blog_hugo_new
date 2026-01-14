@@ -24,6 +24,6 @@ Photo by [Jamie Brown](https://unsplash.com/@lightphonics?utm_source=unsplash&ut
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/recent-developer-note-20200517/  
 

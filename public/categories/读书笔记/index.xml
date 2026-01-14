@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>读书笔记 - 分类 - Miracle Hao</title>
+    <title>读书笔记 - 分类 - 觅睿克</title>
     <link>http://localhost:1313/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Tue, 15 Oct 2019 15:31:28 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Sat, 04 Sep 2021 12:13:51 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>关于读书的一些思考</title>
       <link>http://localhost:1313/posts/some-thoughts-on-reading/</link>
-      <pubDate>Tue, 15 Oct 2019 15:31:28 +0000</pubDate>
+      <pubDate>Tue, 15 Oct 2019 15:31:28 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/some-thoughts-on-reading/</guid>
       <category domain="http://localhost:1313/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</category>
-      <description>&lt;p&gt;看着自己的博客接近两个月没得更新，自己很是难受，一直是想输出点东西，但是又不知道写啥，还想把公众号弄起来，博客都这样了，就不用提公众号了。&lt;/p&gt;&#xA;&lt;p&gt;最近读了一些书，写点读书笔记吧，总结了几天发现没什么实际意义，发现自己的精炼能力几乎为 0。就像分不清重点一样，也包括读书应该读到的程度，什么章节应该精度，什么章节带过就好，这些都是需要提升的能力。&lt;/p&gt;&#xA;&lt;p&gt;这些是不是就是我可以输出的东西呢，让我想一想。&lt;/p&gt;</description>
+      <description>&lt;p&gt;看着自己的博客接近两个月没得更新，自己很是难受，一直是想输出点东西，但是又不知道写啥，还想把公众号弄起来，博客都这样了，就不用提公众号了。&lt;/p&gt;&#xA;&lt;p&gt;最近读了一些书，写点读书笔记吧，总结了几天发现没什么实际意义，发现自己的精炼能力几乎为 0。就像分不清重点一样，也包括读书应该读到的程度，什么章节应该精度，什么章节带过就好，这些都是需要提升的能力。&lt;/p&gt;</description>
     </item>
     <item>
       <title>《码农翻身》读后感</title>
       <link>http://localhost:1313/posts/after-reading-the-code-farmers/</link>
-      <pubDate>Mon, 01 Apr 2019 12:03:36 +0000</pubDate>
+      <pubDate>Mon, 01 Apr 2019 12:03:36 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/after-reading-the-code-farmers/</guid>
       <category domain="http://localhost:1313/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</category>
-      <description>&lt;p&gt;这本书很薄，但是第一次读完会感觉很厚，可能是因为我基础知识不够的原因，就得大量的去查，否则一共六章，每晚半小时就看完了。&lt;/p&gt;&#xA;&lt;p&gt;很早就关注了公众号，书是过年期间准备消耗时间看的，结果拖到了现在才看完。&lt;/p&gt;&#xA;&lt;p&gt;正如豆瓣评论所说，这边书讲的很浅，但是呢，确认宽泛，帮你画好了地界，就等着你自己去看更多的书填补缺少的部分了。&lt;/p&gt;&#xA;&lt;p&gt;这本书看完了之后准备看看几本日本出的书，发现日本出的书是真的好，让人看得很舒服。&lt;/p&gt;</description>
+      <description>&lt;p&gt;这本书很薄，但是第一次读完会感觉很厚，可能是因为我基础知识不够的原因，就得大量的去查，否则一共六章，每晚半小时就看完了。&lt;/p&gt;&#xA;&lt;p&gt;很早就关注了公众号，书是过年期间准备消耗时间看的，结果拖到了现在才看完。&lt;/p&gt;</description>
     </item>
     <item>
       <title>读书笔记：简单思考</title>
       <link>http://localhost:1313/posts/reading-notes-simple-thinking/</link>
-      <pubDate>Sun, 23 Jul 2017 10:59:00 +0000</pubDate>
+      <pubDate>Sun, 23 Jul 2017 10:59:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/reading-notes-simple-thinking/</guid>
       <category domain="http://localhost:1313/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</category>
-      <description>&lt;p&gt;上周五的时候在一个地方看到了简单思考这本书，于是就利用周末的时间读了一下。发现这本书写的很对，但是有时候现实并不会构造那种场景，当然了如果你是一个 boss 则是可以自己构建那样的场景的。所以我就把现在适合我自己的东西总结一下吧，当然是用大白话总结了。&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;没事还是要多学习的，扯别的没用&lt;/li&gt;&#xA;&lt;li&gt;多跟优秀的人一起玩，或者说多跟他们学习&lt;/li&gt;&#xA;&lt;li&gt;要选择一个有挑战并且自己喜欢的工作，不能荒废时间&lt;/li&gt;&#xA;&lt;li&gt;不要总想着起义，努力做好自己或者说努力提升之后才有起义的机会不是&lt;/li&gt;&#xA;&lt;li&gt;一个团队或者说一个公司尽量远离那些不干正事的人。否则你就跑偏了&lt;/li&gt;&#xA;&lt;li&gt;多看多思考多做&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;好吧就想到了这么多，慢慢来吧，恢复看书的节奏&lt;/p&gt;</description>
+      <description>&lt;p&gt;上周五的时候在一个地方看到了简单思考这本书，于是就利用周末的时间读了一下。发现这本书写的很对，但是有时候现实并不会构造那种场景，当然了如果你是一个 boss 则是可以自己构建那样的场景的。所以我就把现在适合我自己的东西总结一下吧，当然是用大白话总结了。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Homestead - 标签 - Miracle Hao</title>
+    <title>Homestead - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/homestead/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Sat, 27 Jan 2018 18:48:00 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Sat, 04 Sep 2021 12:13:51 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/homestead/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>升级 homestead 小记录</title>
       <link>http://localhost:1313/posts/%E5%8D%87%E7%BA%A7-homestead-%E5%B0%8F%E8%AE%B0%E5%BD%95/</link>
-      <pubDate>Sat, 27 Jan 2018 18:48:00 +0000</pubDate>
+      <pubDate>Sat, 27 Jan 2018 18:48:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/%E5%8D%87%E7%BA%A7-homestead-%E5%B0%8F%E8%AE%B0%E5%BD%95/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://laravel.com/assets/img/components/logo-homestead.svg&#39; alt=&#34;https://laravel.com/assets/img/components/logo-homestead.svg&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;又是一个周末，自觉状态调整的不错了，于是就像弄点东西玩，然后，就想到了升级相关版本，vagrant 和 virtual box 都升级完了，然后我又升级了 homestea 的脚本，并且切换到了最新的 release tag 上，最后执行 vagrant box update，会提示 &lt;code&gt;==&amp;gt; homestead-7: Box &#39;laravel/homestead&#39; not installed, can&#39;t check for updates.&lt;/code&gt; 这个么个东西，在网上简单的看了一下也没发现什么&lt;/p&gt;&#xA;&lt;p&gt;最后灵机一动，切换会原来的 tag，然后再升级 box 再换到最新的 tag 就 ok 了。&lt;/p&gt;&#xA;&lt;p&gt;哈哈，太机智了，记录一下顺序吧，以后就不会出问题了，先升级 box，然后升级 homestead 脚本，最后切换到脚本最新的 release 的 tag 就大功告成了，继续写代码&lt;/p&gt;&#xA;&lt;p&gt;对了，升级以后还得重新配置一下 composer 中国镜像&lt;/p&gt;</description>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://laravel.com/assets/img/components/logo-homestead.svg&#39; alt=&#34;https://laravel.com/assets/img/components/logo-homestead.svg&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;又是一个周末，自觉状态调整的不错了，于是就像弄点东西玩，然后，就想到了升级相关版本，vagrant 和 virtual box 都升级完了，然后我又升级了 homestea 的脚本，并且切换到了最新的 release tag 上，最后执行 vagrant box update，会提示 &lt;code&gt;==&amp;gt; homestead-7: Box &#39;laravel/homestead&#39; not installed, can&#39;t check for updates.&lt;/code&gt; 这个么个东西，在网上简单的看了一下也没发现什么&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

@@ -11,7 +11,7 @@ toc: false
 
 github 地址: [https://github.com/crazyhl/php_jump_auto](https://github.com/crazyhl/php_jump_auto)
 
-![分数](https://www.cimple.ink/images/2018/01/06/uvh7x1ap9v7z83w206rtcd8hlc9jijd3.jpg)
+![分数](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2018/01/06/uvh7x1ap9v7z83w206rtcd8hlc9jijd3.jpg)
 
 下面说一下实现的思路，先用 adb 截图，然后再这个截图上寻找小人的位置，以及需要跳跃到的方块的位置，最后再利用 adb 模拟长按跳过去就行了。
 
@@ -19,7 +19,7 @@ github 地址: [https://github.com/crazyhl/php_jump_auto](https://github.com/cra
 分开说下，如何找小人。利用先确认一个小人身上的色块的色值，然后在再整图上找这个色值区间值的一个范围。
 
 如下图
-![图片alt](https://www.cimple.ink/images/2018/01/06/dbjtrgkcj7u6wpveu9292aiog8ao80ey.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2018/01/06/dbjtrgkcj7u6wpveu9292aiog8ao80ey.png)
 
 再调整色块值之后，我觉得这个范围比较合适，所以我就定了下来，然后再计算这个范围的中心点，当做小人的中心点。
 

@@ -1,0 +1,13 @@
+baseURL = 'https://cimple.ink/'
+languageCode = 'zh-cn'
+title = 'Miracle Hao'
+theme = 'FixIt'
+
+[markup]
+_merge = "shallow"
+
+[outputs]
+_merge = "shallow"
+
+[taxonomies]
+_merge = "shallow"

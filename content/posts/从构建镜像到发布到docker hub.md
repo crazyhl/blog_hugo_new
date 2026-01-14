@@ -27,7 +27,7 @@ ENTRYPOINT  ["ffmpeg"]
 直接一个 `apk` 的安装就都搞定了。`ENTRYPOINT` 是入口根命令, `CMD` 可以理解为一个默认的命令参数，如果我们输入自己的以后，就会覆盖这个。具体可以看 [https://yeasy.gitbooks.io/docker_practice/content/image/dockerfile/](https://yeasy.gitbooks.io/docker_practice/content/image/dockerfile/) 和 [https://www.jianshu.com/p/f0a0f6a43907](https://www.jianshu.com/p/f0a0f6a43907)。前面的文章是完整说明，后面的文章更容易懂。
 
 最后，给大家看下目录结构，我这边的计划是根据系统版本和 `ffmpeg` 的版本来区分
-![https://www.cimple.ink/images/2020/02/15/QQ20200215-120951%402x.png](https://www.cimple.ink/images/2020/02/15/QQ20200215-120951%402x.png)
+![https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/02/15/QQ20200215-120951%402x.png](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/02/15/QQ20200215-120951%402x.png)
 
 ## 构建镜像
 

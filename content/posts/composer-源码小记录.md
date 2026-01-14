@@ -14,6 +14,6 @@ toc: false
 
 代码如下图
 
-![图片alt](https://www.cimple.ink/images/2018/03/20/cdd27610e187292157e7744e6ac0d034.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2018/03/20/cdd27610e187292157e7744e6ac0d034.png)
 
 估计等在过一段那个 namespace 的长度也可以不用了，但是看改动记录，还是存在，静待观察

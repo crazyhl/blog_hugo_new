@@ -51,6 +51,6 @@ public function edit(Request $request): Response
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/developing-with-laravel-a-brief-note-on-user-related-features-and-sending-emails/  
 

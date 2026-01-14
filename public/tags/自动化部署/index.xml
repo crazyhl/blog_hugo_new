@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>自动化部署 - 标签 - Miracle Hao</title>
+    <title>自动化部署 - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Thu, 28 Mar 2019 11:16:03 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Sat, 04 Sep 2021 12:13:51 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>实战自动化部署hexo记录</title>
       <link>http://localhost:1313/posts/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95/</link>
-      <pubDate>Thu, 28 Mar 2019 11:16:03 +0000</pubDate>
+      <pubDate>Thu, 28 Mar 2019 11:16:03 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95/</guid>
       <category domain="http://localhost:1313/categories/%E6%8A%80%E5%B7%A7/">技巧</category>
-      <description>&lt;p&gt;难受，两周前把自己的服务器换成自己弄得docker以后，就一直在折腾自己的博客，先是放弃了自己写的博客，换到typecho，然后在换到wordpress，最后换到了 hexo。&lt;/p&gt;&#xA;&lt;p&gt;先说说放弃自己博客的原因，因为自己是在不想在模板上花费太多的心思，其实后台我很满意的，毕竟自己写的，功能足够自己用就好了。&lt;/p&gt;&#xA;&lt;p&gt;再说说 typecho和 wordpress，前者轻量，但是可能因为我用的稳定版的的原因，有一些小问题，还懒得去弄，就放弃了。wordpress呢，太重了，太繁杂了。也弃了，其实我就是想要一个写字的地方，简简单单就好，不需要太多的东西，纠结了一圈之后，就用hexo把。&lt;/p&gt;&#xA;&lt;p&gt;我是这么做的，配置原文什么的我本地有一份，github上我存了一份，这样多台电脑也可以同步了。然后网站部署在了阿里云上面。&lt;/p&gt;&#xA;&lt;p&gt;下面就说说操作步骤。&lt;/p&gt;&#xA;&lt;p&gt;hexo 的安装配置以及主题相关我就不多说了，官方文档好得很，我就所说我的部署部分&lt;/p&gt;&#xA;&lt;p&gt;首先，先看服务器部分，我们首先配置 ssh 的自动登录，这样以后自己管理以及 &lt;code&gt;hexo d&lt;/code&gt; 的时候也会很省事&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;1. 在本机生成SSH密钥&#xA;ssh-keygen -t rsa&#xA;2. 然后将本地公钥拷贝到服务器&#xA;ssh-copy-id root@IP&#xA;注意 非 22端口 同样增加 -p参数&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;简单两步，以后就不用再输入密码了。&lt;/p&gt;&#xA;&lt;p&gt;然后在服务器上找一个地方存放我们的git相关的东西，其实就是配置一个钩子&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;git init --bare 你的文件夹名称&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;bare&lt;/code&gt; 的作用是创建一个裸仓库，我个人觉得这个目录就是我们以往的&lt;code&gt;.git&lt;/code&gt;文件夹。&lt;/p&gt;&#xA;&lt;p&gt;然后我们进入这个目录，进入 &lt;code&gt;hooks&lt;/code&gt; 文件夹,执行&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;vi post-receive&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个就是编辑我们的钩子，这个钩子就是收到推送的时候我们的操作。然后我们编辑这个文件&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;#! /bin/sh&#xA;git --work-tree=/home/docker-nmp/www/blog_hexo(真正存放我们网页的地方) --git-dir=/root/blog.git(这个就是我们上一步创建的git bare 文件夹) checkout -f&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;第一行就是表示是个&lt;code&gt;sh&lt;/code&gt;文件，这么说可能不准确，我们姑且这么认为。 然后 &lt;code&gt;work-tree&lt;/code&gt; 表示需要 &lt;code&gt;clone&lt;/code&gt; 的地方， &lt;code&gt;git-dir&lt;/code&gt; 是指我们的git配置的位置， &lt;code&gt;checkout&lt;/code&gt; 就不说了, &lt;code&gt;-f&lt;/code&gt; 就是强制的意思，忽略本地修改。&lt;/p&gt;&#xA;&lt;p&gt;然后执行&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt; chmod &amp;#43;x post-receive&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;把这个文件标记为可执行的，这里不要忘记&lt;/p&gt;&#xA;&lt;p&gt;这些都弄好后，一定要保证&lt;code&gt;work-tree&lt;/code&gt;是存在的，毕竟 git 又不帮我们创建文件夹。如果不存在，也会提示我们成功。这个很坑.&lt;/p&gt;&#xA;&lt;p&gt;服务器这边就搞定了&lt;/p&gt;</description>
+      <description>&lt;p&gt;难受，两周前把自己的服务器换成自己弄得docker以后，就一直在折腾自己的博客，先是放弃了自己写的博客，换到typecho，然后在换到wordpress，最后换到了 hexo。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

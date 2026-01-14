@@ -191,6 +191,6 @@ PS：上面两个我完全不不懂，小说我是看过相关文章，化妆我
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/from-software-development-to-ai-i-finally-think-of-makeup/  
 

@@ -84,6 +84,6 @@ $requestObject = new Typecho_Request();$requestObject->setParams($request);
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/typecho-source-code-analysis-10/  
 

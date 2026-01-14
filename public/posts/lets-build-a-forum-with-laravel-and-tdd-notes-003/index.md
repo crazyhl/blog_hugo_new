@@ -1,6 +1,6 @@
 # Let's Build a Forum With Laravel and TDD 笔记 003
 
-![图片alt](https://www.cimple.ink/images/2018/05/30/89a4759f89f6e8680d9c06d0661d13db.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2018/05/30/89a4759f89f6e8680d9c06d0661d13db.png)
 
 今天学习了第三集和第四集，下面依然是个人总结
 
@@ -15,6 +15,6 @@
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-003/  
 

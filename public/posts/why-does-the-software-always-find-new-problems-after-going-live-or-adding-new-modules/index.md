@@ -56,6 +56,6 @@
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/why-does-the-software-always-find-new-problems-after-going-live-or-adding-new-modules/  
 

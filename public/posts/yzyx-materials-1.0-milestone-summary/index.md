@@ -31,6 +31,6 @@
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/yzyx-materials-1.0-milestone-summary/  
 

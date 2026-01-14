@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Php7 - 标签 - Miracle Hao</title>
+    <title>Php7 - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/php7/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Wed, 28 Feb 2018 00:51:00 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Wed, 14 Jan 2026 21:50:30 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/php7/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>php curl 模拟上传遇到的小问题记录</title>
       <link>http://localhost:1313/posts/php-curl-simulates-a-small-problem-record-encountered-by-uploading/</link>
-      <pubDate>Wed, 28 Feb 2018 00:51:00 +0000</pubDate>
+      <pubDate>Wed, 28 Feb 2018 00:51:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/php-curl-simulates-a-small-problem-record-encountered-by-uploading/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
-      <description>&lt;p&gt;今天在公司写东西的时候遇到了一个奇怪的小问题，就是在用 curl 模拟文件上传的时候发现上传失败，最初始采用的代码如下&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;[&#xA;    &amp;#39;file&amp;#39; =&amp;gt; &amp;#39;@&amp;#39; . $fileName&#xA;]&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;通过查看文档发现了下面的一段说明&lt;/p&gt;&#xA;&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://www.cimple.ink/images/2018/02/28/fzbbyyirm4vqvp3ywkl7h2m15mpr4w5b.png&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;从这可以得知，&lt;code&gt;CURLOPT_SAFE_UPLOAD &lt;/code&gt; 这个参数可以控制，由于 &lt;code&gt;php 5.5&lt;/code&gt; 以前的默认值是 &lt;code&gt;false&lt;/code&gt; ，所以我可能以前并没有关注，但是在 &lt;code&gt;php 5.6&lt;/code&gt; 的时候这个默认值是 &lt;code&gt;true&lt;/code&gt; 了，所以当我们想要采用上面那种方式就需要设置 &lt;code&gt;CURLOPT_SAFE_UPLOAD &lt;/code&gt; 这个值为 &lt;code&gt;false&lt;/code&gt; 才可以使用。&lt;/p&gt;&#xA;&lt;p&gt;但是需要注意的是在 &lt;code&gt;php 7&lt;/code&gt; 以后这个属性被删除了，所以当我们想要上传的时候，必须采用 &lt;code&gt;CURLFile&lt;/code&gt; 才可以上传。具体可以参见 &lt;a href=&#34;http://php.net/manual/zh/class.curlfile.php&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;http://php.net/manual/zh/class.curlfile.php&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;所以现在就不要考虑 &lt;code&gt;CURLOPT_SAFE_UPLOAD &lt;/code&gt; 这个参数了，以后在模拟上传的时候直接采用 &lt;code&gt;CURLFile&lt;/code&gt; 就可以了&lt;/p&gt;</description>
+      <description>&lt;p&gt;今天在公司写东西的时候遇到了一个奇怪的小问题，就是在用 curl 模拟文件上传的时候发现上传失败，最初始采用的代码如下&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;[&#xA;    &amp;#39;file&amp;#39; =&amp;gt; &amp;#39;@&amp;#39; . $fileName&#xA;]&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;通过查看文档发现了下面的一段说明&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

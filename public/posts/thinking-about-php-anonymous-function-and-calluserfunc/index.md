@@ -1,7 +1,7 @@
 # PHP匿名函数以及call_user_func的思考
 
 
-![图片alt](https://www.cimple.ink/images/2019/03/06/0664506a46a7649adc31545165d08f41.jpg)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/0664506a46a7649adc31545165d08f41.jpg)
 
 
 配图依然与主题无关，仅仅是我个人喜欢而已，今天要说的是关于 `call_user_func` 的一些理解。
@@ -57,6 +57,6 @@
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/thinking-about-php-anonymous-function-and-calluserfunc/  
 

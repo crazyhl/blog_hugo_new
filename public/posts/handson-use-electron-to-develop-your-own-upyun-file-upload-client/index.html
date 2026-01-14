@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <title>手把手使用 Electron 自己动手开发 Upyun 文件上传客户端 - Miracle Hao</title><meta name="author" content="">
+    <title>手把手使用 Electron 自己动手开发 Upyun 文件上传客户端 - 觅睿克</title><meta name="author" content="M1racleHao">
 <meta name="description" content="更换了域名，需要弄很多东西，累死了，没错这篇文章唯一的图片就是通过这篇文章编译的工具上传成功的
 项目地址 https://github.com/crazyhl/upyun-electron
 初始准备 参照文章 https://electronjs.org/docs/tutorial/first-app#installing-electron
@@ -15,20 +15,20 @@
 初始准备 参照文章 https://electronjs.org/docs/tutorial/first-app#installing-electron
 创建项目文件夹 upyun-electron 初始化项目 npm init">
   <meta itemprop="datePublished" content="2019-07-05T16:23:25+00:00">
-  <meta itemprop="dateModified" content="2019-07-05T16:23:25+00:00">
-  <meta itemprop="wordCount" content="1273">
+  <meta itemprop="dateModified" content="2026-01-14T21:50:30+08:00">
+  <meta itemprop="wordCount" content="3028">
   <meta itemprop="keywords" content="Electron,客户端,又拍"><meta property="og:url" content="http://localhost:1313/posts/handson-use-electron-to-develop-your-own-upyun-file-upload-client/">
-  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:site_name" content="觅睿克">
   <meta property="og:title" content="手把手使用 electron 自己动手开发 upyun 文件上传客户端">
   <meta property="og:description" content="更换了域名，需要弄很多东西，累死了，没错这篇文章唯一的图片就是通过这篇文章编译的工具上传成功的
 项目地址 https://github.com/crazyhl/upyun-electron
 初始准备 参照文章 https://electronjs.org/docs/tutorial/first-app#installing-electron
 创建项目文件夹 upyun-electron 初始化项目 npm init">
-  <meta property="og:locale" content="zh_cn">
+  <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2019-07-05T16:23:25+00:00">
-    <meta property="article:modified_time" content="2019-07-05T16:23:25+00:00">
+    <meta property="article:modified_time" content="2026-01-14T21:50:30+08:00">
     <meta property="article:tag" content="Electron">
     <meta property="article:tag" content="客户端">
     <meta property="article:tag" content="又拍">
@@ -39,52 +39,52 @@
 项目地址 https://github.com/crazyhl/upyun-electron
 初始准备 参照文章 https://electronjs.org/docs/tutorial/first-app#installing-electron
 创建项目文件夹 upyun-electron 初始化项目 npm init">
-<meta name="application-name" content="FixIt">
-<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="application-name" content="觅睿克">
+<meta name="apple-mobile-web-app-title" content="觅睿克"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/handson-use-electron-to-develop-your-own-upyun-file-upload-client/" title="手把手使用 electron 自己动手开发 upyun 文件上传客户端 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/implement-a-simple-validator-yourself/" title="自己实现一个简易的 validator" /><link rel="next" type="text/html" href="http://localhost:1313/posts/slim3-uses-eloquent-custom-paging/" title="slim3使用Eloquent自定义分页" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/handson-use-electron-to-develop-your-own-upyun-file-upload-client/index.md" title="手把手使用 electron 自己动手开发 upyun 文件上传客户端 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/handson-use-electron-to-develop-your-own-upyun-file-upload-client/" title="手把手使用 electron 自己动手开发 upyun 文件上传客户端 - 觅睿克" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/implement-a-simple-validator-yourself/" title="自己实现一个简易的 validator" /><link rel="next" type="text/html" href="http://localhost:1313/posts/slim3-uses-eloquent-custom-paging/" title="slim3使用Eloquent自定义分页" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/handson-use-electron-to-develop-your-own-upyun-file-upload-client/index.md" title="手把手使用 electron 自己动手开发 upyun 文件上传客户端 - 觅睿克"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
     "@context": "http://schema.org",
     "@type": "BlogPosting",
     "headline": "手把手使用 electron 自己动手开发 upyun 文件上传客户端",
-    "inLanguage": "zh-cn",
+    "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/posts\/handson-use-electron-to-develop-your-own-upyun-file-upload-client\/"
-    },"genre": "posts","keywords": "electron, 客户端, 又拍","wordcount":  1273 ,
-    "url": "http:\/\/localhost:1313\/posts\/handson-use-electron-to-develop-your-own-upyun-file-upload-client\/","datePublished": "2019-07-05T16:23:25+00:00","dateModified": "2019-07-05T16:23:25+00:00","publisher": {
+    },"genre": "posts","keywords": "electron, 客户端, 又拍","wordcount":  3028 ,
+    "url": "http:\/\/localhost:1313\/posts\/handson-use-electron-to-develop-your-own-upyun-file-upload-client\/","datePublished": "2019-07-05T16:23:25+00:00","dateModified": "2026-01-14T21:50:30+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
-        "name": "作者"
+        "name": "M1racleHao"
       },"description": ""
   }
   </script><script src="/js/head/color-scheme.min.js"></script></head>
   <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper">
     <div class="header-title">
-      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <a href="/" title="觅睿克"><span class="header-title-text">觅睿克</span></a><span class="header-subtitle"></span></div>
     <nav>
       <ul class="menu"><li class="menu-item">
-              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
-              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
-              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
     </nav>
   </div>
 </header><header class="mobile animate__faster" id="header-mobile">
   <div class="header-container">
     <div class="header-wrapper">
       <div class="header-title">
-        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+        <a href="/" title="觅睿克"><span class="header-title-text">觅睿克</span></a><span class="header-subtitle"></span></div>
       <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
       <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
         <span></span><span></span><span></span>
       </div>
     </div>
     <nav>
-      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item menu-system"></li>
       </ul>
     </nav>
   </div>
@@ -93,8 +93,8 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>手把手使用 Electron 自己动手开发 Upyun 文件上传客户端</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
-      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%89%8D%E7%AB%AF/" class="post-category" title="分类 - 前端"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 前端</a></span></div><div class="post-meta-line"><span title="发布于 2019-07-05 16:23:25"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2019-07-05">2019-07-05</time></span>&nbsp;<span title="1273 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/crazyhl" title="作者" target="_blank" rel="external nofollow noopener noreferrer author" class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+    M1racleHao</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%89%8D%E7%AB%AF/" class="post-category" title="分类 - 前端"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 前端</a></span></div><div class="post-meta-line"><span title="发布于 2019-07-05 16:23:25"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2019-07-05">2019-07-05</time></span>&nbsp;<span title="更新于 2026-01-14 21:50:30"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2026-01-14">2026-01-14</time></span>&nbsp;<span title="3028 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 3100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
     </div><div class="content" id="content"><p>更换了域名，需要弄很多东西，累死了，没错这篇文章唯一的图片就是通过这篇文章编译的工具上传成功的</p>
 <h4 class="heading-element" id="项目地址"><span>项目地址</span>
   <a href="#%e9%a1%b9%e7%9b%ae%e5%9c%b0%e5%9d%80" class="heading-mark">
@@ -113,7 +113,7 @@
 <ol>
 <li>创建项目文件夹 <code>upyun-electron</code></li>
 <li>初始化项目 <code>npm init</code>
-<img loading="lazy" src='https://www.cimple.ink/images/2019/07/05/a3f0ef04-6203-5e66-af79-2d8e0d4fd18e.jpeg' alt="https://www.cimple.ink/images/2019/07/05/a3f0ef04-6203-5e66-af79-2d8e0d4fd18e.jpeg"></li>
+<img loading="lazy" src='https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/07/05/a3f0ef04-6203-5e66-af79-2d8e0d4fd18e.jpeg' alt="https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/07/05/a3f0ef04-6203-5e66-af79-2d8e0d4fd18e.jpeg"></li>
 </ol>
 <ol start="3">
 <li>
@@ -902,7 +902,7 @@
 <p>当然目前这个版本还有很多问题，比如多文件会卡顿，大文件主进程卡死等等问题，不过第一版就可以完美的这样结束了，后续的改动包括界面美化，上传线程池，配置文件等等不少东西。</p></div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2019-07-05 16:23:25">更新于 2019-07-05&nbsp;</span>
+      <div class="post-info-mod"><span title="更新于 2026-01-14 21:50:30">更新于 2026-01-14&nbsp;</span>
       </div><div class="post-info-license">
             <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
           </div></div><div class="post-info-line">
@@ -927,7 +927,7 @@
     <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
-              <a href="/"></a></span></div></div>
+              <a href="https://github.com/crazyhl" target="_blank" rel="external nofollow noopener noreferrer">M1racleHao</a></span></div></div>
   </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
     <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>

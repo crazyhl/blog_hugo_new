@@ -75,6 +75,6 @@ deploy:
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95/  
 

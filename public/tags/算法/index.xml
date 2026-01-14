@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>算法 - 标签 - Miracle Hao</title>
+    <title>算法 - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/%E7%AE%97%E6%B3%95/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Tue, 14 Nov 2017 05:28:00 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Sat, 04 Sep 2021 12:13:51 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>广度优先搜索 PHP 实现</title>
       <link>http://localhost:1313/posts/breadthfirst-search-php-implementation/</link>
-      <pubDate>Tue, 14 Nov 2017 05:28:00 +0000</pubDate>
+      <pubDate>Tue, 14 Nov 2017 05:28:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/breadthfirst-search-php-implementation/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
       <description>&lt;p&gt;直接上代码了，注释都在代码里面了。&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;&amp;lt;?php&#xA;/**&#xA; * 广度搜索&#xA; *&#xA; * 你的朋友关系，以及朋友的朋友的关系，查看你的朋友或者朋友的朋友是不是包含 m 结尾的名字&#xA; */&#xA;&#xA;&#xA;// 需要检索的数组&#xA;$graph = [];&#xA;$graph[&amp;#39;you&amp;#39;] = [&amp;#39;alice&amp;#39;, &amp;#39;bob&amp;#39;, &amp;#39;claire&amp;#39;];&#xA;$graph[&amp;#39;bob&amp;#39;] = [&amp;#39;anuj&amp;#39;, &amp;#39;peggy&amp;#39;];&#xA;$graph[&amp;#39;alice&amp;#39;] = [&amp;#39;peggy&amp;#39;];&#xA;$graph[&amp;#39;claire&amp;#39;] = [&amp;#39;thom&amp;#39;, &amp;#39;jonny&amp;#39;];&#xA;$graph[&amp;#39;anuj&amp;#39;] = [];&#xA;$graph[&amp;#39;peggy&amp;#39;] = [];&#xA;$graph[&amp;#39;thom&amp;#39;] = [];&#xA;$graph[&amp;#39;jonny&amp;#39;] = [];&#xA;&#xA;// 搜索过的数组&#xA;$searchedItem = [];&#xA;// 待检索的数组&#xA;$waitSearchArray = [];&#xA;// 将第一层的关系加入到等待搜索的数组&#xA;$waitSearchArray = array_merge($waitSearchArray, $graph[&amp;#39;you&amp;#39;]);&#xA;&#xA;// 将结果元素赋值为 false&#xA;$resultName = false;&#xA;&#xA;//需要查找的字符&#xA;$findChar = &amp;#39;z&amp;#39;;&#xA;&#xA;// 如果等待搜索的数组不为空就循环查找&#xA;while ($waitSearchArray) {&#xA;    // 从队列头部弹出一个元素&#xA;    $name = array_shift($waitSearchArray);&#xA;    // 如果待检查的元素在已经搜索过的数组中，就跳过，这个是用来防止循环检查的&#xA;    if (in_array($name, $searchedItem)) {&#xA;        continue;&#xA;    }&#xA;    // 获取最后一个字符&#xA;    $lastChar = substr($name, strlen($name) - 1, 1);&#xA;    // 如果最后一个字符是 m，就说明找到了，把结果赋值，然后跳出循环&#xA;    if ($lastChar == $findChar) {&#xA;        $resultName = $name;&#xA;        break;&#xA;    }&#xA;&#xA;    // 到这里了说明没有找到，那么把这个人的名字，放入到已经搜索过的数组中&#xA;    $searchedItem[] = $name;&#xA;    // 然后再把这个名字的朋友关系加入到待搜索的数组中&#xA;    $waitSearchArray = array_merge($waitSearchArray, $graph[$name]);&#xA;}&#xA;&#xA;&#xA;var_dump($resultName);&lt;/code&gt;&lt;/pre&gt;</description>

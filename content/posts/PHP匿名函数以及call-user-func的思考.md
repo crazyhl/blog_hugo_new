@@ -8,7 +8,7 @@ updated: 2016-09-04 21:27:00
 toc: false
 ---
 
-![图片alt](https://www.cimple.ink/images/2019/03/06/0664506a46a7649adc31545165d08f41.jpg)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/0664506a46a7649adc31545165d08f41.jpg)
 
 
 配图依然与主题无关，仅仅是我个人喜欢而已，今天要说的是关于 `call_user_func` 的一些理解。

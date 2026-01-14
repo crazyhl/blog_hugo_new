@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>服务提供者 - 标签 - Miracle Hao</title>
+    <title>服务提供者 - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Tue, 30 Aug 2016 11:33:00 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Wed, 14 Jan 2026 21:50:30 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>关于 laravel 服务提供者的思考</title>
       <link>http://localhost:1313/posts/thinking-about-laravel-service-providers/</link>
-      <pubDate>Tue, 30 Aug 2016 11:33:00 +0000</pubDate>
+      <pubDate>Tue, 30 Aug 2016 11:33:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/thinking-about-laravel-service-providers/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://www.cimple.ink/images/2019/03/06/0664506a46a7649adc31545165d08f41.jpg&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;配图与文章无关，仅仅是最近十分喜欢这个图片而已&lt;/p&gt;&#xA;&lt;p&gt;这个博客写完之后，一直在看 laravel 的文档，其实每次都是纠结在服务提供者上面，其实以前在弄 java 的时候就对什么 IOC\DI 什么的理解的不够深刻。我觉得现在我终于可以说说我对于这一块的理解了。&lt;/p&gt;&#xA;&lt;p&gt;哦对了，还想说一些东西，就是单独去理解一个问题那是不好的，而是要综合现有的东西去结合理解。比如说服务提供者的这个问题吧，我就就在在了。含义我理解了，但是在 laravel 框架里面结合的上面，昨天回去看了看源码，并且刚才又看了文档，觉得自己明白一些了。&lt;/p&gt;&#xA;&lt;p&gt;其实 IOC\DI 这个东西，原本就是个独立的东西，至于在框架中如何实现则是另一个问题了（这里所说的实现是指以来的配置项，长久以来我就在这方面纠结）。&lt;/p&gt;&#xA;&lt;p&gt;IOC\DI 就是什么依赖注入啊，控制反转啊什么。简单点说就是解耦，可替换，让我们的程序更加的灵活。&lt;/p&gt;&#xA;&lt;p&gt;我说纠结的就是替换的部分，就是如何去配置那些以来以及加载。这个从代码以及文档理解了一些，更多的东西。留在下一篇来弄&lt;/p&gt;</description>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/0664506a46a7649adc31545165d08f41.jpg&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;配图与文章无关，仅仅是最近十分喜欢这个图片而已&lt;/p&gt;&#xA;&lt;p&gt;这个博客写完之后，一直在看 laravel 的文档，其实每次都是纠结在服务提供者上面，其实以前在弄 java 的时候就对什么 IOC\DI 什么的理解的不够深刻。我觉得现在我终于可以说说我对于这一块的理解了。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

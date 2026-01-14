@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Golang - 分类 - Miracle Hao</title>
+    <title>Golang - 分类 - 觅睿克</title>
     <link>http://localhost:1313/categories/golang/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Fri, 08 Oct 2021 09:28:28 +0800</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Tue, 19 Oct 2021 09:32:11 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/categories/golang/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用tdd构建golang Web 应用（5）最终篇</title>
       <link>http://localhost:1313/posts/build-golang-web-application-with-tdd-5/</link>
-      <pubDate>Fri, 08 Oct 2021 09:28:28 +0800</pubDate>
+      <pubDate>Fri, 08 Oct 2021 09:28:28 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/build-golang-web-application-with-tdd-5/</guid>
       <category domain="http://localhost:1313/categories/golang/">Golang</category>
       <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前置说明&#34;&gt;&lt;span&gt;前置说明&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e7%bd%ae%e8%af%b4%e6%98%8e&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;本文以及接下来的文章都是来自 &lt;a href=&#34;https://quii.gitbook.io/learn-go-with-tests/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://quii.gitbook.io/learn-go-with-tests/&lt;/a&gt; 这个系列文章的。&lt;/p&gt;</description>
@@ -19,7 +21,7 @@
     <item>
       <title>使用tdd构建golang Web 应用（4）</title>
       <link>http://localhost:1313/posts/build-golang-web-application-with-tdd-4/</link>
-      <pubDate>Mon, 04 Oct 2021 15:06:23 +0800</pubDate>
+      <pubDate>Mon, 04 Oct 2021 15:06:23 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/build-golang-web-application-with-tdd-4/</guid>
       <category domain="http://localhost:1313/categories/golang/">Golang</category>
       <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前置说明&#34;&gt;&lt;span&gt;前置说明&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e7%bd%ae%e8%af%b4%e6%98%8e&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;本文以及接下来的文章都是来自 &lt;a href=&#34;https://quii.gitbook.io/learn-go-with-tests/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://quii.gitbook.io/learn-go-with-tests/&lt;/a&gt; 这个系列文章的。&lt;/p&gt;</description>
@@ -27,7 +29,7 @@
     <item>
       <title>使用tdd构建golang Web 应用（3）</title>
       <link>http://localhost:1313/posts/build-golang-web-application-with-tdd-3/</link>
-      <pubDate>Sun, 03 Oct 2021 09:59:35 +0800</pubDate>
+      <pubDate>Sun, 03 Oct 2021 09:59:35 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/build-golang-web-application-with-tdd-3/</guid>
       <category domain="http://localhost:1313/categories/golang/">Golang</category>
       <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前置说明&#34;&gt;&lt;span&gt;前置说明&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e7%bd%ae%e8%af%b4%e6%98%8e&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;本文以及接下来的文章都是来自 &lt;a href=&#34;https://quii.gitbook.io/learn-go-with-tests/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://quii.gitbook.io/learn-go-with-tests/&lt;/a&gt; 这个系列文章的。&lt;/p&gt;</description>
@@ -35,7 +37,7 @@
     <item>
       <title>使用tdd构建golang Web 应用（2）</title>
       <link>http://localhost:1313/posts/build-golang-web-application-with-tdd-2/</link>
-      <pubDate>Sat, 02 Oct 2021 08:27:24 +0800</pubDate>
+      <pubDate>Sat, 02 Oct 2021 08:27:24 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/build-golang-web-application-with-tdd-2/</guid>
       <category domain="http://localhost:1313/categories/golang/">Golang</category>
       <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前置说明&#34;&gt;&lt;span&gt;前置说明&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e7%bd%ae%e8%af%b4%e6%98%8e&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;本文以及接下来的文章都是来自 &lt;a href=&#34;https://quii.gitbook.io/learn-go-with-tests/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://quii.gitbook.io/learn-go-with-tests/&lt;/a&gt; 这个系列文章的。&lt;/p&gt;</description>
@@ -43,7 +45,7 @@
     <item>
       <title>使用tdd构建golang Web 应用（1）</title>
       <link>http://localhost:1313/posts/build-golang-web-application-with-tdd/</link>
-      <pubDate>Fri, 01 Oct 2021 10:30:50 +0800</pubDate>
+      <pubDate>Fri, 01 Oct 2021 10:30:50 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/build-golang-web-application-with-tdd/</guid>
       <category domain="http://localhost:1313/categories/golang/">Golang</category>
       <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前置说明&#34;&gt;&lt;span&gt;前置说明&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e7%bd%ae%e8%af%b4%e6%98%8e&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;本文以及接下来的文章都是来自 &lt;a href=&#34;https://quii.gitbook.io/learn-go-with-tests/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://quii.gitbook.io/learn-go-with-tests/&lt;/a&gt; 这个系列文章的。&lt;/p&gt;</description>
@@ -51,7 +53,7 @@
     <item>
       <title>golang 代码生成</title>
       <link>http://localhost:1313/posts/golang-code-generate/</link>
-      <pubDate>Sat, 04 Sep 2021 12:21:59 +0800</pubDate>
+      <pubDate>Sat, 04 Sep 2021 12:21:59 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/golang-code-generate/</guid>
       <category domain="http://localhost:1313/categories/golang/">Golang</category>
       <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;为什么要写这个&#34;&gt;&lt;span&gt;为什么要写这个&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%86%99%e8%bf%99%e4%b8%aa&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;主要还是为了加深自己的理解。第一次接触代码生成的东西，这玩意原来也可以分为各种流派的。比如，用 &lt;code&gt;template&lt;/code&gt; 来生成整个代码文件。比如用 &lt;code&gt;stringer&lt;/code&gt; 来生成一些辅助方法啥的。注意这个 &lt;code&gt;stringer&lt;/code&gt; 不是 &lt;a href=&#34;https://pkg.go.dev/fmt#Stringer&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://pkg.go.dev/fmt#Stringer&lt;/a&gt;, 而是 &lt;a href=&#34;https://pkg.go.dev/golang.org/x/tools/cmd/stringer&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://pkg.go.dev/golang.org/x/tools/cmd/stringer&lt;/a&gt;。不得不说，咱们国内的文章啊，你得弄清楚啊，第一个 &lt;code&gt;stringer&lt;/code&gt; 是个接口啊，你让接口来生成代码么。&lt;/p&gt;</description>
@@ -59,7 +61,7 @@
     <item>
       <title>设计模式系列-监听模式</title>
       <link>http://localhost:1313/posts/design-pattern-oberver-pattern/</link>
-      <pubDate>Thu, 03 Sep 2020 20:50:46 +0800</pubDate>
+      <pubDate>Thu, 03 Sep 2020 20:50:46 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/design-pattern-oberver-pattern/</guid>
       <category domain="http://localhost:1313/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</category>
       <category domain="http://localhost:1313/categories/golang/">Golang</category>
@@ -68,7 +70,7 @@
     <item>
       <title>跳表 Golang 实现</title>
       <link>http://localhost:1313/posts/skiplist-golang-implementation/</link>
-      <pubDate>Tue, 25 Aug 2020 21:56:48 +0800</pubDate>
+      <pubDate>Tue, 25 Aug 2020 21:56:48 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/skiplist-golang-implementation/</guid>
       <category domain="http://localhost:1313/categories/golang/">Golang</category>
       <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前言&#34;&gt;&lt;span&gt;前言&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e8%a8%80&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;第一次接触跳表就是在 16 年的时候，那时候看《Redis 设计与实现》了解到了跳表，当时还参考了其他的代码用 php 实现了一份。&lt;/p&gt;</description>

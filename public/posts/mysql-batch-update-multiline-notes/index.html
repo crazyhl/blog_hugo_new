@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <title>Mysql 批量更新多行笔记 - Miracle Hao</title><meta name="author" content="">
+    <title>Mysql 批量更新多行笔记 - 觅睿克</title><meta name="author" content="M1racleHao">
 <meta name="description" content="今天在公司写代码的时候使用到了 mysql 的批量更新，但是呢，自己之前对其了解的果然不够多啊。所以，回家以后赶紧查查，做好笔记，让自己有更深的记忆。以及更多的了解。
 首先我们构造好了一个测试表，如下图
 "><meta name="keywords" content='mysql update, 批量更新'>
@@ -12,18 +12,18 @@
   <meta itemprop="description" content="今天在公司写代码的时候使用到了 mysql 的批量更新，但是呢，自己之前对其了解的果然不够多啊。所以，回家以后赶紧查查，做好笔记，让自己有更深的记忆。以及更多的了解。
 首先我们构造好了一个测试表，如下图">
   <meta itemprop="datePublished" content="2016-09-11T21:16:00+00:00">
-  <meta itemprop="dateModified" content="2016-09-11T21:16:00+00:00">
-  <meta itemprop="wordCount" content="202">
+  <meta itemprop="dateModified" content="2026-01-14T21:50:30+08:00">
+  <meta itemprop="wordCount" content="1118">
   <meta itemprop="keywords" content="Mysql Update,批量更新"><meta property="og:url" content="http://localhost:1313/posts/mysql-batch-update-multiline-notes/">
-  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:site_name" content="觅睿克">
   <meta property="og:title" content="Mysql 批量更新多行笔记">
   <meta property="og:description" content="今天在公司写代码的时候使用到了 mysql 的批量更新，但是呢，自己之前对其了解的果然不够多啊。所以，回家以后赶紧查查，做好笔记，让自己有更深的记忆。以及更多的了解。
 首先我们构造好了一个测试表，如下图">
-  <meta property="og:locale" content="zh_cn">
+  <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2016-09-11T21:16:00+00:00">
-    <meta property="article:modified_time" content="2016-09-11T21:16:00+00:00">
+    <meta property="article:modified_time" content="2026-01-14T21:50:30+08:00">
     <meta property="article:tag" content="Mysql Update">
     <meta property="article:tag" content="批量更新">
 
@@ -31,52 +31,52 @@
   <meta name="twitter:title" content="Mysql 批量更新多行笔记">
   <meta name="twitter:description" content="今天在公司写代码的时候使用到了 mysql 的批量更新，但是呢，自己之前对其了解的果然不够多啊。所以，回家以后赶紧查查，做好笔记，让自己有更深的记忆。以及更多的了解。
 首先我们构造好了一个测试表，如下图">
-<meta name="application-name" content="FixIt">
-<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="application-name" content="觅睿克">
+<meta name="apple-mobile-web-app-title" content="觅睿克"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/mysql-batch-update-multiline-notes/" title="Mysql 批量更新多行笔记 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/thinking-about-php-anonymous-function-and-calluserfunc/" title="PHP匿名函数以及call_user_func的思考" /><link rel="next" type="text/html" href="http://localhost:1313/posts/php-autoloading/" title="PHP 自动加载" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/mysql-batch-update-multiline-notes/index.md" title="Mysql 批量更新多行笔记 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/mysql-batch-update-multiline-notes/" title="Mysql 批量更新多行笔记 - 觅睿克" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/thinking-about-php-anonymous-function-and-calluserfunc/" title="PHP匿名函数以及call_user_func的思考" /><link rel="next" type="text/html" href="http://localhost:1313/posts/php-autoloading/" title="PHP 自动加载" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/mysql-batch-update-multiline-notes/index.md" title="Mysql 批量更新多行笔记 - 觅睿克"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
     "@context": "http://schema.org",
     "@type": "BlogPosting",
     "headline": "Mysql 批量更新多行笔记",
-    "inLanguage": "zh-cn",
+    "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/posts\/mysql-batch-update-multiline-notes\/"
-    },"genre": "posts","keywords": "mysql update, 批量更新","wordcount":  202 ,
-    "url": "http:\/\/localhost:1313\/posts\/mysql-batch-update-multiline-notes\/","datePublished": "2016-09-11T21:16:00+00:00","dateModified": "2016-09-11T21:16:00+00:00","publisher": {
+    },"genre": "posts","keywords": "mysql update, 批量更新","wordcount":  1118 ,
+    "url": "http:\/\/localhost:1313\/posts\/mysql-batch-update-multiline-notes\/","datePublished": "2016-09-11T21:16:00+00:00","dateModified": "2026-01-14T21:50:30+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
-        "name": "作者"
+        "name": "M1racleHao"
       },"description": ""
   }
   </script><script src="/js/head/color-scheme.min.js"></script></head>
   <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper">
     <div class="header-title">
-      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <a href="/" title="觅睿克"><span class="header-title-text">觅睿克</span></a><span class="header-subtitle"></span></div>
     <nav>
       <ul class="menu"><li class="menu-item">
-              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
-              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
-              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
     </nav>
   </div>
 </header><header class="mobile animate__faster" id="header-mobile">
   <div class="header-container">
     <div class="header-wrapper">
       <div class="header-title">
-        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+        <a href="/" title="觅睿克"><span class="header-title-text">觅睿克</span></a><span class="header-subtitle"></span></div>
       <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
       <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
         <span></span><span></span><span></span>
       </div>
     </div>
     <nav>
-      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item menu-system"></li>
       </ul>
     </nav>
   </div>
@@ -85,11 +85,11 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Mysql 批量更新多行笔记</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
-      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/mysql/" class="post-category" title="分类 - MySql"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> MySql</a></span></div><div class="post-meta-line"><span title="发布于 2016-09-11 21:16:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2016-09-11">2016-09-11</time></span>&nbsp;<span title="202 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/crazyhl" title="作者" target="_blank" rel="external nofollow noopener noreferrer author" class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+    M1racleHao</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/mysql/" class="post-category" title="分类 - MySql"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> MySql</a></span></div><div class="post-meta-line"><span title="发布于 2016-09-11 21:16:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2016-09-11">2016-09-11</time></span>&nbsp;<span title="更新于 2026-01-14 21:50:30"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2026-01-14">2026-01-14</time></span>&nbsp;<span title="1118 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1200 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
     </div><div class="content" id="content"><p>今天在公司写代码的时候使用到了 mysql 的批量更新，但是呢，自己之前对其了解的果然不够多啊。所以，回家以后赶紧查查，做好笔记，让自己有更深的记忆。以及更多的了解。</p>
 <p>首先我们构造好了一个测试表，如下图</p>
-<p><img loading="lazy" src='https://www.cimple.ink/images/2019/03/06/387ea4a3dff34a73889d73dcda85d1d3.png' alt="图片alt"></p>
+<p><img loading="lazy" src='https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/387ea4a3dff34a73889d73dcda85d1d3.png' alt="图片alt"></p>
 <p>简单说一下结构，<code>name</code> 姓名， <code>sex</code> 分组，<code>group</code> 分组。</p>
 <p>我们先执行一下代码，在来解释一下 sql 语句的作用，代码如下</p>
 <div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
@@ -108,7 +108,7 @@
 </span></span><span class="line"><span class="cl"><span class="nx">where</span> <span class="nx">name</span> <span class="nx">in</span> <span class="p">(</span><span class="s1">&#39;小白&#39;</span><span class="p">,</span> <span class="s1">&#39;小红&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>代码执行后，结果如下图</p>
-<p><img loading="lazy" src='https://www.cimple.ink/images/2019/03/06/68725ebf9f2349e9dab85c5dea833b69.png' alt="图片alt"></p>
+<p><img loading="lazy" src='https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/68725ebf9f2349e9dab85c5dea833b69.png' alt="图片alt"></p>
 <p>可以看到，小白和小红的 <code>group</code> 的值都改变了。</p>
 <p>好了，我们来说说上面 <code>sql</code> 语句的作用，我们在这个例子里面需要修改的是 <code>group</code> 的值
 常规的写法是 <code>update test set group=? where name=?</code> 这个是执行一次的时候的写法，那么我们为什么还要上面的写法呢，因为这样单条执行多次的开销比较大，所以应该用上面的写法，来更新多条语句。好吧，前面又说了一堆废话，让我们正式的来说一下上面的语句，首先，我们在给 group 赋值的时候，采用 <code>case when then</code> 的写法，这个写法，类似于我们 php 里面的 <code>switch</code> 语句，其实直接理解为 <code>switch</code> 就好了，所以那条语句用文字来说的话就是我们要给 <code>group</code> 更改值，当 <code>name</code> 为小白的时候把值更改为9，当 <code>name</code> 为小红的时候，把值更新为10。好了，<code>case when then</code> 的部分我们就简述完毕了，但是 <code>when</code> 里面的值是从哪里来的呢，答案就在 <code>where</code> 里面，在 <code>where</code> 里面我们吧 <code>name</code> 的条件供给上面的 <code>when</code> 来使用。大家可以试试把条件减少，看看有什么效果。好吧，我直接公布答案就好了，<code>when</code> 捕获不到的部分不会被更改。代码如下</p>
@@ -128,7 +128,7 @@
 </span></span><span class="line"><span class="cl"><span class="nx">where</span> <span class="nx">name</span> <span class="nx">in</span> <span class="p">(</span><span class="s1">&#39;小白&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>结果如下，</p>
-<p><img loading="lazy" src='https://www.cimple.ink/images/2019/03/06/a06ffd726572058da1cfa046a1a7c365.png' alt="图片alt"></p>
+<p><img loading="lazy" src='https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/a06ffd726572058da1cfa046a1a7c365.png' alt="图片alt"></p>
 <p>我们可以看到小红并没有被更改到。</p>
 <p>我们在做一个实验，其实我们还有一个 <code>else</code> 条件可用，这个类似 <code>switch</code> 里面的 <code>default</code> 。代码如下</p>
 <div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
@@ -149,7 +149,7 @@
 </span></span><span class="line"><span class="cl"><span class="nx">where</span> <span class="nx">name</span> <span class="nx">in</span> <span class="p">(</span><span class="s1">&#39;小白&#39;</span><span class="p">,</span><span class="s1">&#39;大白&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>结果如下</p>
-<p><img loading="lazy" src='https://www.cimple.ink/images/2019/03/06/8ed7b5f3834f7623e7d8f34893e41faa.png' alt="图片alt"></p>
+<p><img loading="lazy" src='https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/8ed7b5f3834f7623e7d8f34893e41faa.png' alt="图片alt"></p>
 <p>看到了么，<code>大白</code> 没有被任何 <code>when</code> 所捕获到，所以，执行了 <code>else</code> 部分，把值更改为了11。</p>
 <p>好了，其实可用的就是这么多了，但是呢，今天我脑残想了另一个问题，多条件的问题，其实这个问题也不是很难，只不过是我想复杂了而已。我们在上一个例子把，我们要把 <code>group</code> 为 <code>1</code>，的 <code>小红</code> 和 <code>小白</code> 的 <code>sex</code> 值更改为 <code>2</code>。那么这个语句该怎么写呢，不要想的太复杂，按照常规的写法写就可以了，直接上代码</p>
 <div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
@@ -170,12 +170,12 @@
 </span></span><span class="line"><span class="cl"><span class="nx">where</span> <span class="nx">name</span> <span class="nx">in</span> <span class="p">(</span><span class="s1">&#39;小白&#39;</span><span class="p">,</span><span class="s1">&#39;小红&#39;</span><span class="p">)</span> <span class="k">and</span> <span class="nx">test</span><span class="o">.</span><span class="nx">group</span> <span class="o">=</span> <span class="mi">1</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>结果如下</p>
-<p><img loading="lazy" src='https://www.cimple.ink/images/2019/03/06/77a84df28580eaab1d64cc1aaf9c2b23.png' alt="图片alt"></p>
+<p><img loading="lazy" src='https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/77a84df28580eaab1d64cc1aaf9c2b23.png' alt="图片alt"></p>
 <p>看到了吧，多条件的写法，也如此的简单。</p>
 <p>好了，今天的笔记就到这里，持续学习，持续记录。加油</p></div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2016-09-11 21:16:00">更新于 2016-09-11&nbsp;</span>
+      <div class="post-info-mod"><span title="更新于 2026-01-14 21:50:30">更新于 2026-01-14&nbsp;</span>
       </div><div class="post-info-license">
             <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
           </div></div><div class="post-info-line">
@@ -200,7 +200,7 @@
     <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
-              <a href="/"></a></span></div></div>
+              <a href="https://github.com/crazyhl" target="_blank" rel="external nofollow noopener noreferrer">M1racleHao</a></span></div></div>
   </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
     <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>

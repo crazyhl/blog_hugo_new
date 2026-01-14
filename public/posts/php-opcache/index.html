@@ -1,108 +1,76 @@
 <!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <title>聊聊 PHP 的 OPcache - Miracle Hao</title><meta name="author" content="">
+    <title>聊聊 PHP 的 OPcache - 觅睿克</title><meta name="author" content="M1racleHao">
 <meta name="description" content="前两天被问到了问题，关于 OPcache 我配置过有多少？当时简单的想了一下，貌似这个东西我没配置过几个，就说了调整了五六个选项。然后又大概说了一下这五六个都调整了什么，我就说了一下缓存时长，跳过文件，内存大小，文件数量什么的。因为自己印象里面貌似能记住的就这几个了，然后对方告诉我 OPcache 有 30 多个可调整选项。说实话，我当时都惊了，这么多!!! 事后回家翻了一下我自己的配置部分，发现我配置的也有十几个了，但是分类呢，也就是我上面说的那几个。所以呢，今天就重新翻了一波文档，并且结合自己的理解，说说自己配置过的部分。以及没有接触的东西。看看能不能也加入到自己的配置中去。
-OPcache 文档简介：
-OPcache 通过将 PHP 脚本预编译的字节码存储到共享内存中来提升 PHP 的性能， 存储预编译字节码的好处就是 省去了每次加载和解析 PHP 脚本的开销。
-这是说啥呢，直白点就是空间换时间，把代码预编译并且存储到内存中。节省的时间就是解析 PHP 脚本的时间，但是加载部分虽然也有节省，但是依然还是有加载时间的，不过就是从磁盘换到了内存。另外加载到内存中是占用内存的哟，也就是说单机的处理能力随着缓存的增长会有变小。所以这个内存值的设置要根据实际逐步调整。
-另外，关于新增的 preloading，可以看这个文章，我觉得写的挺好的 https://blog.csdn.net/qmhball/article/details/103503939
-https://hdj.me/php74-preload/
-好了，配置开始
-配置过：
-opcache.enable 开启 OPcache opcache.memory_consumption OPcache 的共享内存大小，这个要根据机器情况来调节了，我自己的一个服务设置的512，因为几乎没有多少访问量，以及内存十分充裕，我就设置的很大 opcache.interned_strings_buffer 专门给字符串预留的空间，我自己的设置是 16 opcache.validate_timestamps 定期检测脚本更新，开启，除非代码更改频率实在是非常低，然后每次更新重启 fpm。说到这，我想到了聊天的时候，提到的，极致性能。这点我有些不认同，首先要保障安全和稳定，然后在此基础上在逐步提升性能，否则我觉得有些顾此失彼了，就如同 use_cwd 这个配置一样，难道每次提交代码的时候 CI 那边还要配置一个检测文件名冲突的服务么？ opcache.revalidate_freq 检测脚本检测更新周期，我这边设置的是 5。这个主要跟项目的实际有关，要及时更新就设置的低一点，但是不要用默认哦，默认是0。每个请求都检测的。 opcache.save_comments 缓存注释，如果不用那些依赖注释的注解的话，就关闭把。 opcache.load_comments 如果禁用，则即使文件中包含注释，也不会加载这些注释内容。已经被移除了。 opcache.blacklist_filename 不在 opcache 缓存的文件列表文件名 opcache.error_log OPcache 错误输出路径，默认是 stderr，所以这个还是要保存一下的。 opcache.log_verbosity_level 输出错误级别，这个看需求调整，我把 warning 也输出了 设置 2。 opcache.file_update_protection 如果文件的最后修改时间距现在不足此项配置指令所设定的秒数，那么这个文件不会进入到缓存中。 这是为了防止尚未完全修改完毕的文件进入到缓存。 如果你的应用中不存在部分修改文件的情况，把此项设置为 0 可以提高性能。默认值是 2，以前调整过，后来还是用默认值了。 看过未配置：
-">
+"><meta name="keywords" content='php, laravel, filament, mysql, redis, vue, js, javascript, pgsql, postgresql, golang, go, aliyun'>
   <meta itemprop="name" content="聊聊 PHP 的 OPcache">
-  <meta itemprop="description" content="前两天被问到了问题，关于 OPcache 我配置过有多少？当时简单的想了一下，貌似这个东西我没配置过几个，就说了调整了五六个选项。然后又大概说了一下这五六个都调整了什么，我就说了一下缓存时长，跳过文件，内存大小，文件数量什么的。因为自己印象里面貌似能记住的就这几个了，然后对方告诉我 OPcache 有 30 多个可调整选项。说实话，我当时都惊了，这么多!!! 事后回家翻了一下我自己的配置部分，发现我配置的也有十几个了，但是分类呢，也就是我上面说的那几个。所以呢，今天就重新翻了一波文档，并且结合自己的理解，说说自己配置过的部分。以及没有接触的东西。看看能不能也加入到自己的配置中去。
-OPcache 文档简介：
-OPcache 通过将 PHP 脚本预编译的字节码存储到共享内存中来提升 PHP 的性能， 存储预编译字节码的好处就是 省去了每次加载和解析 PHP 脚本的开销。
-这是说啥呢，直白点就是空间换时间，把代码预编译并且存储到内存中。节省的时间就是解析 PHP 脚本的时间，但是加载部分虽然也有节省，但是依然还是有加载时间的，不过就是从磁盘换到了内存。另外加载到内存中是占用内存的哟，也就是说单机的处理能力随着缓存的增长会有变小。所以这个内存值的设置要根据实际逐步调整。
-另外，关于新增的 preloading，可以看这个文章，我觉得写的挺好的 https://blog.csdn.net/qmhball/article/details/103503939
-https://hdj.me/php74-preload/
-好了，配置开始
-配置过：
-opcache.enable 开启 OPcache opcache.memory_consumption OPcache 的共享内存大小，这个要根据机器情况来调节了，我自己的一个服务设置的512，因为几乎没有多少访问量，以及内存十分充裕，我就设置的很大 opcache.interned_strings_buffer 专门给字符串预留的空间，我自己的设置是 16 opcache.validate_timestamps 定期检测脚本更新，开启，除非代码更改频率实在是非常低，然后每次更新重启 fpm。说到这，我想到了聊天的时候，提到的，极致性能。这点我有些不认同，首先要保障安全和稳定，然后在此基础上在逐步提升性能，否则我觉得有些顾此失彼了，就如同 use_cwd 这个配置一样，难道每次提交代码的时候 CI 那边还要配置一个检测文件名冲突的服务么？ opcache.revalidate_freq 检测脚本检测更新周期，我这边设置的是 5。这个主要跟项目的实际有关，要及时更新就设置的低一点，但是不要用默认哦，默认是0。每个请求都检测的。 opcache.save_comments 缓存注释，如果不用那些依赖注释的注解的话，就关闭把。 opcache.load_comments 如果禁用，则即使文件中包含注释，也不会加载这些注释内容。已经被移除了。 opcache.blacklist_filename 不在 opcache 缓存的文件列表文件名 opcache.error_log OPcache 错误输出路径，默认是 stderr，所以这个还是要保存一下的。 opcache.log_verbosity_level 输出错误级别，这个看需求调整，我把 warning 也输出了 设置 2。 opcache.file_update_protection 如果文件的最后修改时间距现在不足此项配置指令所设定的秒数，那么这个文件不会进入到缓存中。 这是为了防止尚未完全修改完毕的文件进入到缓存。 如果你的应用中不存在部分修改文件的情况，把此项设置为 0 可以提高性能。默认值是 2，以前调整过，后来还是用默认值了。 看过未配置：">
+  <meta itemprop="description" content="前两天被问到了问题，关于 OPcache 我配置过有多少？当时简单的想了一下，貌似这个东西我没配置过几个，就说了调整了五六个选项。然后又大概说了一下这五六个都调整了什么，我就说了一下缓存时长，跳过文件，内存大小，文件数量什么的。因为自己印象里面貌似能记住的就这几个了，然后对方告诉我 OPcache 有 30 多个可调整选项。说实话，我当时都惊了，这么多!!! 事后回家翻了一下我自己的配置部分，发现我配置的也有十几个了，但是分类呢，也就是我上面说的那几个。所以呢，今天就重新翻了一波文档，并且结合自己的理解，说说自己配置过的部分。以及没有接触的东西。看看能不能也加入到自己的配置中去。">
   <meta itemprop="datePublished" content="2021-09-26T09:21:45+08:00">
-  <meta itemprop="dateModified" content="2021-09-26T09:21:45+08:00">
-  <meta itemprop="wordCount" content="166">
+  <meta itemprop="dateModified" content="2021-09-26T11:22:31+08:00">
+  <meta itemprop="wordCount" content="2005">
   <meta itemprop="keywords" content="PHP"><meta property="og:url" content="http://localhost:1313/posts/php-opcache/">
-  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:site_name" content="觅睿克">
   <meta property="og:title" content="聊聊 PHP 的 OPcache">
-  <meta property="og:description" content="前两天被问到了问题，关于 OPcache 我配置过有多少？当时简单的想了一下，貌似这个东西我没配置过几个，就说了调整了五六个选项。然后又大概说了一下这五六个都调整了什么，我就说了一下缓存时长，跳过文件，内存大小，文件数量什么的。因为自己印象里面貌似能记住的就这几个了，然后对方告诉我 OPcache 有 30 多个可调整选项。说实话，我当时都惊了，这么多!!! 事后回家翻了一下我自己的配置部分，发现我配置的也有十几个了，但是分类呢，也就是我上面说的那几个。所以呢，今天就重新翻了一波文档，并且结合自己的理解，说说自己配置过的部分。以及没有接触的东西。看看能不能也加入到自己的配置中去。
-OPcache 文档简介：
-OPcache 通过将 PHP 脚本预编译的字节码存储到共享内存中来提升 PHP 的性能， 存储预编译字节码的好处就是 省去了每次加载和解析 PHP 脚本的开销。
-这是说啥呢，直白点就是空间换时间，把代码预编译并且存储到内存中。节省的时间就是解析 PHP 脚本的时间，但是加载部分虽然也有节省，但是依然还是有加载时间的，不过就是从磁盘换到了内存。另外加载到内存中是占用内存的哟，也就是说单机的处理能力随着缓存的增长会有变小。所以这个内存值的设置要根据实际逐步调整。
-另外，关于新增的 preloading，可以看这个文章，我觉得写的挺好的 https://blog.csdn.net/qmhball/article/details/103503939
-https://hdj.me/php74-preload/
-好了，配置开始
-配置过：
-opcache.enable 开启 OPcache opcache.memory_consumption OPcache 的共享内存大小，这个要根据机器情况来调节了，我自己的一个服务设置的512，因为几乎没有多少访问量，以及内存十分充裕，我就设置的很大 opcache.interned_strings_buffer 专门给字符串预留的空间，我自己的设置是 16 opcache.validate_timestamps 定期检测脚本更新，开启，除非代码更改频率实在是非常低，然后每次更新重启 fpm。说到这，我想到了聊天的时候，提到的，极致性能。这点我有些不认同，首先要保障安全和稳定，然后在此基础上在逐步提升性能，否则我觉得有些顾此失彼了，就如同 use_cwd 这个配置一样，难道每次提交代码的时候 CI 那边还要配置一个检测文件名冲突的服务么？ opcache.revalidate_freq 检测脚本检测更新周期，我这边设置的是 5。这个主要跟项目的实际有关，要及时更新就设置的低一点，但是不要用默认哦，默认是0。每个请求都检测的。 opcache.save_comments 缓存注释，如果不用那些依赖注释的注解的话，就关闭把。 opcache.load_comments 如果禁用，则即使文件中包含注释，也不会加载这些注释内容。已经被移除了。 opcache.blacklist_filename 不在 opcache 缓存的文件列表文件名 opcache.error_log OPcache 错误输出路径，默认是 stderr，所以这个还是要保存一下的。 opcache.log_verbosity_level 输出错误级别，这个看需求调整，我把 warning 也输出了 设置 2。 opcache.file_update_protection 如果文件的最后修改时间距现在不足此项配置指令所设定的秒数，那么这个文件不会进入到缓存中。 这是为了防止尚未完全修改完毕的文件进入到缓存。 如果你的应用中不存在部分修改文件的情况，把此项设置为 0 可以提高性能。默认值是 2，以前调整过，后来还是用默认值了。 看过未配置：">
-  <meta property="og:locale" content="zh_cn">
+  <meta property="og:description" content="前两天被问到了问题，关于 OPcache 我配置过有多少？当时简单的想了一下，貌似这个东西我没配置过几个，就说了调整了五六个选项。然后又大概说了一下这五六个都调整了什么，我就说了一下缓存时长，跳过文件，内存大小，文件数量什么的。因为自己印象里面貌似能记住的就这几个了，然后对方告诉我 OPcache 有 30 多个可调整选项。说实话，我当时都惊了，这么多!!! 事后回家翻了一下我自己的配置部分，发现我配置的也有十几个了，但是分类呢，也就是我上面说的那几个。所以呢，今天就重新翻了一波文档，并且结合自己的理解，说说自己配置过的部分。以及没有接触的东西。看看能不能也加入到自己的配置中去。">
+  <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2021-09-26T09:21:45+08:00">
-    <meta property="article:modified_time" content="2021-09-26T09:21:45+08:00">
+    <meta property="article:modified_time" content="2021-09-26T11:22:31+08:00">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="聊聊 PHP 的 OPcache">
-  <meta name="twitter:description" content="前两天被问到了问题，关于 OPcache 我配置过有多少？当时简单的想了一下，貌似这个东西我没配置过几个，就说了调整了五六个选项。然后又大概说了一下这五六个都调整了什么，我就说了一下缓存时长，跳过文件，内存大小，文件数量什么的。因为自己印象里面貌似能记住的就这几个了，然后对方告诉我 OPcache 有 30 多个可调整选项。说实话，我当时都惊了，这么多!!! 事后回家翻了一下我自己的配置部分，发现我配置的也有十几个了，但是分类呢，也就是我上面说的那几个。所以呢，今天就重新翻了一波文档，并且结合自己的理解，说说自己配置过的部分。以及没有接触的东西。看看能不能也加入到自己的配置中去。
-OPcache 文档简介：
-OPcache 通过将 PHP 脚本预编译的字节码存储到共享内存中来提升 PHP 的性能， 存储预编译字节码的好处就是 省去了每次加载和解析 PHP 脚本的开销。
-这是说啥呢，直白点就是空间换时间，把代码预编译并且存储到内存中。节省的时间就是解析 PHP 脚本的时间，但是加载部分虽然也有节省，但是依然还是有加载时间的，不过就是从磁盘换到了内存。另外加载到内存中是占用内存的哟，也就是说单机的处理能力随着缓存的增长会有变小。所以这个内存值的设置要根据实际逐步调整。
-另外，关于新增的 preloading，可以看这个文章，我觉得写的挺好的 https://blog.csdn.net/qmhball/article/details/103503939
-https://hdj.me/php74-preload/
-好了，配置开始
-配置过：
-opcache.enable 开启 OPcache opcache.memory_consumption OPcache 的共享内存大小，这个要根据机器情况来调节了，我自己的一个服务设置的512，因为几乎没有多少访问量，以及内存十分充裕，我就设置的很大 opcache.interned_strings_buffer 专门给字符串预留的空间，我自己的设置是 16 opcache.validate_timestamps 定期检测脚本更新，开启，除非代码更改频率实在是非常低，然后每次更新重启 fpm。说到这，我想到了聊天的时候，提到的，极致性能。这点我有些不认同，首先要保障安全和稳定，然后在此基础上在逐步提升性能，否则我觉得有些顾此失彼了，就如同 use_cwd 这个配置一样，难道每次提交代码的时候 CI 那边还要配置一个检测文件名冲突的服务么？ opcache.revalidate_freq 检测脚本检测更新周期，我这边设置的是 5。这个主要跟项目的实际有关，要及时更新就设置的低一点，但是不要用默认哦，默认是0。每个请求都检测的。 opcache.save_comments 缓存注释，如果不用那些依赖注释的注解的话，就关闭把。 opcache.load_comments 如果禁用，则即使文件中包含注释，也不会加载这些注释内容。已经被移除了。 opcache.blacklist_filename 不在 opcache 缓存的文件列表文件名 opcache.error_log OPcache 错误输出路径，默认是 stderr，所以这个还是要保存一下的。 opcache.log_verbosity_level 输出错误级别，这个看需求调整，我把 warning 也输出了 设置 2。 opcache.file_update_protection 如果文件的最后修改时间距现在不足此项配置指令所设定的秒数，那么这个文件不会进入到缓存中。 这是为了防止尚未完全修改完毕的文件进入到缓存。 如果你的应用中不存在部分修改文件的情况，把此项设置为 0 可以提高性能。默认值是 2，以前调整过，后来还是用默认值了。 看过未配置：">
-<meta name="application-name" content="FixIt">
-<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+  <meta name="twitter:description" content="前两天被问到了问题，关于 OPcache 我配置过有多少？当时简单的想了一下，貌似这个东西我没配置过几个，就说了调整了五六个选项。然后又大概说了一下这五六个都调整了什么，我就说了一下缓存时长，跳过文件，内存大小，文件数量什么的。因为自己印象里面貌似能记住的就这几个了，然后对方告诉我 OPcache 有 30 多个可调整选项。说实话，我当时都惊了，这么多!!! 事后回家翻了一下我自己的配置部分，发现我配置的也有十几个了，但是分类呢，也就是我上面说的那几个。所以呢，今天就重新翻了一波文档，并且结合自己的理解，说说自己配置过的部分。以及没有接触的东西。看看能不能也加入到自己的配置中去。">
+<meta name="application-name" content="觅睿克">
+<meta name="apple-mobile-web-app-title" content="觅睿克"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/php-opcache/" title="聊聊 PHP 的 OPcache - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/golang-code-generate/" title="golang 代码生成" /><link rel="next" type="text/html" href="http://localhost:1313/posts/build-golang-web-application-with-tdd/" title="使用tdd构建golang Web 应用（1）" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/php-opcache/index.md" title="聊聊 PHP 的 OPcache - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/php-opcache/" title="聊聊 PHP 的 OPcache - 觅睿克" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/golang-code-generate/" title="golang 代码生成" /><link rel="next" type="text/html" href="http://localhost:1313/posts/build-golang-web-application-with-tdd/" title="使用tdd构建golang Web 应用（1）" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/php-opcache/index.md" title="聊聊 PHP 的 OPcache - 觅睿克"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
     "@context": "http://schema.org",
     "@type": "BlogPosting",
     "headline": "聊聊 PHP 的 OPcache",
-    "inLanguage": "zh-cn",
+    "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/posts\/php-opcache\/"
-    },"genre": "posts","wordcount":  166 ,
-    "url": "http:\/\/localhost:1313\/posts\/php-opcache\/","datePublished": "2021-09-26T09:21:45+08:00","dateModified": "2021-09-26T09:21:45+08:00","publisher": {
+    },"genre": "posts","wordcount":  2005 ,
+    "url": "http:\/\/localhost:1313\/posts\/php-opcache\/","datePublished": "2021-09-26T09:21:45+08:00","dateModified": "2021-09-26T11:22:31+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
-        "name": "作者"
+        "name": "M1racleHao"
       },"description": ""
   }
   </script><script src="/js/head/color-scheme.min.js"></script></head>
   <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper">
     <div class="header-title">
-      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <a href="/" title="觅睿克"><span class="header-title-text">觅睿克</span></a><span class="header-subtitle"></span></div>
     <nav>
       <ul class="menu"><li class="menu-item">
-              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
-              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
-              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
     </nav>
   </div>
 </header><header class="mobile animate__faster" id="header-mobile">
   <div class="header-container">
     <div class="header-wrapper">
       <div class="header-title">
-        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+        <a href="/" title="觅睿克"><span class="header-title-text">觅睿克</span></a><span class="header-subtitle"></span></div>
       <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
       <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
         <span></span><span></span><span></span>
       </div>
     </div>
     <nav>
-      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item menu-system"></li>
       </ul>
     </nav>
   </div>
@@ -111,8 +79,8 @@ opcache.enable 开启 OPcache opcache.memory_consumption OPcache 的共享内存
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>聊聊 PHP 的 OPcache</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
-      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2021-09-26 09:21:45"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2021-09-26">2021-09-26</time></span>&nbsp;<span title="166 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 200 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/crazyhl" title="作者" target="_blank" rel="external nofollow noopener noreferrer author" class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+    M1racleHao</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2021-09-26 09:21:45"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2021-09-26">2021-09-26</time></span>&nbsp;<span title="更新于 2021-09-26 11:22:31"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2021-09-26">2021-09-26</time></span>&nbsp;<span title="2005 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
     </div><div class="content" id="content"><p>前两天被问到了问题，关于 OPcache 我配置过有多少？当时简单的想了一下，貌似这个东西我没配置过几个，就说了调整了五六个选项。然后又大概说了一下这五六个都调整了什么，我就说了一下缓存时长，跳过文件，内存大小，文件数量什么的。因为自己印象里面貌似能记住的就这几个了，然后对方告诉我 OPcache 有 30 多个可调整选项。说实话，我当时都惊了，这么多!!! 事后回家翻了一下我自己的配置部分，发现我配置的也有十几个了，但是分类呢，也就是我上面说的那几个。所以呢，今天就重新翻了一波文档，并且结合自己的理解，说说自己配置过的部分。以及没有接触的东西。看看能不能也加入到自己的配置中去。</p>
 <p>OPcache 文档简介：</p>
 <blockquote>
@@ -168,7 +136,7 @@ opcache.enable 开启 OPcache opcache.memory_consumption OPcache 的共享内存
 </div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2021-09-26 09:21:45">更新于 2021-09-26&nbsp;</span>
+      <div class="post-info-mod"><span title="更新于 2021-09-26 11:22:31">更新于 2021-09-26&nbsp;</span>
       </div><div class="post-info-license">
             <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
           </div></div><div class="post-info-line">
@@ -193,7 +161,7 @@ opcache.enable 开启 OPcache opcache.memory_consumption OPcache 的共享内存
     <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
-              <a href="/"></a></span></div></div>
+              <a href="https://github.com/crazyhl" target="_blank" rel="external nofollow noopener noreferrer">M1racleHao</a></span></div></div>
   </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
     <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>

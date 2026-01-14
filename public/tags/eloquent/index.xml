@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Eloquent - 标签 - Miracle Hao</title>
+    <title>Eloquent - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/eloquent/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Tue, 09 Jul 2019 14:44:20 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Sat, 04 Sep 2021 12:13:51 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/eloquent/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>slim3使用Eloquent自定义分页</title>
       <link>http://localhost:1313/posts/slim3-uses-eloquent-custom-paging/</link>
-      <pubDate>Tue, 09 Jul 2019 14:44:20 +0000</pubDate>
+      <pubDate>Tue, 09 Jul 2019 14:44:20 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/slim3-uses-eloquent-custom-paging/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
-      <description>&lt;p&gt;最近一年私下里写东西一直都是在使用 slim 框架，其实说是一直在写东西，可是到现在真的一点输出都没有，不过小技巧倒是学会了不少，自己写个小验证器啊什么的，并且对于框架的一些理解也加深了，最好的是工作中很多都把这些小技巧用到了。&lt;/p&gt;&#xA;&lt;p&gt;好了，吐槽了这么多，我又要说句废话了，写了一年的东西才写到分页你敢信？不过这是真的，写了一年了，代码终于累计300行了，可以进入分页的过程了。&lt;/p&gt;&#xA;&lt;p&gt;以前用 laravel 的时候觉得 Eloquent 麻烦的很，麻烦不是指使用，而是指看代码麻烦，不过用起来还是很爽的。所以当我在使用 slim 需要连接数据库的时候毫不犹豫就继续用了 Eloquent。&lt;/p&gt;&#xA;&lt;p&gt;当我写到分页的时候，发现调用方法失败，那么就继续引入 illuminate/pagination 好了。这下查询有问题不能正确获取页码，还有一些其他的参数也都是不对的，而且到前端的时候由于使用的模板是 twig，不能像 blade 模板那样在代码用调用 model 的相关方法，想要调用就得扩展 twig，那又是一桩麻烦事，既然如此，我就在代码中调用好了，然后在输出到模板中去，但是当我想偷懒使用 links 输出分页部分的时候报错了，在看报错，发现又得引入 blade 等一系列的东西，那引入了这么多，还不如直接使用 laravel 算了。所以，在使用 slim 不变的情况下，我们就自己扩展一个分页方法吧。&lt;/p&gt;&#xA;&lt;p&gt;最初我是想继承 model 然后在里面写方法的，后来发现不行，不行的原因是，model代用的大部分方法其实都是在 new 一个 builder 之后链式调用的，这里我又得多说一句了奥，laravel 中同一个类名，会在很多个包下都有的，自己查看的时候要小心别看错了。（其实，集成 model 也是可以的，就是太麻烦了，而且没法链式调用）&lt;/p&gt;&#xA;&lt;p&gt;所以在继承 model 行不通之后，我们就从 builder 入手，通过 google 和看代码可以找到这个方法&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;/**&#xA;  * Create a new Eloquent query builder for the model.&#xA;  *&#xA;  * @param  \Illuminate\Database\Query\Builder  $query&#xA;  * @return \Illuminate\Database\Eloquent\Builder|static&#xA;  */&#xA;public function newEloquentBuilder($query)&#xA;{&#xA;    return new Builder($query);&#xA;}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个方法就是 model 里面产生新 builder 用的，那我们就在我们的 model 中 覆盖这个方法就好了。&lt;/p&gt;</description>
+      <description>&lt;p&gt;最近一年私下里写东西一直都是在使用 slim 框架，其实说是一直在写东西，可是到现在真的一点输出都没有，不过小技巧倒是学会了不少，自己写个小验证器啊什么的，并且对于框架的一些理解也加深了，最好的是工作中很多都把这些小技巧用到了。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Typescript - 标签 - Miracle Hao</title>
+    <title>Typescript - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/typescript/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Mon, 15 Oct 2018 06:09:00 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Sat, 04 Sep 2021 12:13:51 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/typescript/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>typescript object 转 array 以及动态调用方法</title>
       <link>http://localhost:1313/posts/typescript-object-to-array-and-dynamic-calling-method/</link>
-      <pubDate>Mon, 15 Oct 2018 06:09:00 +0000</pubDate>
+      <pubDate>Mon, 15 Oct 2018 06:09:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/typescript-object-to-array-and-dynamic-calling-method/</guid>
       <category domain="http://localhost:1313/categories/%E5%89%8D%E7%AB%AF/">前端</category>
-      <description>&lt;pre&gt;&lt;code&gt;Object.keys(requestParsmsOjb).map(function(paramsIndex){&#xA;        let value = requestParsmsOjb[paramsIndex];&#xA;        return value;&#xA;    })&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;不知道为何 &lt;code&gt;typescript&lt;/code&gt; 里面木有 &lt;code&gt;Object.values()&lt;/code&gt; 的方法，所以可以用这种方法，搞定&lt;/p&gt;&#xA;&lt;p&gt;由于有动态调用某些方法的需求，所以还得继续搞，只怪自己对 js 的理解不深，不过万幸都能搜索到，所以呢就记录下来&lt;/p&gt;&#xA;&lt;p&gt;参考&lt;a href=&#34;https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/apply&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/apply&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;上面那篇文章是动态调用方法的，下面是我的方法&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;ojbect[functionName].apply(null, params);&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;上面的 &lt;code&gt;params&lt;/code&gt; 是个参数数组&lt;/p&gt;&#xA;&lt;p&gt;因为我还有方法名也是动态的需求，所以上面我用数组的方案搞定的，毕竟  &lt;code&gt;js&lt;/code&gt; 中都可以用数组的方式来引用，这点还是很好的。所以就可以用数组的方式搞定动态方法名。&lt;/p&gt;</description>
+      <description>&lt;pre&gt;&lt;code&gt;Object.keys(requestParsmsOjb).map(function(paramsIndex){&#xA;        let value = requestParsmsOjb[paramsIndex];&#xA;        return value;&#xA;    })&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;不知道为何 &lt;code&gt;typescript&lt;/code&gt; 里面木有 &lt;code&gt;Object.values()&lt;/code&gt; 的方法，所以可以用这种方法，搞定&lt;/p&gt;&#xA;&lt;p&gt;由于有动态调用某些方法的需求，所以还得继续搞，只怪自己对 js 的理解不深，不过万幸都能搜索到，所以呢就记录下来&lt;/p&gt;</description>
     </item>
     <item>
       <title>webpack4 typescript 配置笔记</title>
       <link>http://localhost:1313/posts/webpack4-typescript-configuration-notes/</link>
-      <pubDate>Sat, 13 Oct 2018 07:11:00 +0000</pubDate>
+      <pubDate>Sat, 13 Oct 2018 07:11:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/webpack4-typescript-configuration-notes/</guid>
       <category domain="http://localhost:1313/categories/%E5%89%8D%E7%AB%AF/">前端</category>
-      <description>&lt;p&gt;最新需要写一些 &lt;code&gt;js&lt;/code&gt; 的东西，正好就想试用一下 &lt;code&gt;typescript&lt;/code&gt; 试用以后感觉舒服，那么需求来了，我们需要编译出来的文件，在外部可以调用，所以就有了下面的笔记&lt;/p&gt;&#xA;&lt;p&gt;参考文章&lt;a href=&#34;https://www.cnblogs.com/mahidol/p/8874300.html&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://www.cnblogs.com/mahidol/p/8874300.html&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;npm 安装依赖&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;npm install --save-dev typescript ts-loader webpack webpack-cli&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在项目根目录创建两个文件夹 &lt;code&gt;src&lt;/code&gt; 和 &lt;code&gt;dist&lt;/code&gt; 以及一个测试用的入口文件 &lt;code&gt;index.html&lt;/code&gt;&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;src&lt;/code&gt; 用来存放我们的源码&#xA;&lt;code&gt;dist&lt;/code&gt; 用来保存生成后的源码&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;index.html&lt;/code&gt; 的内容&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;&#xA;&amp;lt;html lang=&amp;#34;en&amp;#34;&amp;gt;&#xA;&amp;lt;head&amp;gt;&#xA;    &amp;lt;meta charset=&amp;#34;UTF-8&amp;#34;&amp;gt;&#xA;    &amp;lt;title&amp;gt;Title&amp;lt;/title&amp;gt;&#xA;&amp;lt;/head&amp;gt;&#xA;&amp;lt;body&amp;gt;&#xA;&#xA;&amp;lt;/body&amp;gt;&#xA;&amp;lt;script type=&amp;#34;text/javascript&amp;#34; src=&amp;#34;./dist/app.js&amp;#34; &amp;gt;&amp;lt;/script&amp;gt;&#xA;&amp;lt;/html&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;入口文件仅仅是用来测试的，所以仅仅引入了输出的js 我们在 &lt;code&gt;chrome&lt;/code&gt; 控制台测试&lt;/p&gt;&#xA;&lt;p&gt;根目录创建 &lt;code&gt;typescript&lt;/code&gt; 配置文件 &lt;code&gt;tsconfig.json&lt;/code&gt;&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;{&#xA;  &amp;#34;compilerOptions&amp;#34;: {&#xA;    &amp;#34;module&amp;#34;: &amp;#34;commonjs&amp;#34;,&#xA;    &amp;#34;target&amp;#34;: &amp;#34;es5&amp;#34;,&#xA;    &amp;#34;sourceMap&amp;#34;: true&#xA;  },&#xA;  &amp;#34;exclude&amp;#34;: [&#xA;    &amp;#34;node_modules&amp;#34;&#xA;  ]&#xA;}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;创建 &lt;code&gt;webpack&lt;/code&gt; 配置文件，采用&lt;a href=&#34;https://www.webpackjs.com/guides/production/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://www.webpackjs.com/guides/production/&lt;/a&gt;&#xA;中的方案，只不过有些小修改&lt;/p&gt;</description>
+      <description>&lt;p&gt;最新需要写一些 &lt;code&gt;js&lt;/code&gt; 的东西，正好就想试用一下 &lt;code&gt;typescript&lt;/code&gt; 试用以后感觉舒服，那么需求来了，我们需要编译出来的文件，在外部可以调用，所以就有了下面的笔记&lt;/p&gt;&#xA;&lt;p&gt;参考文章&lt;a href=&#34;https://www.cnblogs.com/mahidol/p/8874300.html&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://www.cnblogs.com/mahidol/p/8874300.html&lt;/a&gt;&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

@@ -105,16 +105,16 @@ $application->add(new TestCommand($app->getContainer()));
 ```php
 php console/application.php test:slim-command
 ```
-![图片alt](https://www.cimple.ink/images/2019/02/12/10806644011804ad9a6e148fc4d81150.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/02/12/10806644011804ad9a6e148fc4d81150.png)
 
 
 再看，我们用 slim container 里面设置的 log 是不是生效了，
-![图片alt](https://www.cimple.ink/images/2019/02/12/cf90c886050387daf3adbf878a8af453.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/02/12/cf90c886050387daf3adbf878a8af453.png)
 
 可以看到 slim 里面设置的 log 也都 ok 了，至此，所有的东西都可以搞定了，接下来我们就可以在 crontab 里面使用这些命令了。
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/slim-framework/  
 

@@ -1,7 +1,7 @@
 # 给博客升级成功了
 
 
-![图片alt](https://www.cimple.ink/images/2017/10/13/g7gwrw9vtqim5twvqi1cbb7o8rmdorss.jpeg)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2017/10/13/g7gwrw9vtqim5twvqi1cbb7o8rmdorss.jpeg)
 
 话说这次升级还是比较坑的，踏了以前注意过的坑。
 
@@ -11,6 +11,6 @@
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/upgraded-the-blog-successfully/  
 

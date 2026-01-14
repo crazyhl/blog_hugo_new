@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>运维 - 分类 - Miracle Hao</title>
+    <title>运维 - 分类 - 觅睿克</title>
     <link>http://localhost:1313/categories/%E8%BF%90%E7%BB%B4/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Mar 2023 10:49:43 +0800</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Thu, 09 Mar 2023 14:18:19 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/categories/%E8%BF%90%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Laravel in Kubernetes 系列文章个人总结（2）</title>
       <link>http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-2/</link>
-      <pubDate>Thu, 09 Mar 2023 10:49:43 +0800</pubDate>
+      <pubDate>Thu, 09 Mar 2023 10:49:43 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-2/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
       <category domain="http://localhost:1313/categories/%E8%BF%90%E7%BB%B4/">运维</category>
@@ -20,7 +22,7 @@
     <item>
       <title>Laravel in Kubernetes 系列文章个人总结（1）</title>
       <link>http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-1/</link>
-      <pubDate>Tue, 07 Mar 2023 11:16:24 +0800</pubDate>
+      <pubDate>Tue, 07 Mar 2023 11:16:24 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-1/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
       <category domain="http://localhost:1313/categories/%E8%BF%90%E7%BB%B4/">运维</category>
@@ -29,7 +31,7 @@
     <item>
       <title>Ubuntu 20.04 K8s 单节点部署有状态 Mysql</title>
       <link>http://localhost:1313/posts/ubuntu-k8s-stateful-mysql/</link>
-      <pubDate>Sun, 17 Apr 2022 13:18:49 +0800</pubDate>
+      <pubDate>Sun, 17 Apr 2022 13:18:49 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/ubuntu-k8s-stateful-mysql/</guid>
       <category domain="http://localhost:1313/categories/%E8%BF%90%E7%BB%B4/">运维</category>
       <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前言&#34;&gt;&lt;span&gt;前言&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e8%a8%80&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;来了来了来了。这是续上一篇文章的第二部分，这篇文章简单说明了一下，如何在 k8s 中部署有状态的单节点 mysql 服务。&#xA;注意：这个基本上只是实验环境，并不能应用于生产环境。当然了，谁会在生产环境中使用本地磁盘呢？&lt;/p&gt;</description>
@@ -37,7 +39,7 @@
     <item>
       <title>Ubuntu 20.04 部署单节点 K8s 集群并用MetalLB应用 Nginx Ingress</title>
       <link>http://localhost:1313/posts/ubuntu-install-k8s-and-use-metallb-with-nginx-ingerss/</link>
-      <pubDate>Wed, 06 Apr 2022 14:08:04 +0800</pubDate>
+      <pubDate>Wed, 06 Apr 2022 14:08:04 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/ubuntu-install-k8s-and-use-metallb-with-nginx-ingerss/</guid>
       <category domain="http://localhost:1313/categories/%E8%BF%90%E7%BB%B4/">运维</category>
       <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前言&#34;&gt;&lt;span&gt;前言&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e8%a8%80&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;这是一篇拖了一年的东西，大约一年前就要开始弄这部分，但是因为种种事情吧，拖延了。不过终于在今天把这个坑填上了。&lt;/p&gt;</description>

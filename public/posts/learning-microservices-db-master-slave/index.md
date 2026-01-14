@@ -199,6 +199,6 @@ slave2 和 slave 3
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/learning-microservices-db-master-slave/  
 

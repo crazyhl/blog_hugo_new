@@ -1,89 +1,77 @@
 <!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <title>通过快排和归并排序思考分治法 - Miracle Hao</title><meta name="author" content="">
+    <title>通过快排和归并排序思考分治法 - 觅睿克</title><meta name="author" content="M1racleHao">
 <meta name="description" content="话说以前看过很多算法相关的书，大部分讲的都很模糊，然后直接上代码，当时看似理解了，可是时间一长就忘光光了，以前看书学习的都是如何去做，而自己也没有深入的思考过为何这么做，单纯的就是背下来那种。当学习到一定程度之后，发现基础知识还是非常重要的。
-今天要说的就是分治法，什么是分治法，就是分而治之，先把把大的问题分解为小一些的问题。逐步把小问题解决了，在把这些解决的小问题合并了就把大问题解决了，这就是我所理解的分治法。
-我们在看算法排序相关的时候，都会有并归排序和快速排序，这两个方法都是用分治法解决的，只不过解决的方案不一样。下面是我用 php 实现的代码，大家可以先看下，然后我会在代码后面对两种方式做说明。
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 /** * 归并排序 * @param $arr * @return array */ function mergeSort($arr) { $arrCount = count($arr); if ($arrCount &lt; 2) { return $arr; } $mid = ceil($arrCount / 2); // 向上取整一下 $leftArr = array_slice($arr, 0, $mid); $rightArr = array_slice($arr, $mid, $arrCount - $mid); return mergeArr(mergeSort($leftArr), mergeSort($rightArr)); } /** * 最终合并数组的方法 * @param $leftArr * @param $rightArr * @return array */ function mergeArr($leftArr, $rightArr) { $i = 0; $j = 0; $returnArr = []; while ($i &lt; count($leftArr) &amp;&amp; $j &lt; count($rightArr)) { if ($leftArr[$i] &lt; $rightArr[$j]) { $returnArr[] = $leftArr[$i]; $i&#43;&#43;; } else if ($leftArr[$i] &gt; $rightArr[$j]) { $returnArr[] = $rightArr[$j]; $j&#43;&#43;; } else { $returnArr[] = $leftArr[$i]; $returnArr[] = $rightArr[$j]; $i&#43;&#43;; $j&#43;&#43;; } } for ($temp = $i; $temp &lt; count($leftArr); $temp&#43;&#43;) { $returnArr[] = $leftArr[$temp]; } for ($temp = $j; $temp &lt; count($rightArr); $temp&#43;&#43;) { $returnArr[] = $rightArr[$temp]; } return $returnArr; } /** * 快速排序 * @param $arr * @return array */ function quickSort($arr) { if (count($arr) &lt; 2) { return $arr; } $flag = $arr[0]; $lessArr = []; $largeArr = []; $flagArr = []; $flagArr[] = $flag; for ($i = 1; $i &lt; count($arr); $i&#43;&#43;) { if ($arr[$i] &lt; $flag) { $lessArr[] = $arr[$i]; } else if ($arr[$i] &gt; $flag) { $largeArr[] = $arr[$i]; } else { $flagArr[] = $arr[$i]; } } return array_merge(quickSort($lessArr), $flagArr, quickSort($largeArr)); } 先来说一下快排，因为快排的代码比较简短。快排的解决方案是，找出一个数字，一般都是采用数组的第一个数字作为标识数字，然后把比这个数字小的放到一个数组里面，在把比这个数字大的放到一个数组里面。这样，我们就已经确定好中间的数字了，然后我们在采用递归的方式分别处理比标志位数字小的数组和比标志位大的数组。 但是在处理递归的时候我们要注意一个点，就是何时终止递归，让其返回，这个点就是当数组的元素个数小于2的时候，因为这个时候已经不需要进行比较了。
 "><meta name="keywords" content='排序'>
   <meta itemprop="name" content="通过快排和归并排序思考分治法">
-  <meta itemprop="description" content="话说以前看过很多算法相关的书，大部分讲的都很模糊，然后直接上代码，当时看似理解了，可是时间一长就忘光光了，以前看书学习的都是如何去做，而自己也没有深入的思考过为何这么做，单纯的就是背下来那种。当学习到一定程度之后，发现基础知识还是非常重要的。
-今天要说的就是分治法，什么是分治法，就是分而治之，先把把大的问题分解为小一些的问题。逐步把小问题解决了，在把这些解决的小问题合并了就把大问题解决了，这就是我所理解的分治法。
-我们在看算法排序相关的时候，都会有并归排序和快速排序，这两个方法都是用分治法解决的，只不过解决的方案不一样。下面是我用 php 实现的代码，大家可以先看下，然后我会在代码后面对两种方式做说明。
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 /** * 归并排序 * @param $arr * @return array */ function mergeSort($arr) { $arrCount = count($arr); if ($arrCount &lt; 2) { return $arr; } $mid = ceil($arrCount / 2); // 向上取整一下 $leftArr = array_slice($arr, 0, $mid); $rightArr = array_slice($arr, $mid, $arrCount - $mid); return mergeArr(mergeSort($leftArr), mergeSort($rightArr)); } /** * 最终合并数组的方法 * @param $leftArr * @param $rightArr * @return array */ function mergeArr($leftArr, $rightArr) { $i = 0; $j = 0; $returnArr = []; while ($i &lt; count($leftArr) &amp;&amp; $j &lt; count($rightArr)) { if ($leftArr[$i] &lt; $rightArr[$j]) { $returnArr[] = $leftArr[$i]; $i&#43;&#43;; } else if ($leftArr[$i] &gt; $rightArr[$j]) { $returnArr[] = $rightArr[$j]; $j&#43;&#43;; } else { $returnArr[] = $leftArr[$i]; $returnArr[] = $rightArr[$j]; $i&#43;&#43;; $j&#43;&#43;; } } for ($temp = $i; $temp &lt; count($leftArr); $temp&#43;&#43;) { $returnArr[] = $leftArr[$temp]; } for ($temp = $j; $temp &lt; count($rightArr); $temp&#43;&#43;) { $returnArr[] = $rightArr[$temp]; } return $returnArr; } /** * 快速排序 * @param $arr * @return array */ function quickSort($arr) { if (count($arr) &lt; 2) { return $arr; } $flag = $arr[0]; $lessArr = []; $largeArr = []; $flagArr = []; $flagArr[] = $flag; for ($i = 1; $i &lt; count($arr); $i&#43;&#43;) { if ($arr[$i] &lt; $flag) { $lessArr[] = $arr[$i]; } else if ($arr[$i] &gt; $flag) { $largeArr[] = $arr[$i]; } else { $flagArr[] = $arr[$i]; } } return array_merge(quickSort($lessArr), $flagArr, quickSort($largeArr)); } 先来说一下快排，因为快排的代码比较简短。快排的解决方案是，找出一个数字，一般都是采用数组的第一个数字作为标识数字，然后把比这个数字小的放到一个数组里面，在把比这个数字大的放到一个数组里面。这样，我们就已经确定好中间的数字了，然后我们在采用递归的方式分别处理比标志位数字小的数组和比标志位大的数组。 但是在处理递归的时候我们要注意一个点，就是何时终止递归，让其返回，这个点就是当数组的元素个数小于2的时候，因为这个时候已经不需要进行比较了。">
+  <meta itemprop="description" content="话说以前看过很多算法相关的书，大部分讲的都很模糊，然后直接上代码，当时看似理解了，可是时间一长就忘光光了，以前看书学习的都是如何去做，而自己也没有深入的思考过为何这么做，单纯的就是背下来那种。当学习到一定程度之后，发现基础知识还是非常重要的。">
   <meta itemprop="datePublished" content="2017-04-10T10:41:00+00:00">
-  <meta itemprop="dateModified" content="2017-04-10T10:41:00+00:00">
-  <meta itemprop="wordCount" content="310">
+  <meta itemprop="dateModified" content="2021-09-04T12:13:51+08:00">
+  <meta itemprop="wordCount" content="1520">
   <meta itemprop="keywords" content="排序"><meta property="og:url" content="http://localhost:1313/posts/thinking-about-divide-and-conquer-by-sorting-fast-merging/">
-  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:site_name" content="觅睿克">
   <meta property="og:title" content="通过快排和归并排序思考分治法">
-  <meta property="og:description" content="话说以前看过很多算法相关的书，大部分讲的都很模糊，然后直接上代码，当时看似理解了，可是时间一长就忘光光了，以前看书学习的都是如何去做，而自己也没有深入的思考过为何这么做，单纯的就是背下来那种。当学习到一定程度之后，发现基础知识还是非常重要的。
-今天要说的就是分治法，什么是分治法，就是分而治之，先把把大的问题分解为小一些的问题。逐步把小问题解决了，在把这些解决的小问题合并了就把大问题解决了，这就是我所理解的分治法。
-我们在看算法排序相关的时候，都会有并归排序和快速排序，这两个方法都是用分治法解决的，只不过解决的方案不一样。下面是我用 php 实现的代码，大家可以先看下，然后我会在代码后面对两种方式做说明。
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 /** * 归并排序 * @param $arr * @return array */ function mergeSort($arr) { $arrCount = count($arr); if ($arrCount &lt; 2) { return $arr; } $mid = ceil($arrCount / 2); // 向上取整一下 $leftArr = array_slice($arr, 0, $mid); $rightArr = array_slice($arr, $mid, $arrCount - $mid); return mergeArr(mergeSort($leftArr), mergeSort($rightArr)); } /** * 最终合并数组的方法 * @param $leftArr * @param $rightArr * @return array */ function mergeArr($leftArr, $rightArr) { $i = 0; $j = 0; $returnArr = []; while ($i &lt; count($leftArr) &amp;&amp; $j &lt; count($rightArr)) { if ($leftArr[$i] &lt; $rightArr[$j]) { $returnArr[] = $leftArr[$i]; $i&#43;&#43;; } else if ($leftArr[$i] &gt; $rightArr[$j]) { $returnArr[] = $rightArr[$j]; $j&#43;&#43;; } else { $returnArr[] = $leftArr[$i]; $returnArr[] = $rightArr[$j]; $i&#43;&#43;; $j&#43;&#43;; } } for ($temp = $i; $temp &lt; count($leftArr); $temp&#43;&#43;) { $returnArr[] = $leftArr[$temp]; } for ($temp = $j; $temp &lt; count($rightArr); $temp&#43;&#43;) { $returnArr[] = $rightArr[$temp]; } return $returnArr; } /** * 快速排序 * @param $arr * @return array */ function quickSort($arr) { if (count($arr) &lt; 2) { return $arr; } $flag = $arr[0]; $lessArr = []; $largeArr = []; $flagArr = []; $flagArr[] = $flag; for ($i = 1; $i &lt; count($arr); $i&#43;&#43;) { if ($arr[$i] &lt; $flag) { $lessArr[] = $arr[$i]; } else if ($arr[$i] &gt; $flag) { $largeArr[] = $arr[$i]; } else { $flagArr[] = $arr[$i]; } } return array_merge(quickSort($lessArr), $flagArr, quickSort($largeArr)); } 先来说一下快排，因为快排的代码比较简短。快排的解决方案是，找出一个数字，一般都是采用数组的第一个数字作为标识数字，然后把比这个数字小的放到一个数组里面，在把比这个数字大的放到一个数组里面。这样，我们就已经确定好中间的数字了，然后我们在采用递归的方式分别处理比标志位数字小的数组和比标志位大的数组。 但是在处理递归的时候我们要注意一个点，就是何时终止递归，让其返回，这个点就是当数组的元素个数小于2的时候，因为这个时候已经不需要进行比较了。">
-  <meta property="og:locale" content="zh_cn">
+  <meta property="og:description" content="话说以前看过很多算法相关的书，大部分讲的都很模糊，然后直接上代码，当时看似理解了，可是时间一长就忘光光了，以前看书学习的都是如何去做，而自己也没有深入的思考过为何这么做，单纯的就是背下来那种。当学习到一定程度之后，发现基础知识还是非常重要的。">
+  <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2017-04-10T10:41:00+00:00">
-    <meta property="article:modified_time" content="2017-04-10T10:41:00+00:00">
+    <meta property="article:modified_time" content="2021-09-04T12:13:51+08:00">
     <meta property="article:tag" content="排序">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="通过快排和归并排序思考分治法">
-  <meta name="twitter:description" content="话说以前看过很多算法相关的书，大部分讲的都很模糊，然后直接上代码，当时看似理解了，可是时间一长就忘光光了，以前看书学习的都是如何去做，而自己也没有深入的思考过为何这么做，单纯的就是背下来那种。当学习到一定程度之后，发现基础知识还是非常重要的。
-今天要说的就是分治法，什么是分治法，就是分而治之，先把把大的问题分解为小一些的问题。逐步把小问题解决了，在把这些解决的小问题合并了就把大问题解决了，这就是我所理解的分治法。
-我们在看算法排序相关的时候，都会有并归排序和快速排序，这两个方法都是用分治法解决的，只不过解决的方案不一样。下面是我用 php 实现的代码，大家可以先看下，然后我会在代码后面对两种方式做说明。
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 /** * 归并排序 * @param $arr * @return array */ function mergeSort($arr) { $arrCount = count($arr); if ($arrCount &lt; 2) { return $arr; } $mid = ceil($arrCount / 2); // 向上取整一下 $leftArr = array_slice($arr, 0, $mid); $rightArr = array_slice($arr, $mid, $arrCount - $mid); return mergeArr(mergeSort($leftArr), mergeSort($rightArr)); } /** * 最终合并数组的方法 * @param $leftArr * @param $rightArr * @return array */ function mergeArr($leftArr, $rightArr) { $i = 0; $j = 0; $returnArr = []; while ($i &lt; count($leftArr) &amp;&amp; $j &lt; count($rightArr)) { if ($leftArr[$i] &lt; $rightArr[$j]) { $returnArr[] = $leftArr[$i]; $i&#43;&#43;; } else if ($leftArr[$i] &gt; $rightArr[$j]) { $returnArr[] = $rightArr[$j]; $j&#43;&#43;; } else { $returnArr[] = $leftArr[$i]; $returnArr[] = $rightArr[$j]; $i&#43;&#43;; $j&#43;&#43;; } } for ($temp = $i; $temp &lt; count($leftArr); $temp&#43;&#43;) { $returnArr[] = $leftArr[$temp]; } for ($temp = $j; $temp &lt; count($rightArr); $temp&#43;&#43;) { $returnArr[] = $rightArr[$temp]; } return $returnArr; } /** * 快速排序 * @param $arr * @return array */ function quickSort($arr) { if (count($arr) &lt; 2) { return $arr; } $flag = $arr[0]; $lessArr = []; $largeArr = []; $flagArr = []; $flagArr[] = $flag; for ($i = 1; $i &lt; count($arr); $i&#43;&#43;) { if ($arr[$i] &lt; $flag) { $lessArr[] = $arr[$i]; } else if ($arr[$i] &gt; $flag) { $largeArr[] = $arr[$i]; } else { $flagArr[] = $arr[$i]; } } return array_merge(quickSort($lessArr), $flagArr, quickSort($largeArr)); } 先来说一下快排，因为快排的代码比较简短。快排的解决方案是，找出一个数字，一般都是采用数组的第一个数字作为标识数字，然后把比这个数字小的放到一个数组里面，在把比这个数字大的放到一个数组里面。这样，我们就已经确定好中间的数字了，然后我们在采用递归的方式分别处理比标志位数字小的数组和比标志位大的数组。 但是在处理递归的时候我们要注意一个点，就是何时终止递归，让其返回，这个点就是当数组的元素个数小于2的时候，因为这个时候已经不需要进行比较了。">
-<meta name="application-name" content="FixIt">
-<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+  <meta name="twitter:description" content="话说以前看过很多算法相关的书，大部分讲的都很模糊，然后直接上代码，当时看似理解了，可是时间一长就忘光光了，以前看书学习的都是如何去做，而自己也没有深入的思考过为何这么做，单纯的就是背下来那种。当学习到一定程度之后，发现基础知识还是非常重要的。">
+<meta name="application-name" content="觅睿克">
+<meta name="apple-mobile-web-app-title" content="觅睿克"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/thinking-about-divide-and-conquer-by-sorting-fast-merging/" title="通过快排和归并排序思考分治法 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/php-dependency-injection-note-from-the-container-pimple/" title="Php依赖注入容器Pimple的笔记" /><link rel="next" type="text/html" href="http://localhost:1313/posts/deepin-add-phpstorm-shortcut-to-the-application-directory/" title="deepin 添加 phpstorm 快捷方式到 application 目录" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/thinking-about-divide-and-conquer-by-sorting-fast-merging/index.md" title="通过快排和归并排序思考分治法 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/thinking-about-divide-and-conquer-by-sorting-fast-merging/" title="通过快排和归并排序思考分治法 - 觅睿克" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/php-dependency-injection-note-from-the-container-pimple/" title="Php依赖注入容器Pimple的笔记" /><link rel="next" type="text/html" href="http://localhost:1313/posts/deepin-add-phpstorm-shortcut-to-the-application-directory/" title="deepin 添加 phpstorm 快捷方式到 application 目录" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/thinking-about-divide-and-conquer-by-sorting-fast-merging/index.md" title="通过快排和归并排序思考分治法 - 觅睿克"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
     "@context": "http://schema.org",
     "@type": "BlogPosting",
     "headline": "通过快排和归并排序思考分治法",
-    "inLanguage": "zh-cn",
+    "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/posts\/thinking-about-divide-and-conquer-by-sorting-fast-merging\/"
-    },"genre": "posts","keywords": "排序","wordcount":  310 ,
-    "url": "http:\/\/localhost:1313\/posts\/thinking-about-divide-and-conquer-by-sorting-fast-merging\/","datePublished": "2017-04-10T10:41:00+00:00","dateModified": "2017-04-10T10:41:00+00:00","publisher": {
+    },"genre": "posts","keywords": "排序","wordcount":  1520 ,
+    "url": "http:\/\/localhost:1313\/posts\/thinking-about-divide-and-conquer-by-sorting-fast-merging\/","datePublished": "2017-04-10T10:41:00+00:00","dateModified": "2021-09-04T12:13:51+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
-        "name": "作者"
+        "name": "M1racleHao"
       },"description": ""
   }
   </script><script src="/js/head/color-scheme.min.js"></script></head>
   <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper">
     <div class="header-title">
-      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <a href="/" title="觅睿克"><span class="header-title-text">觅睿克</span></a><span class="header-subtitle"></span></div>
     <nav>
       <ul class="menu"><li class="menu-item">
-              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
-              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
-              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
     </nav>
   </div>
 </header><header class="mobile animate__faster" id="header-mobile">
   <div class="header-container">
     <div class="header-wrapper">
       <div class="header-title">
-        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+        <a href="/" title="觅睿克"><span class="header-title-text">觅睿克</span></a><span class="header-subtitle"></span></div>
       <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
       <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
         <span></span><span></span><span></span>
       </div>
     </div>
     <nav>
-      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item menu-system"></li>
       </ul>
     </nav>
   </div>
@@ -92,8 +80,8 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>通过快排和归并排序思考分治法</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
-      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a>&ensp;<a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category" title="分类 - 算法"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 算法</a></span></div><div class="post-meta-line"><span title="发布于 2017-04-10 10:41:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2017-04-10">2017-04-10</time></span>&nbsp;<span title="310 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 400 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/crazyhl" title="作者" target="_blank" rel="external nofollow noopener noreferrer author" class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+    M1racleHao</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a>&ensp;<a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category" title="分类 - 算法"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 算法</a></span></div><div class="post-meta-line"><span title="发布于 2017-04-10 10:41:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2017-04-10">2017-04-10</time></span>&nbsp;<span title="更新于 2021-09-04 12:13:51"><i class="fa-regular fa-calendar-check fa-fw me-1" aria-hidden="true"></i><time datetime="2021-09-04">2021-09-04</time></span>&nbsp;<span title="1520 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1600 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
     </div><div class="content" id="content"><p>话说以前看过很多算法相关的书，大部分讲的都很模糊，然后直接上代码，当时看似理解了，可是时间一长就忘光光了，以前看书学习的都是如何去做，而自己也没有深入的思考过为何这么做，单纯的就是背下来那种。当学习到一定程度之后，发现基础知识还是非常重要的。</p>
 <p>今天要说的就是分治法，什么是分治法，就是分而治之，先把把大的问题分解为小一些的问题。逐步把小问题解决了，在把这些解决的小问题合并了就把大问题解决了，这就是我所理解的分治法。</p>
 <p>我们在看算法排序相关的时候，都会有并归排序和快速排序，这两个方法都是用分治法解决的，只不过解决的方案不一样。下面是我用 php 实现的代码，大家可以先看下，然后我会在代码后面对两种方式做说明。</p>
@@ -268,7 +256,7 @@
 </div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2017-04-10 10:41:00">更新于 2017-04-10&nbsp;</span>
+      <div class="post-info-mod"><span title="更新于 2021-09-04 12:13:51">更新于 2021-09-04&nbsp;</span>
       </div><div class="post-info-license">
             <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
           </div></div><div class="post-info-line">
@@ -293,7 +281,7 @@
     <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
-              <a href="/"></a></span></div></div>
+              <a href="https://github.com/crazyhl" target="_blank" rel="external nofollow noopener noreferrer">M1racleHao</a></span></div></div>
   </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
     <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>

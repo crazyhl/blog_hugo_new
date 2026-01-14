@@ -8,7 +8,7 @@ updated: 2018-05-30 14:50:00
 toc: false
 ---
 
-![图片alt](https://www.cimple.ink/images/2018/05/30/89a4759f89f6e8680d9c06d0661d13db.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2018/05/30/89a4759f89f6e8680d9c06d0661d13db.png)
 
 这个教程是 laracasts 上面的一个系列教程，对于我来说有很多比较多的东西没有接触过，所以起码看完第一集来说对我还是很有帮助的，在其他论坛也是有相关笔记的，我仔细想了一下如果也是想他们那样记录每一步的操作来说意义并不大，毕竟我可以直接看他们的文章。所以这里面还记录一些我个人的感悟
 

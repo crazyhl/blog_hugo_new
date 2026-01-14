@@ -15,7 +15,7 @@ slug: dfa-with-php
 
 通过百度可以知道 `dfa` 是 `确定有穷自动机` 的缩写。
 应该还会见到类似下面图的说明
-![](https://www.cimple.ink/images/2020/03/29/b3afacefa9dcdd7d7fb929dd824c7bd1.png)
+![](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/03/29/b3afacefa9dcdd7d7fb929dd824c7bd1.png)
 原谅我实在一些，我这人数学不好不说，貌似看图能力也不行，这个图恕我直言我没看懂。所以关于精准的解释，请大家去百度或者 google 自行查阅了。
 
 ## 我的理解
@@ -34,9 +34,9 @@ slug: dfa-with-php
 先做个解释，前三个大家都能看懂，那么 `*` 是什么，这个是我定义的通配符，代表着 `*` 可以是 0 - n 个占位符用来替代在关键词中间插入混淆字符。至于可以替换几个我们可以在代码中进行定义，需要注意 n 越大，速度就会越慢。
 
 说明完了，来看看构造好的树是什么一样的，应该是跟下图差不多的。
-![](https://www.cimple.ink/images/2020/03/29/d81c2be9b6a49d571d9ae1522ad715db.jpg)
+![](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/03/29/d81c2be9b6a49d571d9ae1522ad715db.jpg)
 为什么要手动画一个，因为需要对比，我的理解跟程序是否一致，如果不一致，就要找出程序是不是写的不对了。那么我们来看看程序生成的是啥样的。
-![](https://www.cimple.ink/images/2020/03/29/d5c6185a5a9cd2c11e7d0e10f4e6e76e.png)
+![](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/03/29/d5c6185a5a9cd2c11e7d0e10f4e6e76e.png)
 程序生成的跟图片一致，到这里还都是正确的。
 
 ### 待检测的字符串

@@ -12,7 +12,7 @@
 
 1. 创建项目文件夹 `upyun-electron`
 2. 初始化项目 `npm init`
-![](https://www.cimple.ink/images/2019/07/05/a3f0ef04-6203-5e66-af79-2d8e0d4fd18e.jpeg)
+![](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/07/05/a3f0ef04-6203-5e66-af79-2d8e0d4fd18e.jpeg)
 
 <!--more-->
 
@@ -444,6 +444,6 @@ ipcMain.on('fileAdd', (event, filePath) => {
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/handson-use-electron-to-develop-your-own-upyun-file-upload-client/  
 

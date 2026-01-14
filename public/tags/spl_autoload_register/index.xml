@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Spl_autoload_register - 标签 - Miracle Hao</title>
+    <title>Spl_autoload_register - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/spl_autoload_register/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Sun, 18 Sep 2016 22:52:00 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Sat, 04 Sep 2021 12:13:51 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/spl_autoload_register/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>PHP 自动加载</title>
       <link>http://localhost:1313/posts/php-autoloading/</link>
-      <pubDate>Sun, 18 Sep 2016 22:52:00 +0000</pubDate>
+      <pubDate>Sun, 18 Sep 2016 22:52:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/php-autoloading/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
-      <description>&lt;p&gt;做编程3年了，几乎每年一个转型 （java -&amp;gt; android（web app） -&amp;gt; php），这个节奏太不舒服了。想深入了解什么的时候，总是无奈的转型。现在自己也算是彻底的稳定下来了。可以安心的研究 php 了。php 也做了一年多了，一直在用框架，也就是最近几个月吧，认识到了自己的不足之处，开始逐步研究一些细节方面的东西。&lt;/p&gt;&#xA;&lt;p&gt;这个博客使用 laravel 弄的，里面很多的细节都是在以前的 java 的时候接触过，但是以前弄 java 的时候就没有太细致的研究。现在也就顺道一起弥补回来。&lt;/p&gt;&#xA;&lt;p&gt;今天要写的是自动加载， php 中如果想要加载一个类的话，一般采用 require 或者 include 但是呢，自动引入了命名空间以后，类名加上命名空间超级长，然后每个文件开头一排 require 外加一排 use 这个文件无疑太长，而且如果某一次忘记了引入文件，如果项目过大，那么结果就是两个字爆炸 boom shakalaka。排查起来超级麻烦。&lt;/p&gt;&#xA;&lt;p&gt;所以，就有了自动加载，以前用自动加载都是使用 &lt;code&gt;__autoload&lt;/code&gt; 但是这个方法有一个bug，就是只能使用一次。这样造成的问题就是如果我们有多种状态的引用的话，就会产生很长的代码，这是我们所不想见到的。于是就有了 &lt;code&gt;spl_autoload_register&lt;/code&gt; 其实，从文档上来看他就是 autoload 的一种实现，但是区别是，这个方法可以执行多次。但是以我这一段看代码来看，其实也就是使用了一次。但是安全第一，而且为了标准还是使用 &lt;code&gt;spl_autoload_register&lt;/code&gt; 。&lt;/p&gt;&#xA;&lt;p&gt;上面说了一大堆没用，其实有用的就是一个方法 &lt;code&gt;spl_autoload_register&lt;/code&gt; ，具体看文档： &lt;a href=&#34;http://php.net/manual/zh/function.autoload.php&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;http://php.net/manual/zh/function.autoload.php&lt;/a&gt;。&lt;/p&gt;&#xA;&lt;p&gt;下面进入正题，开始我们的自动加载吧。我直接上代码了：&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;&amp;lt;?php&#xA;&#xA;use Test32\Test;&#xA;&#xA;spl_autoload_register(function ($class) {&#xA;    $path = str_replace(&amp;#39;\\&amp;#39;, DIRECTORY_SEPARATOR, $class);&#xA;    $path .= &amp;#39;.php&amp;#39;;&#xA;    if (file_exists($path)) {&#xA;        require_once ($path);&#xA;    } else {&#xA;        throw new Exception(&amp;#39;Class not exist!&amp;#39;);&#xA;    }&#xA;}, true);&#xA;&#xA;$test = new Test();&#xA;&#xA;$test-&amp;gt;sayHello();&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;现在来解释一下：这个方法会接受三个参数，第一个是一个回掉函数，后面两个是bool类型的参数。后面两个很少使用，所以我们就着重说一下第一个回掉函数，这个函数有一个参数是一个包含命名空间的类名，也就是我们use的那一个部分的名称，我们在这里是使用层次文件夹的方式，构造的目录和文件结构的。所以，在我们收到名称之后，先转换为路径在加上 &lt;code&gt;.php&lt;/code&gt; 的文件名后缀，判断一下文件是否存在。如果存在就 &lt;code&gt;require&lt;/code&gt; 进去。如果不存在就抛出一个异常，告知class不存在。这样要简单的自动加载器就完成了。&lt;/p&gt;</description>
+      <description>&lt;p&gt;做编程3年了，几乎每年一个转型 （java -&amp;gt; android（web app） -&amp;gt; php），这个节奏太不舒服了。想深入了解什么的时候，总是无奈的转型。现在自己也算是彻底的稳定下来了。可以安心的研究 php 了。php 也做了一年多了，一直在用框架，也就是最近几个月吧，认识到了自己的不足之处，开始逐步研究一些细节方面的东西。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

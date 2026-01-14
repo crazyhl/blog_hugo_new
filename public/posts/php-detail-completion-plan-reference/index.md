@@ -1,7 +1,7 @@
 # PHP 细节补全计划：引用
 
 
-![图片alt](https://www.cimple.ink/images/2019/03/06/0664506a46a7649adc31545165d08f41.jpg)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/0664506a46a7649adc31545165d08f41.jpg)
 
 最近在公司比较忙，以前有空闲的时候没有发现的东西，反而再忙的时候会加深体会。所以就动了心思准备写一个 php 细节补全的系列，不知道能写多少，慢慢来吧，这个就是第一篇了。
 
@@ -94,6 +94,6 @@ var_dump($arr);
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/php-detail-completion-plan-reference/  
 

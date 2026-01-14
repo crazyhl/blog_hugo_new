@@ -11,7 +11,7 @@
 
 通过查看文档发现了下面的一段说明
 
-![图片alt](https://www.cimple.ink/images/2018/02/28/fzbbyyirm4vqvp3ywkl7h2m15mpr4w5b.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2018/02/28/fzbbyyirm4vqvp3ywkl7h2m15mpr4w5b.png)
 
 从这可以得知，`CURLOPT_SAFE_UPLOAD ` 这个参数可以控制，由于 `php 5.5` 以前的默认值是 `false` ，所以我可能以前并没有关注，但是在 `php 5.6` 的时候这个默认值是 `true` 了，所以当我们想要采用上面那种方式就需要设置 `CURLOPT_SAFE_UPLOAD ` 这个值为 `false` 才可以使用。
 
@@ -22,6 +22,6 @@
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/php-curl-simulates-a-small-problem-record-encountered-by-uploading/  
 

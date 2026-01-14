@@ -250,6 +250,6 @@ func main() {
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/design-pattern-oberver-pattern/  
 

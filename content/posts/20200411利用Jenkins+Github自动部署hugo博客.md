@@ -12,32 +12,32 @@ slug: jenkins-and-github-auto-deploy-hugo-blog
 
 
 点击菜单进入`系统管理` -> `系统配置`，找到 `Publish over SSH` 的部分，设置按照如图，配置好自己的参数
-![图片alt](https://www.cimple.ink/images/2020/04/11/WX20200411-201435@2x.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/04/11/WX20200411-201435@2x.png)
 没有 `SSH Server` 的部分就点击新增就可以出现了。没有红框密码的部分，点击一下高级就有了，勾选使用密码，在输入密码。 `Name` 自己输入自己定义的名字 `Host` 和 `Username` 就是服务器的 ip 和用户名，`Remote Directory` 可以理解为操作的根目录，最后设置好以后，点击 `Test` 没问题的话就会有 `Success` 的提示。测试成功后点击保存就可以了。
 
 接下来，选择菜单 `新建任务`，名称还是自己填写自己的任务名，接下来选择我们这里选择 `构建一个自由风格的软件项目` 大家可以按照自己的需求选择，然后点击`确定`进入下一步进入配置。
-![图片alt](https://www.cimple.ink/images/2020/04/11/WX20200411-202240@2x.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/04/11/WX20200411-202240@2x.png)
 在源码管理，我们这边是用的 `git`，可以根据自己的需求自己选择。别忘了账号密码的配置。否则拉代码会有问题哦，因为我们是私有的项目。
-![图片alt](https://www.cimple.ink/images/2020/04/11/WX20200411-202427@2x.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/04/11/WX20200411-202427@2x.png)
 接下来我们在 `构建触发器` 选择 `GitHub hook trigger for GITScm polling`
-![图片alt](https://www.cimple.ink/images/2020/04/11/WX20200411-202610@2x.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/04/11/WX20200411-202610@2x.png)
 是用方法可以看文档的说明，我们使用的方法，在文档的下图位置
-![图片alt](https://www.cimple.ink/images/2020/04/11/WX20200411-202655@2x.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/04/11/WX20200411-202655@2x.png)
 这里说的就是在`系统管理` -> `系统配置`中可以看到 hook 的 url，我们把他填写到 github 项目设置里面的 webhook 就可以了，如下两张图。
 
-![图片alt](https://www.cimple.ink/images/2020/04/11/WX20200411-203510@2x.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/04/11/WX20200411-203510@2x.png)
 如果看不到，点击高级就可以了。
-![图片alt](https://www.cimple.ink/images/2020/04/11/WX20200411-203758@2x.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/04/11/WX20200411-203758@2x.png)
 这里注意配置什么情况下载通知，我们这里只要配置在有 `push` 的时候通知就足够了。
 
 继续回到 Jenkins 的项目配置
 
 
-![图片alt](https://www.cimple.ink/images/2020/04/11/WX20200411-202808@2x.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/04/11/WX20200411-202808@2x.png)
 
 执行脚本就按照自己的配置就可以了，我这边就是下载了 `hugo` 的可执行文件，然后编译了一下。
 在`构建后操作`我们有两个操作，一个是服务器那边拉取这边编译好以后的博客到服务器，用 `rsync` 拉取。
-![图片alt](https://www.cimple.ink/images/2020/04/11/WX20200411-202839@2x.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2020/04/11/WX20200411-202839@2x.png)
 第二个操作是 `Delete workspace when build is done` 都弄好后清除，每次编译都全新拉取，我觉得会更安全一些，至于速度慢一些可以接受。
 
 最后点击保存，点击`立即构建`测试一波，不出意外应该都可以部署了。

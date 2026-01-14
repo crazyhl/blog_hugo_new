@@ -23,6 +23,6 @@ laravel 的命令，以前就是简单的用了，并没有很仔细的用。
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/laravel-custom-artisan-command/  
 

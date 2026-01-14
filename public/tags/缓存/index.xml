@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>缓存 - 标签 - Miracle Hao</title>
+    <title>缓存 - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/%E7%BC%93%E5%AD%98/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Tue, 20 Sep 2016 21:29:00 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Wed, 14 Jan 2026 21:50:30 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/%E7%BC%93%E5%AD%98/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Redis zSets 数据类型不一致踏坑记</title>
       <link>http://localhost:1313/posts/redis-zsets-data-type-inconsistency/</link>
-      <pubDate>Tue, 20 Sep 2016 21:29:00 +0000</pubDate>
+      <pubDate>Tue, 20 Sep 2016 21:29:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/redis-zsets-data-type-inconsistency/</guid>
       <category domain="http://localhost:1313/categories/redis/">Redis</category>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://www.cimple.ink/images/2019/03/06/e0338116d68951a669a1b0197cdc20f3.jpg&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;今天在公司写代码的时候，遇到了一个大问题，简单说一下场景，有两处使用了一个 zSets，一处是从网页获取数据，放到zSets里面；另一处是从数据库获取数据放到 zSets 里面。在后期做清除数据操作的时候，发现了数据清除的不完全，后来仔细的检查了一下。发现数据重复。&lt;/p&gt;&#xA;&lt;p&gt;仔细测试了好一会儿之后，才发现了问题坐在，就是当score相同的时候，相同的value会覆盖数据，这里的value相同，并不仅仅是值相同，而且数据类型也应该一致才会覆盖。否则就会产生score相同的两条数据。&lt;/p&gt;&#xA;&lt;p&gt;这个问题是个大坑，记录下来，以后一定要记得&lt;/p&gt;</description>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/e0338116d68951a669a1b0197cdc20f3.jpg&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;今天在公司写代码的时候，遇到了一个大问题，简单说一下场景，有两处使用了一个 zSets，一处是从网页获取数据，放到zSets里面；另一处是从数据库获取数据放到 zSets 里面。在后期做清除数据操作的时候，发现了数据清除的不完全，后来仔细的检查了一下。发现数据重复。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

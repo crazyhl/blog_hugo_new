@@ -55,6 +55,6 @@ jwt 过期的时间在 `exp` 中定义。如果超期了，就说明这个 jwt �
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/jwt-authentication-summary/  
 

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Laravel-Modules - 标签 - Miracle Hao</title>
+    <title>Laravel-Modules - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/laravel-modules/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Wed, 01 Jan 2025 18:39:47 +0800</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Wed, 01 Jan 2025 19:50:31 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/laravel-modules/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Laravel Modules 使用数据库进行模块管理以及 Filement Modules 自定义模块管理器</title>
       <link>http://localhost:1313/posts/laravel-modules-use-database-for-module-management-and-filement-modules-custom-module-manager/</link>
-      <pubDate>Wed, 01 Jan 2025 18:39:47 +0800</pubDate>
+      <pubDate>Wed, 01 Jan 2025 18:39:47 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/laravel-modules-use-database-for-module-management-and-filement-modules-custom-module-manager/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
       <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;laravel-modules-使用数据库进行模块管理&#34;&gt;&lt;span&gt;Laravel Modules 使用数据库进行模块管理&lt;/span&gt;&#xA;  &lt;a href=&#34;#laravel-modules-%e4%bd%bf%e7%94%a8%e6%95%b0%e6%8d%ae%e5%ba%93%e8%bf%9b%e8%a1%8c%e6%a8%a1%e5%9d%97%e7%ae%a1%e7%90%86&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;&lt;code&gt;Laravel Modules&lt;/code&gt; 默认是使用文件系统进行进行模块管理的，如果本地开发是没有问题的，但是如果放到线上，由于模块信息默认是在项目根目录的，那么就要把根目录的这个文件进行权限配置。背离了我们只放开 public/storage 目录权限的目标（这里描述的的可能不准确），所以下面只有两个选择&lt;/p&gt;</description>
@@ -19,10 +21,10 @@
     <item>
       <title>2024 年 12 月 1 日 Laravel Modules 使用小记</title>
       <link>http://localhost:1313/posts/laravel-modules-note/</link>
-      <pubDate>Sun, 01 Dec 2024 11:06:55 +0800</pubDate>
+      <pubDate>Sun, 01 Dec 2024 11:06:55 +0800</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/laravel-modules-note/</guid>
       <category domain="http://localhost:1313/categories/php/">PHP</category>
-      <description>&lt;p&gt;最近准备用 laravel 写点实验性的东西，由于要准备精准划分模块，所以就发现了 &lt;a href=&#34;https://github.com/nWidart/laravel-modules&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;laravel-modules&lt;/a&gt; 这个完美符合我需求的库。&lt;/p&gt;&#xA;&lt;p&gt;安装的时候严格根据实际的版本参照文档安装即可 &lt;a href=&#34;https://laravelmodules.com/docs/v11/installation-and-setup&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://laravelmodules.com/docs/v11/installation-and-setup&lt;/a&gt;。不过这里有个注意点，在 &lt;code&gt;Autoload&lt;/code&gt; 部分需要配置&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;&amp;#34;extra&amp;#34;: {&#xA;    &amp;#34;laravel&amp;#34;: {&#xA;        &amp;#34;dont-discover&amp;#34;: []&#xA;    },&#xA;    &amp;#34;merge-plugin&amp;#34;: {&#xA;        &amp;#34;include&amp;#34;: [&#xA;            &amp;#34;Modules/*/composer.json&amp;#34;&#xA;        ]&#xA;    }&#xA;},&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;我在安装的时候，没有注意这点，导致模块没有自动加载，花费了很久的时间，这里就记录下来了，其实就是看文档不仔细。&lt;/p&gt;&#xA;&lt;p&gt;创建模块的时候参照这里即可 &lt;a href=&#34;https://laravelmodules.com/docs/v11/creating-a-module&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://laravelmodules.com/docs/v11/creating-a-module&lt;/a&gt; 。一定要把目录结构部分了解清楚，这就是一个很精简的 &lt;code&gt;laravel&lt;/code&gt; 结构。&lt;/p&gt;&#xA;&lt;p&gt;模块开发完后，准备发布了，就参照这篇文档 &lt;a href=&#34;https://laravelmodules.com/docs/v11/publishing-modules&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://laravelmodules.com/docs/v11/publishing-modules&lt;/a&gt;。&#xA;注意点：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;模块 &lt;code&gt;compose.json&lt;/code&gt; 文件中的 &lt;code&gt;type&lt;/code&gt; 为 &lt;code&gt;laravel-module&lt;/code&gt;。这个在默认生成的 &lt;code&gt;composer.json&lt;/code&gt; 文件中是没有的，记得添加上。&lt;/li&gt;&#xA;&lt;li&gt;安装 &lt;code&gt;https://github.com/joshbrw/laravel-module-installer&lt;/code&gt; 这个包会将安装的模块移动到 &lt;code&gt;Modules&lt;/code&gt; 目录中，这个操作是可选的，毕竟封装好的模块，理论上是可以直接用的，如果有修改的需求，在安装这个包就可以了。&lt;/li&gt;&#xA;&lt;li&gt;其他项目在需要应用模块的时候也需要安装 &lt;code&gt;laravel-modules&lt;/code&gt; 这个别忘了。&lt;/li&gt;&#xA;&lt;li&gt;模块需要发布的时候，要将模块移动到一个单独的文件，并且模块名称全部小写并且以&lt;code&gt;-module&lt;/code&gt;结尾。虽然文档是这么说的，但是我觉得没必要，因为我们大部分都是将模块发布到 github 或者自建的 gitea 中，此时我们在创建项目的时候将模块名称全部小写，并且以&lt;code&gt;-module&lt;/code&gt; 结尾就可以了。&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;例如，名为Quotes的模块将被重命名为quotes-module 。&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;安装模块后执行 &lt;code&gt;php artisan module:enable moduleName&lt;/code&gt; 命令来启用模块，其实这个我觉得也可以省略，毕竟我觉得一个完备的 &lt;code&gt;laravel-modules&lt;/code&gt; 基座项目，需要在可视化的情况下来激活这些。&lt;code&gt;php artisan module:migrate moduleName&lt;/code&gt; &lt;code&gt;php artisan module:seed moduleName&lt;/code&gt; 用这两个命令运行模块的迁移文件，以及数据填充文件。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;今天就先记录这么多，模块更多的使用相关，以及权限相关。我会在下一篇文章中继续来记录。&lt;/p&gt;</description>
+      <description>&lt;p&gt;最近准备用 laravel 写点实验性的东西，由于要准备精准划分模块，所以就发现了 &lt;a href=&#34;https://github.com/nWidart/laravel-modules&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;laravel-modules&lt;/a&gt; 这个完美符合我需求的库。&lt;/p&gt;&#xA;&lt;p&gt;安装的时候严格根据实际的版本参照文档安装即可 &lt;a href=&#34;https://laravelmodules.com/docs/v11/installation-and-setup&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://laravelmodules.com/docs/v11/installation-and-setup&lt;/a&gt;。不过这里有个注意点，在 &lt;code&gt;Autoload&lt;/code&gt; 部分需要配置&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

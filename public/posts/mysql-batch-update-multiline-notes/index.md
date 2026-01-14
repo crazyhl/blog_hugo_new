@@ -6,7 +6,7 @@
 
 首先我们构造好了一个测试表，如下图
 
-![图片alt](https://www.cimple.ink/images/2019/03/06/387ea4a3dff34a73889d73dcda85d1d3.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/387ea4a3dff34a73889d73dcda85d1d3.png)
 
 
 <!--more-->
@@ -24,7 +24,7 @@ where name in ('小白', '小红')
 
 代码执行后，结果如下图
 
-![图片alt](https://www.cimple.ink/images/2019/03/06/68725ebf9f2349e9dab85c5dea833b69.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/68725ebf9f2349e9dab85c5dea833b69.png)
 
 可以看到，小白和小红的 `group` 的值都改变了。
 
@@ -39,7 +39,7 @@ where name in ('小白')
 ```
 结果如下，
 
-![图片alt](https://www.cimple.ink/images/2019/03/06/a06ffd726572058da1cfa046a1a7c365.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/a06ffd726572058da1cfa046a1a7c365.png)
 
 我们可以看到小红并没有被更改到。
 
@@ -56,7 +56,7 @@ where name in ('小白','大白')
 
 结果如下
 
-![图片alt](https://www.cimple.ink/images/2019/03/06/8ed7b5f3834f7623e7d8f34893e41faa.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/8ed7b5f3834f7623e7d8f34893e41faa.png)
 
 看到了么，`大白` 没有被任何 `when` 所捕获到，所以，执行了 `else` 部分，把值更改为了11。
 
@@ -73,7 +73,7 @@ where name in ('小白','小红') and test.group = 1
 
 结果如下
 
-![图片alt](https://www.cimple.ink/images/2019/03/06/77a84df28580eaab1d64cc1aaf9c2b23.png)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/77a84df28580eaab1d64cc1aaf9c2b23.png)
 
 看到了吧，多条件的写法，也如此的简单。
 
@@ -81,6 +81,6 @@ where name in ('小白','小红') and test.group = 1
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/mysql-batch-update-multiline-notes/  
 

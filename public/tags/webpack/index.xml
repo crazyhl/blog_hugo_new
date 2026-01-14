@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Webpack - 标签 - Miracle Hao</title>
+    <title>Webpack - 标签 - 觅睿克</title>
     <link>http://localhost:1313/tags/webpack/</link>
-    <description>Miracle Hao</description>
+    <description>一个中年 php 程序员，喜欢折腾点代码</description>
     <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Sat, 13 Oct 2018 07:11:00 +0000</lastBuildDate>
+    <language>zh-CN</language>
+    <managingEditor>crazyhl@163.com (M1racleHao)</managingEditor>
+    <webMaster>crazyhl@163.com (M1racleHao)</webMaster>
+    <lastBuildDate>Sat, 04 Sep 2021 12:13:51 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/webpack/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>webpack4 typescript 配置笔记</title>
       <link>http://localhost:1313/posts/webpack4-typescript-configuration-notes/</link>
-      <pubDate>Sat, 13 Oct 2018 07:11:00 +0000</pubDate>
+      <pubDate>Sat, 13 Oct 2018 07:11:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/webpack4-typescript-configuration-notes/</guid>
       <category domain="http://localhost:1313/categories/%E5%89%8D%E7%AB%AF/">前端</category>
-      <description>&lt;p&gt;最新需要写一些 &lt;code&gt;js&lt;/code&gt; 的东西，正好就想试用一下 &lt;code&gt;typescript&lt;/code&gt; 试用以后感觉舒服，那么需求来了，我们需要编译出来的文件，在外部可以调用，所以就有了下面的笔记&lt;/p&gt;&#xA;&lt;p&gt;参考文章&lt;a href=&#34;https://www.cnblogs.com/mahidol/p/8874300.html&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://www.cnblogs.com/mahidol/p/8874300.html&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;npm 安装依赖&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;npm install --save-dev typescript ts-loader webpack webpack-cli&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在项目根目录创建两个文件夹 &lt;code&gt;src&lt;/code&gt; 和 &lt;code&gt;dist&lt;/code&gt; 以及一个测试用的入口文件 &lt;code&gt;index.html&lt;/code&gt;&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;src&lt;/code&gt; 用来存放我们的源码&#xA;&lt;code&gt;dist&lt;/code&gt; 用来保存生成后的源码&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;index.html&lt;/code&gt; 的内容&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;&#xA;&amp;lt;html lang=&amp;#34;en&amp;#34;&amp;gt;&#xA;&amp;lt;head&amp;gt;&#xA;    &amp;lt;meta charset=&amp;#34;UTF-8&amp;#34;&amp;gt;&#xA;    &amp;lt;title&amp;gt;Title&amp;lt;/title&amp;gt;&#xA;&amp;lt;/head&amp;gt;&#xA;&amp;lt;body&amp;gt;&#xA;&#xA;&amp;lt;/body&amp;gt;&#xA;&amp;lt;script type=&amp;#34;text/javascript&amp;#34; src=&amp;#34;./dist/app.js&amp;#34; &amp;gt;&amp;lt;/script&amp;gt;&#xA;&amp;lt;/html&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;入口文件仅仅是用来测试的，所以仅仅引入了输出的js 我们在 &lt;code&gt;chrome&lt;/code&gt; 控制台测试&lt;/p&gt;&#xA;&lt;p&gt;根目录创建 &lt;code&gt;typescript&lt;/code&gt; 配置文件 &lt;code&gt;tsconfig.json&lt;/code&gt;&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;{&#xA;  &amp;#34;compilerOptions&amp;#34;: {&#xA;    &amp;#34;module&amp;#34;: &amp;#34;commonjs&amp;#34;,&#xA;    &amp;#34;target&amp;#34;: &amp;#34;es5&amp;#34;,&#xA;    &amp;#34;sourceMap&amp;#34;: true&#xA;  },&#xA;  &amp;#34;exclude&amp;#34;: [&#xA;    &amp;#34;node_modules&amp;#34;&#xA;  ]&#xA;}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;创建 &lt;code&gt;webpack&lt;/code&gt; 配置文件，采用&lt;a href=&#34;https://www.webpackjs.com/guides/production/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://www.webpackjs.com/guides/production/&lt;/a&gt;&#xA;中的方案，只不过有些小修改&lt;/p&gt;</description>
+      <description>&lt;p&gt;最新需要写一些 &lt;code&gt;js&lt;/code&gt; 的东西，正好就想试用一下 &lt;code&gt;typescript&lt;/code&gt; 试用以后感觉舒服，那么需求来了，我们需要编译出来的文件，在外部可以调用，所以就有了下面的笔记&lt;/p&gt;&#xA;&lt;p&gt;参考文章&lt;a href=&#34;https://www.cnblogs.com/mahidol/p/8874300.html&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://www.cnblogs.com/mahidol/p/8874300.html&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     <item>
       <title>npm 以及 webpack 的一些笔记</title>
       <link>http://localhost:1313/posts/npm-and-some-notes-from-webpack/</link>
-      <pubDate>Wed, 01 Mar 2017 11:34:00 +0000</pubDate>
+      <pubDate>Wed, 01 Mar 2017 11:34:00 +0000</pubDate><author>crazyhl@163.com (M1racleHao)</author>
       <guid>http://localhost:1313/posts/npm-and-some-notes-from-webpack/</guid>
       <category domain="http://localhost:1313/categories/%E5%89%8D%E7%AB%AF/">前端</category>
-      <description>&lt;p&gt;先说点没用的，工作了3年了，相关东西也都接触一些，但是前端呢，还是按照以前的套路，做页面模版，写 js，写 css，但是现代相关的东西却没有深入的了解过。这不好啊，趁着现在有些空闲时间就想学习一下vue，但是 vue-cli 是使用 webpack 打包的，所以第一步就应该学习一下 webpack 趁机了解一下现代前端的开发思想。&lt;/p&gt;&#xA;&lt;p&gt;本篇笔记总结自:  &lt;a href=&#34;http://www.jianshu.com/p/42e11515c10f&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;http://www.jianshu.com/p/42e11515c10f&lt;/a&gt;，并针对笔记当日的最新版本对配置项进行响应的配置&lt;/p&gt;&#xA;&lt;p&gt;####安装 webpack&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;//全局安装&#xA;npm install -g webpack&#xA;//安装到你的项目目录&#xA;npm install --save-dev webpack&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;####编译项目&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;webpack {entry file/入口文件} {destination for bundled file/存放bundle.js的地方}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;####不适用繁杂的命令，使用配置文件编译项目&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;module.exports = {&#xA;  entry:  __dirname &amp;#43; &amp;#34;/app/main.js&amp;#34;,//已多次提及的唯一入口文件&#xA;  output: {&#xA;    path: __dirname &amp;#43; &amp;#34;/public&amp;#34;,//打包后的文件存放的地方&#xA;    filename: &amp;#34;bundle.js&amp;#34;//打包后输出文件的文件名&#xA;  }&#xA;}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;####使用 node 的 package.json 设置 script 来执行编译&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;// 在package.json 的 scripts 里面添加下面的命令&#xA;&amp;#34;build&amp;#34;: &amp;#34;webpack&amp;#34;&#xA;// 前面的是指在利用 npm run 后面执行的命令，问号后面的是真正执行的命令&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;####使用webpack构建本地服务器&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;// 在 webpck.config.js 加入下面的配置文件&#xA;devServer: {&#xA;    contentBase: &amp;#34;./public&amp;#34;,//本地服务器所加载的页面所在的目录&#xA;    // colors: true,//终端中输出结果为彩色 新版本貌似不需要这个了&#xA;    historyApiFallback: true,//不跳转&#xA;    inline: true//实时刷新&#xA;  } &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;大概就这么多吧，Loader 和 Bable 没有总结，毕竟这两个扩展性比较强，需要用的时候，在查或者看文档就 ok 了，基本上 webpack 也就了解了一下了。&lt;/p&gt;</description>
+      <description>&lt;p&gt;先说点没用的，工作了3年了，相关东西也都接触一些，但是前端呢，还是按照以前的套路，做页面模版，写 js，写 css，但是现代相关的东西却没有深入的了解过。这不好啊，趁着现在有些空闲时间就想学习一下vue，但是 vue-cli 是使用 webpack 打包的，所以第一步就应该学习一下 webpack 趁机了解一下现代前端的开发思想。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

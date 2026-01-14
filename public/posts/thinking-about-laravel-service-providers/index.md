@@ -1,7 +1,7 @@
 # 关于 Laravel 服务提供者的思考
 
 
-![图片alt](https://www.cimple.ink/images/2019/03/06/0664506a46a7649adc31545165d08f41.jpg)
+![图片alt](https://raw.githubusercontent.com/M1racle-Hao/blog-image/master/2019/03/06/0664506a46a7649adc31545165d08f41.jpg)
 
 配图与文章无关，仅仅是最近十分喜欢这个图片而已
 
@@ -17,6 +17,6 @@ IOC\DI 就是什么依赖注入啊，控制反转啊什么。简单点说就是�
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/thinking-about-laravel-service-providers/  
 

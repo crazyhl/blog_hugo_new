@@ -97,6 +97,6 @@ class AmazeuiThreePresenter extends \Illuminate\Pagination\BootstrapThreePresent
 
 ---
 
-> 作者:   
+> 作者: [M1racleHao](https://github.com/crazyhl)  
 > URL: http://localhost:1313/posts/laravel51-exploration-of-custom-paging-style/  
 
