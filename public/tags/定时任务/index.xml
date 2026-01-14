@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>定时任务 - 标签 - Miracle Hao</title>
+    <link>http://localhost:1313/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 12 Feb 2019 07:38:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>slim framework 定时任务</title>
+      <link>http://localhost:1313/posts/slim-framework/</link>
+      <pubDate>Tue, 12 Feb 2019 07:38:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/slim-framework/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;p&gt;最近想要弄点东西，不想用 laravel 这种框架了，因为想要更细致的了解一些底层框架相关的东西，所以采用了 slim 框架，首先这个框架比较轻便，看源码也比较快捷，当然现在更细以后有很多东西也都不熟悉了，正好可以再次看看。&lt;/p&gt;&#xA;&lt;p&gt;不过 slim 这个框架因为比较轻便，所以周边也都比较少，我有个需求是定时任务，这个时候 slim 就不支持了，所以得需要自己搞定。&lt;/p&gt;&#xA;&lt;p&gt;做这个的时候想到了以前看 symfony 的时候有个 console 模块，正好可以用到，google 了一下发现也有人是这么实现的，所以我也就参考着弄了下来。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

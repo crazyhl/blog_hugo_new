@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Laravel Sail Phpstorm 开启 Xdebug - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="以前弄 java 的时候常年跟 dubug 作伴。换到 php 后就没用过 debug。因为 var_dump 是真爽啊。但是如今又用回了 laravel 不得不再次把 debug 提上日程了。因为不论 laravel 还是 symfony 封装的太到位了，如果没有 debug 的调用栈。真的没法去追代码了。
+闲话少叙，开整。
+创建项目后，编辑 .env 文件 添加一行 SAIL_XDEBUG_MODE=develop,debug,coverage。这三个 mode 的解释，可以看这里https://xdebug.org/docs/all_settings。
+注意，编辑 .env 文件后需要重启 sail, 以使上面的配置生效。
+浏览器安装 xdebug-helper 扩展，其他浏览器可以自行查找。扩展安装好后可以在扩展按钮选择 debug 。浏览器到这就差不多了。
+接下来弄 phpstorm 。 选择红框的选项，就可以开启监听了。开启监听后，会提示配置没有，我们就可以自己配置一下了。 按照图里的配置就可以了。 最后还需要配置 php 的 deubg 看图即可 不出意外的话，就可以跑起来了。 好了，今天就到这，这几天我就用 debug。追踪一些代码了。后续，等我准备好了就来。
+"><meta name="keywords" content='laravel'>
+  <meta itemprop="name" content="Laravel Sail Phpstorm 开启 Xdebug">
+  <meta itemprop="description" content="以前弄 java 的时候常年跟 dubug 作伴。换到 php 后就没用过 debug。因为 var_dump 是真爽啊。但是如今又用回了 laravel 不得不再次把 debug 提上日程了。因为不论 laravel 还是 symfony 封装的太到位了，如果没有 debug 的调用栈。真的没法去追代码了。
+闲话少叙，开整。
+创建项目后，编辑 .env 文件 添加一行 SAIL_XDEBUG_MODE=develop,debug,coverage。这三个 mode 的解释，可以看这里https://xdebug.org/docs/all_settings。
+注意，编辑 .env 文件后需要重启 sail, 以使上面的配置生效。
+浏览器安装 xdebug-helper 扩展，其他浏览器可以自行查找。扩展安装好后可以在扩展按钮选择 debug 。浏览器到这就差不多了。
+接下来弄 phpstorm 。 选择红框的选项，就可以开启监听了。开启监听后，会提示配置没有，我们就可以自己配置一下了。 按照图里的配置就可以了。 最后还需要配置 php 的 deubg 看图即可 不出意外的话，就可以跑起来了。 好了，今天就到这，这几天我就用 debug。追踪一些代码了。后续，等我准备好了就来。">
+  <meta itemprop="datePublished" content="2022-11-03T13:37:06+08:00">
+  <meta itemprop="dateModified" content="2022-11-03T13:37:06+08:00">
+  <meta itemprop="wordCount" content="51">
+  <meta itemprop="keywords" content="Laravel"><meta property="og:url" content="http://localhost:1313/posts/laravel-sail-use-xdebug-with-phpsotrm/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="Laravel Sail Phpstorm 开启 Xdebug">
+  <meta property="og:description" content="以前弄 java 的时候常年跟 dubug 作伴。换到 php 后就没用过 debug。因为 var_dump 是真爽啊。但是如今又用回了 laravel 不得不再次把 debug 提上日程了。因为不论 laravel 还是 symfony 封装的太到位了，如果没有 debug 的调用栈。真的没法去追代码了。
+闲话少叙，开整。
+创建项目后，编辑 .env 文件 添加一行 SAIL_XDEBUG_MODE=develop,debug,coverage。这三个 mode 的解释，可以看这里https://xdebug.org/docs/all_settings。
+注意，编辑 .env 文件后需要重启 sail, 以使上面的配置生效。
+浏览器安装 xdebug-helper 扩展，其他浏览器可以自行查找。扩展安装好后可以在扩展按钮选择 debug 。浏览器到这就差不多了。
+接下来弄 phpstorm 。 选择红框的选项，就可以开启监听了。开启监听后，会提示配置没有，我们就可以自己配置一下了。 按照图里的配置就可以了。 最后还需要配置 php 的 deubg 看图即可 不出意外的话，就可以跑起来了。 好了，今天就到这，这几天我就用 debug。追踪一些代码了。后续，等我准备好了就来。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2022-11-03T13:37:06+08:00">
+    <meta property="article:modified_time" content="2022-11-03T13:37:06+08:00">
+    <meta property="article:tag" content="Laravel">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Laravel Sail Phpstorm 开启 Xdebug">
+  <meta name="twitter:description" content="以前弄 java 的时候常年跟 dubug 作伴。换到 php 后就没用过 debug。因为 var_dump 是真爽啊。但是如今又用回了 laravel 不得不再次把 debug 提上日程了。因为不论 laravel 还是 symfony 封装的太到位了，如果没有 debug 的调用栈。真的没法去追代码了。
+闲话少叙，开整。
+创建项目后，编辑 .env 文件 添加一行 SAIL_XDEBUG_MODE=develop,debug,coverage。这三个 mode 的解释，可以看这里https://xdebug.org/docs/all_settings。
+注意，编辑 .env 文件后需要重启 sail, 以使上面的配置生效。
+浏览器安装 xdebug-helper 扩展，其他浏览器可以自行查找。扩展安装好后可以在扩展按钮选择 debug 。浏览器到这就差不多了。
+接下来弄 phpstorm 。 选择红框的选项，就可以开启监听了。开启监听后，会提示配置没有，我们就可以自己配置一下了。 按照图里的配置就可以了。 最后还需要配置 php 的 deubg 看图即可 不出意外的话，就可以跑起来了。 好了，今天就到这，这几天我就用 debug。追踪一些代码了。后续，等我准备好了就来。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/laravel-sail-use-xdebug-with-phpsotrm/" title="Laravel Sail Phpstorm 开启 Xdebug - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/laravel-livewire-note-5/" title="Laravel Livewire 使用笔记（5）最终篇" /><link rel="next" type="text/html" href="http://localhost:1313/posts/laravel-developer-tips/" title="2022年11月21日 Laravel 开发中的几个小注意点" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/laravel-sail-use-xdebug-with-phpsotrm/index.md" title="Laravel Sail Phpstorm 开启 Xdebug - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Laravel Sail Phpstorm 开启 Xdebug",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/laravel-sail-use-xdebug-with-phpsotrm\/"
+    },"genre": "posts","keywords": "laravel","wordcount":  51 ,
+    "url": "http:\/\/localhost:1313\/posts\/laravel-sail-use-xdebug-with-phpsotrm\/","datePublished": "2022-11-03T13:37:06+08:00","dateModified": "2022-11-03T13:37:06+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Laravel Sail Phpstorm 开启 Xdebug</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2022-11-03 13:37:06"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2022-11-03">2022-11-03</time></span>&nbsp;<span title="51 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>以前弄 java 的时候常年跟 dubug 作伴。换到 <code>php</code> 后就没用过 <code>debug</code>。因为 <code>var_dump</code> 是真爽啊。但是如今又用回了 <code>laravel</code> 不得不再次把 <code>debug</code> 提上日程了。因为不论 <code>laravel</code> 还是 <code>symfony</code> 封装的太到位了，如果没有 <code>debug</code> 的调用栈。真的没法去追代码了。</p>
+<p>闲话少叙，开整。</p>
+<p>创建项目后，编辑 <code>.env</code> 文件 添加一行 <code>SAIL_XDEBUG_MODE=develop,debug,coverage</code>。这三个 <code>mode</code> 的解释，可以看这里<a href="https://xdebug.org/docs/all_settings" target="_blank" rel="external nofollow noopener noreferrer">https://xdebug.org/docs/all_settings</a>。</p>
+<blockquote>
+<p>注意，编辑 <code>.env</code> 文件后需要重启 sail, 以使上面的配置生效。</p>
+</blockquote>
+<p>浏览器安装 <a href="https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc" target="_blank" rel="external nofollow noopener noreferrer">xdebug-helper</a> 扩展，其他浏览器可以自行查找。扩展安装好后可以在扩展按钮选择 <code>debug</code> 。浏览器到这就差不多了。</p>
+<p>接下来弄 <code>phpstorm</code> 。
+<img loading="lazy" src='https://www.cimple.ink/static/images/202211031353198.png' alt="https://www.cimple.ink/static/images/202211031353198.png"></p>
+<p>选择红框的选项，就可以开启监听了。开启监听后，会提示配置没有，我们就可以自己配置一下了。
+<img loading="lazy" src='https://www.cimple.ink/static/images/202211031355851.png' alt="https://www.cimple.ink/static/images/202211031355851.png">
+按照图里的配置就可以了。
+最后还需要配置 php 的 deubg 看图即可
+<img loading="lazy" src='https://www.cimple.ink/static/images/202211031358157.png' alt="https://www.cimple.ink/static/images/202211031358157.png"></p>
+<p>不出意外的话，就可以跑起来了。
+好了，今天就到这，这几天我就用 debug。追踪一些代码了。后续，等我准备好了就来。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2022-11-03 13:37:06">更新于 2022-11-03&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/laravel-sail-use-xdebug-with-phpsotrm/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/2022%e5%b9%b411%e6%9c%8803%e6%97%a5%20laravel%20sail%20phpstorm%20%e5%bc%80%e5%90%af%20xdebug.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/laravel-sail-use-xdebug-with-phpsotrm/" data-title="Laravel Sail Phpstorm 开启 Xdebug" data-hashtags="laravel"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/laravel-sail-use-xdebug-with-phpsotrm/" data-hashtag="laravel"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/laravel-sail-use-xdebug-with-phpsotrm/" data-title="Laravel Sail Phpstorm 开启 Xdebug"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/laravel/" class="post-tag" title="标签 - Laravel">Laravel</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/laravel-livewire-note-5/" class="post-nav-item" rel="prev" title="Laravel Livewire 使用笔记（5）最终篇"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Laravel Livewire 使用笔记（5）最终篇</a><a href="/posts/laravel-developer-tips/" class="post-nav-item" rel="next" title="2022年11月21日 Laravel 开发中的几个小注意点">2022年11月21日 Laravel 开发中的几个小注意点<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/c5ee6c36e190b802ff6fdbb2f3cd0484.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

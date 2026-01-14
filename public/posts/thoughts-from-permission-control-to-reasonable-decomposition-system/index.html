@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>从权限控制到合理分解系统的思考 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="本来这篇文章想写一个不利用轮子在laravel上实现rbac的东西的，其实也就是自己造一个rbac的轮子。
+但是，最后自己还是懒了，不想写代码，所以呢，聊聊从权限管理让我思考的分解系统的一些东西吧，其实也不算是分解系统，仅仅就是想说说松耦合的事情。
+曾经我以为我自己了解的不够多，但是通过这半年换工作以后我才意识到我了解的很多了，只不过有很多东西仅仅就是了解的程度而已，没有实践经验并没有什么卵用，而且了解的越多，不知道的就越多，就包括这次的权限控制这些东西，以前我总是认为这是个很高大上的东西，后面的学习我知道了rbac就是角色权限这些东西，现在我又认识到，这些东西应该是可以热插拔的可替换的，不应该对现有系统造成任何影响，也就是说我撤除掉权限相关的东西系统应该可以正常运行下去，还有，其实造一个轮子很难啊，因为可能需要我们为不同的框架去做相应的适配。
+学习，永远都停不下来，我也不知道我上面说的东西对不对。就这样吧，看东西去了
+对了，最重要的东西没说，说说思路。
+首先我们应该有一个baseModel，所有的model对象都继承自baseModel，baseModel里面有hasRole，hasPermission，can ,cannot等这些方法用于权限的验证，然后blade那边我们也应该有相应的控制，至于角色权限相关，就按照自己的思路定义就可以了。
+一些都应该是可替换的
+"><meta name="keywords" content='权限'>
+  <meta itemprop="name" content="从权限控制到合理分解系统的思考">
+  <meta itemprop="description" content="本来这篇文章想写一个不利用轮子在laravel上实现rbac的东西的，其实也就是自己造一个rbac的轮子。
+但是，最后自己还是懒了，不想写代码，所以呢，聊聊从权限管理让我思考的分解系统的一些东西吧，其实也不算是分解系统，仅仅就是想说说松耦合的事情。
+曾经我以为我自己了解的不够多，但是通过这半年换工作以后我才意识到我了解的很多了，只不过有很多东西仅仅就是了解的程度而已，没有实践经验并没有什么卵用，而且了解的越多，不知道的就越多，就包括这次的权限控制这些东西，以前我总是认为这是个很高大上的东西，后面的学习我知道了rbac就是角色权限这些东西，现在我又认识到，这些东西应该是可以热插拔的可替换的，不应该对现有系统造成任何影响，也就是说我撤除掉权限相关的东西系统应该可以正常运行下去，还有，其实造一个轮子很难啊，因为可能需要我们为不同的框架去做相应的适配。
+学习，永远都停不下来，我也不知道我上面说的东西对不对。就这样吧，看东西去了
+对了，最重要的东西没说，说说思路。
+首先我们应该有一个baseModel，所有的model对象都继承自baseModel，baseModel里面有hasRole，hasPermission，can ,cannot等这些方法用于权限的验证，然后blade那边我们也应该有相应的控制，至于角色权限相关，就按照自己的思路定义就可以了。
+一些都应该是可替换的">
+  <meta itemprop="datePublished" content="2017-01-07T13:56:00+00:00">
+  <meta itemprop="dateModified" content="2017-01-07T13:56:00+00:00">
+  <meta itemprop="wordCount" content="8">
+  <meta itemprop="keywords" content="权限"><meta property="og:url" content="http://localhost:1313/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="从权限控制到合理分解系统的思考">
+  <meta property="og:description" content="本来这篇文章想写一个不利用轮子在laravel上实现rbac的东西的，其实也就是自己造一个rbac的轮子。
+但是，最后自己还是懒了，不想写代码，所以呢，聊聊从权限管理让我思考的分解系统的一些东西吧，其实也不算是分解系统，仅仅就是想说说松耦合的事情。
+曾经我以为我自己了解的不够多，但是通过这半年换工作以后我才意识到我了解的很多了，只不过有很多东西仅仅就是了解的程度而已，没有实践经验并没有什么卵用，而且了解的越多，不知道的就越多，就包括这次的权限控制这些东西，以前我总是认为这是个很高大上的东西，后面的学习我知道了rbac就是角色权限这些东西，现在我又认识到，这些东西应该是可以热插拔的可替换的，不应该对现有系统造成任何影响，也就是说我撤除掉权限相关的东西系统应该可以正常运行下去，还有，其实造一个轮子很难啊，因为可能需要我们为不同的框架去做相应的适配。
+学习，永远都停不下来，我也不知道我上面说的东西对不对。就这样吧，看东西去了
+对了，最重要的东西没说，说说思路。
+首先我们应该有一个baseModel，所有的model对象都继承自baseModel，baseModel里面有hasRole，hasPermission，can ,cannot等这些方法用于权限的验证，然后blade那边我们也应该有相应的控制，至于角色权限相关，就按照自己的思路定义就可以了。
+一些都应该是可替换的">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2017-01-07T13:56:00+00:00">
+    <meta property="article:modified_time" content="2017-01-07T13:56:00+00:00">
+    <meta property="article:tag" content="权限">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="从权限控制到合理分解系统的思考">
+  <meta name="twitter:description" content="本来这篇文章想写一个不利用轮子在laravel上实现rbac的东西的，其实也就是自己造一个rbac的轮子。
+但是，最后自己还是懒了，不想写代码，所以呢，聊聊从权限管理让我思考的分解系统的一些东西吧，其实也不算是分解系统，仅仅就是想说说松耦合的事情。
+曾经我以为我自己了解的不够多，但是通过这半年换工作以后我才意识到我了解的很多了，只不过有很多东西仅仅就是了解的程度而已，没有实践经验并没有什么卵用，而且了解的越多，不知道的就越多，就包括这次的权限控制这些东西，以前我总是认为这是个很高大上的东西，后面的学习我知道了rbac就是角色权限这些东西，现在我又认识到，这些东西应该是可以热插拔的可替换的，不应该对现有系统造成任何影响，也就是说我撤除掉权限相关的东西系统应该可以正常运行下去，还有，其实造一个轮子很难啊，因为可能需要我们为不同的框架去做相应的适配。
+学习，永远都停不下来，我也不知道我上面说的东西对不对。就这样吧，看东西去了
+对了，最重要的东西没说，说说思路。
+首先我们应该有一个baseModel，所有的model对象都继承自baseModel，baseModel里面有hasRole，hasPermission，can ,cannot等这些方法用于权限的验证，然后blade那边我们也应该有相应的控制，至于角色权限相关，就按照自己的思路定义就可以了。
+一些都应该是可替换的">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/" title="从权限控制到合理分解系统的思考 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/i-understand-the-container-in-php/" title="我所理解PHP中的container" /><link rel="next" type="text/html" href="http://localhost:1313/posts/npm-and-some-notes-from-webpack/" title="npm 以及 webpack 的一些笔记" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/index.md" title="从权限控制到合理分解系统的思考 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "从权限控制到合理分解系统的思考",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/thoughts-from-permission-control-to-reasonable-decomposition-system\/"
+    },"genre": "posts","keywords": "权限","wordcount":  8 ,
+    "url": "http:\/\/localhost:1313\/posts\/thoughts-from-permission-control-to-reasonable-decomposition-system\/","datePublished": "2017-01-07T13:56:00+00:00","dateModified": "2017-01-07T13:56:00+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>从权限控制到合理分解系统的思考</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2017-01-07 13:56:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2017-01-07">2017-01-07</time></span>&nbsp;<span title="8 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>本来这篇文章想写一个不利用轮子在laravel上实现rbac的东西的，其实也就是自己造一个rbac的轮子。</p>
+<p>但是，最后自己还是懒了，不想写代码，所以呢，聊聊从权限管理让我思考的分解系统的一些东西吧，其实也不算是分解系统，仅仅就是想说说松耦合的事情。</p>
+<p>曾经我以为我自己了解的不够多，但是通过这半年换工作以后我才意识到我了解的很多了，只不过有很多东西仅仅就是了解的程度而已，没有实践经验并没有什么卵用，而且了解的越多，不知道的就越多，就包括这次的权限控制这些东西，以前我总是认为这是个很高大上的东西，后面的学习我知道了rbac就是角色权限这些东西，现在我又认识到，这些东西应该是可以热插拔的可替换的，不应该对现有系统造成任何影响，也就是说我撤除掉权限相关的东西系统应该可以正常运行下去，还有，其实造一个轮子很难啊，因为可能需要我们为不同的框架去做相应的适配。</p>
+<p>学习，永远都停不下来，我也不知道我上面说的东西对不对。就这样吧，看东西去了</p>
+<p>对了，最重要的东西没说，说说思路。</p>
+<p>首先我们应该有一个baseModel，所有的model对象都继承自baseModel，baseModel里面有hasRole，hasPermission，can ,cannot等这些方法用于权限的验证，然后blade那边我们也应该有相应的控制，至于角色权限相关，就按照自己的思路定义就可以了。</p>
+<p>一些都应该是可替换的</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2017-01-07 13:56:00">更新于 2017-01-07&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/%e4%bb%8e%e6%9d%83%e9%99%90%e6%8e%a7%e5%88%b6%e5%88%b0%e5%90%88%e7%90%86%e5%88%86%e8%a7%a3%e7%b3%bb%e7%bb%9f%e7%9a%84%e6%80%9d%e8%80%83.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/" data-title="从权限控制到合理分解系统的思考" data-hashtags="权限"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/" data-hashtag="权限"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/" data-title="从权限控制到合理分解系统的思考"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/%E6%9D%83%E9%99%90/" class="post-tag" title="标签 - 权限">权限</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/i-understand-the-container-in-php/" class="post-nav-item" rel="prev" title="我所理解PHP中的container"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>我所理解PHP中的container</a><a href="/posts/npm-and-some-notes-from-webpack/" class="post-nav-item" rel="next" title="Npm 以及 Webpack 的一些笔记">Npm 以及 Webpack 的一些笔记<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/69a1df578952d19feb4c13819c109ce1.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

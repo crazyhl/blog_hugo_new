@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>闭包 - 标签 - Miracle Hao</title>
+    <link>http://localhost:1313/tags/%E9%97%AD%E5%8C%85/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 04 Sep 2016 21:27:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E9%97%AD%E5%8C%85/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PHP匿名函数以及call_user_func的思考</title>
+      <link>http://localhost:1313/posts/thinking-about-php-anonymous-function-and-calluserfunc/</link>
+      <pubDate>Sun, 04 Sep 2016 21:27:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/thinking-about-php-anonymous-function-and-calluserfunc/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://www.cimple.ink/images/2019/03/06/0664506a46a7649adc31545165d08f41.jpg&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;配图依然与主题无关，仅仅是我个人喜欢而已，今天要说的是关于 &lt;code&gt;call_user_func&lt;/code&gt; 的一些理解。&lt;/p&gt;&#xA;&lt;p&gt;以前对于闭包和匿名函数的理解不是太好。所以，今天在 &lt;code&gt;phphub&lt;/code&gt; 提问的时候犯了一个比较二的错误，趁着晚上回家赶紧总结一下，增强自己的记忆。&lt;/p&gt;&#xA;&lt;p&gt;话说以前对于闭包或者匿名函数都是自己写自己调用，所以没有出现过什么问题，但是前几天在弄 &lt;code&gt;laravel&lt;/code&gt; 分页的时候，发现里面有一个 &lt;code&gt;$presenter&lt;/code&gt; 自己知道这个可能会让我的代码更简洁，但是我却不知道如何调用，在 &lt;code&gt;phphub&lt;/code&gt; 提问的时候有人告诉了我怎么使用，但是我却对参数列表比较迷惑，是如何获取参数列表的。今天终于有人告诉了我，我才发现对于 &lt;code&gt;php&lt;/code&gt; 的一些函数理解的并不是很到位。于是乎赶紧翻阅 &lt;code&gt;php&lt;/code&gt; 文档，把 &lt;code&gt;call_user_func&lt;/code&gt; 再次理解一下。参见： &lt;a href=&#34;http://php.net/manual/zh/function.call-user-func.php&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;http://php.net/manual/zh/function.call-user-func.php&lt;/a&gt; 。&lt;/p&gt;&#xA;&lt;p&gt;文档说的比较明白，第一个参数是方法名称，余下的参数就是调用方法的参数列表了。&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;    public function render(Presenter $presenter = null)&#xA;    {&#xA;        if (is_null($presenter) &amp;amp;&amp;amp; static::$presenterResolver) {&#xA;            $presenter = call_user_func(static::$presenterResolver, $this);&#xA;        }&#xA;&#xA;        $presenter = $presenter ?: new BootstrapThreePresenter($this);&#xA;&#xA;        return $presenter-&amp;gt;render();&#xA;    }&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;所以，这个 &lt;code&gt;render&lt;/code&gt; 方法里面就比较容易理解了，当我们传入的 &lt;code&gt;$presenter&lt;/code&gt; 为空的时候，并且 &lt;code&gt;static::$presenterResolver&lt;/code&gt; (&lt;span class=&#34;katex-error&#34; title=&#34;ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &amp;#x27;error&amp;#x27;: Unicode text character &amp;quot;是&amp;quot; used in math mode [unicodeTextInMathMode] at position 7: static是̲延迟绑定，这个也可以在文档里面…&#34; style=&#34;color:#ff4949&#34;&gt;static是延迟绑定，这个也可以在文档里面找到)已经赋值的时候，就会执行 `if` 代码段里面的内容了。在我的代码中主要应用的是 `LengthAwarePaginator` 类里面的相关方法（其实还有一个 `Paginator` 类，这个类是用在那个 `simple` 的简单分页中的），在这里面我并没有找到为 `&lt;/span&gt;presenter&lt;code&gt;赋值的方法，所以我们去他们的父类&lt;/code&gt;AbstractPaginator&lt;code&gt;中寻找，果然里面有为&lt;/code&gt;$presenter` 赋值的方法。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

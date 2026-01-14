@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Laravel in Kubernetes 系列文章个人总结（1） - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="前言 前一段时间，自己实现了一个项目后，准备部署，自然还是要搞 k8s 啦。但是我觉得以前的用 golang 的封装就比较简单粗暴了，编译一层，然后再把编译后的输出一层就好了。然后前段也单独配置就很完美。但是 php 这里没搞前后端分离，且我觉得可能还需要再了解一下 docker 镜像编译的好套路，所以就搜索了一下，结果还真的让我发现了一个好东西 https://chris-vermeulen.com/laravel-in-kubernetes/。写的非常细致，且方便观看，每篇都很短，目的明确清晰。这个在写作上也给了我很多的指导。我以后在写博客的时候也要模仿这种操作。好了，下面我就会把我觉得我需要记录的东西，记录下来，方便后面再次使用到这部分时候回忆。
+"><meta name="keywords" content='laravel, kubernetes'>
+  <meta itemprop="name" content="Laravel in Kubernetes 系列文章个人总结（1）">
+  <meta itemprop="description" content="前言 前一段时间，自己实现了一个项目后，准备部署，自然还是要搞 k8s 啦。但是我觉得以前的用 golang 的封装就比较简单粗暴了，编译一层，然后再把编译后的输出一层就好了。然后前段也单独配置就很完美。但是 php 这里没搞前后端分离，且我觉得可能还需要再了解一下 docker 镜像编译的好套路，所以就搜索了一下，结果还真的让我发现了一个好东西 https://chris-vermeulen.com/laravel-in-kubernetes/。写的非常细致，且方便观看，每篇都很短，目的明确清晰。这个在写作上也给了我很多的指导。我以后在写博客的时候也要模仿这种操作。好了，下面我就会把我觉得我需要记录的东西，记录下来，方便后面再次使用到这部分时候回忆。">
+  <meta itemprop="datePublished" content="2023-03-07T11:16:24+08:00">
+  <meta itemprop="dateModified" content="2023-03-07T11:16:24+08:00">
+  <meta itemprop="wordCount" content="2347">
+  <meta itemprop="keywords" content="Laravel,Kubernetes"><meta property="og:url" content="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-1/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="Laravel in Kubernetes 系列文章个人总结（1）">
+  <meta property="og:description" content="前言 前一段时间，自己实现了一个项目后，准备部署，自然还是要搞 k8s 啦。但是我觉得以前的用 golang 的封装就比较简单粗暴了，编译一层，然后再把编译后的输出一层就好了。然后前段也单独配置就很完美。但是 php 这里没搞前后端分离，且我觉得可能还需要再了解一下 docker 镜像编译的好套路，所以就搜索了一下，结果还真的让我发现了一个好东西 https://chris-vermeulen.com/laravel-in-kubernetes/。写的非常细致，且方便观看，每篇都很短，目的明确清晰。这个在写作上也给了我很多的指导。我以后在写博客的时候也要模仿这种操作。好了，下面我就会把我觉得我需要记录的东西，记录下来，方便后面再次使用到这部分时候回忆。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-03-07T11:16:24+08:00">
+    <meta property="article:modified_time" content="2023-03-07T11:16:24+08:00">
+    <meta property="article:tag" content="Laravel">
+    <meta property="article:tag" content="Kubernetes">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Laravel in Kubernetes 系列文章个人总结（1）">
+  <meta name="twitter:description" content="前言 前一段时间，自己实现了一个项目后，准备部署，自然还是要搞 k8s 啦。但是我觉得以前的用 golang 的封装就比较简单粗暴了，编译一层，然后再把编译后的输出一层就好了。然后前段也单独配置就很完美。但是 php 这里没搞前后端分离，且我觉得可能还需要再了解一下 docker 镜像编译的好套路，所以就搜索了一下，结果还真的让我发现了一个好东西 https://chris-vermeulen.com/laravel-in-kubernetes/。写的非常细致，且方便观看，每篇都很短，目的明确清晰。这个在写作上也给了我很多的指导。我以后在写博客的时候也要模仿这种操作。好了，下面我就会把我觉得我需要记录的东西，记录下来，方便后面再次使用到这部分时候回忆。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-1/" title="Laravel in Kubernetes 系列文章个人总结（1） - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/laravel-livewire-form-builder-update/" title="初步做完表单构造器后我又对它做了什么" /><link rel="next" type="text/html" href="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-2/" title="Laravel in Kubernetes 系列文章个人总结（2）" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-1/index.md" title="Laravel in Kubernetes 系列文章个人总结（1） - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Laravel in Kubernetes 系列文章个人总结（1）",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/personal-summary-of-laravel-in-kubernetes-series-of-articles-1\/"
+    },"genre": "posts","keywords": "laravel, kubernetes","wordcount":  2347 ,
+    "url": "http:\/\/localhost:1313\/posts\/personal-summary-of-laravel-in-kubernetes-series-of-articles-1\/","datePublished": "2023-03-07T11:16:24+08:00","dateModified": "2023-03-07T11:16:24+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Laravel in Kubernetes 系列文章个人总结（1）</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a>&ensp;<a href="/categories/%E8%BF%90%E7%BB%B4/" class="post-category" title="分类 - 运维"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 运维</a></span></div><div class="post-meta-line"><span title="发布于 2023-03-07 11:16:24"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-03-07">2023-03-07</time></span>&nbsp;<span title="2347 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2400 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 12 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#正文">正文</a>
+      <ul>
+        <li><a href="#修改-laravel-日子输出为-stdout">修改 laravel 日子输出为 stdout</a></li>
+        <li><a href="#session-驱动调整">Session 驱动调整</a></li>
+        <li><a href="#强制返回-https">强制返回 HTTPS</a></li>
+        <li><a href="#镜像分层规划">镜像分层规划</a></li>
+        <li><a href="#添加-dockerignore-文件">添加 .dockerignore 文件</a></li>
+        <li><a href="#创建-docker-文件">创建 docker 文件</a>
+          <ul>
+            <li><a href="#composer-层">composer 层</a></li>
+            <li><a href="#前端资源编译阶段">前端资源编译阶段</a></li>
+            <li><a href="#cli-阶段">cli 阶段</a></li>
+            <li><a href="#fpm-阶段">fpm 阶段</a></li>
+            <li><a href="#web服务阶段">web服务阶段</a></li>
+            <li><a href="#cron-阶段">cron 阶段</a></li>
+          </ul>
+        </li>
+        <li><a href="#docker-compose">docker-compose</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 class="heading-element" id="前言"><span>前言</span>
+  <a href="#%e5%89%8d%e8%a8%80" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>前一段时间，自己实现了一个项目后，准备部署，自然还是要搞 k8s 啦。但是我觉得以前的用 golang 的封装就比较简单粗暴了，编译一层，然后再把编译后的输出一层就好了。然后前段也单独配置就很完美。但是 php 这里没搞前后端分离，且我觉得可能还需要再了解一下 docker 镜像编译的好套路，所以就搜索了一下，结果还真的让我发现了一个好东西 <a href="https://chris-vermeulen.com/laravel-in-kubernetes/" target="_blank" rel="external nofollow noopener noreferrer">https://chris-vermeulen.com/laravel-in-kubernetes/</a>。写的非常细致，且方便观看，每篇都很短，目的明确清晰。这个在写作上也给了我很多的指导。我以后在写博客的时候也要模仿这种操作。好了，下面我就会把我觉得我需要记录的东西，记录下来，方便后面再次使用到这部分时候回忆。</p>
+<h2 class="heading-element" id="正文"><span>正文</span>
+  <a href="#%e6%ad%a3%e6%96%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="修改-laravel-日子输出为-stdout"><span>修改 laravel 日子输出为 stdout</span>
+  <a href="#%e4%bf%ae%e6%94%b9-laravel-%e6%97%a5%e5%ad%90%e8%be%93%e5%87%ba%e4%b8%ba-stdout" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>在 config/logging.php，添加新的日志输出通道，输出到 <code>stdout</code>。原因是可以通过 <code>kubectl logs</code> 查看到日志。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">return</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;channels&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;stdout&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;driver&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;monolog&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;level&#39;</span> <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">&#39;LOG_LEVEL&#39;</span><span class="p">,</span> <span class="s1">&#39;debug&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;handler&#39;</span> <span class="o">=&gt;</span> <span class="nx">StreamHandler</span><span class="o">::</span><span class="na">class</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;formatter&#39;</span> <span class="o">=&gt;</span> <span class="nx">env</span><span class="p">(</span><span class="s1">&#39;LOG_STDOUT_FORMATTER&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;with&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                <span class="s1">&#39;stream&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;php://stdout&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="p">],</span>
+</span></span><span class="line"><span class="cl">        <span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl"><span class="p">],</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>在 <code>.env</code> 中修改 日志 输出位置</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">LOG_CHANNEL</span><span class="o">=</span><span class="nx">stdout</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这里我个人理解就是方便我们查看日志，不过话说回来，在真的大型商业服务中，谁会把日志放到 <code>stdout</code> 呢，肯定是投递到某个日志分析组件中了。这里就当学习设置日志输出通道把，也有可能日志组件在读取 <code>kubectl logs</code>？不是很了解。先按照我自己的理解来。</p>
+<h3 class="heading-element" id="session-驱动调整"><span>Session 驱动调整</span>
+  <a href="#session-%e9%a9%b1%e5%8a%a8%e8%b0%83%e6%95%b4" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>因为可能会开启多个 pods，所以 <code>Session</code> 自然不能用传统的文件方式存储，否则落到了，其他 pods 上会丢失登录信息，除非配置落到指定的 pods 上，但是实际上是不可能的。毕竟这玩意会‘频繁’ 的杀死开启，落到指定的服务器是可能呢，pods 万万不能。所以要把 <code>Session</code> 移动到一个合理的地方，那么 <code>Redis</code> 自然就是优选了。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">composer require predis/predis</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>安装 redis 扩展。使 php 能够使用 <code>redis</code>。</p>
+<p>编辑 <code>.env</code> 文件调整 <code>Session</code> 驱动</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">SESSION_DRIVER</span><span class="o">=</span><span class="nx">redis</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="强制返回-https"><span>强制返回 HTTPS</span>
+  <a href="#%e5%bc%ba%e5%88%b6%e8%bf%94%e5%9b%9e-https" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>编辑 <code>AppServiceProvider</code></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="nx">App\Providers</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Add the Facade
+</span></span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Illuminate\Support\Facades\URL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Illuminate\Support\ServiceProvider</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">AppServiceProvider</span> <span class="k">extends</span> <span class="nx">ServiceProvider</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="sd">/** All the rest */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">function</span> <span class="nf">boot</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">app</span><span class="o">-&gt;</span><span class="na">environment</span><span class="p">(</span><span class="s1">&#39;production&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">URL</span><span class="o">::</span><span class="na">forceScheme</span><span class="p">(</span><span class="s1">&#39;https&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这个其实就是为了解决证书卸载导致返回生成的 <code>url</code> 是 http。这个不仅是 k8s 会用到，在很多场景都会用到</p>
+<h3 class="heading-element" id="镜像分层规划"><span>镜像分层规划</span>
+  <a href="#%e9%95%9c%e5%83%8f%e5%88%86%e5%b1%82%e8%a7%84%e5%88%92" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><img loading="lazy" src='https://www.cimple.ink/static/images/202303071438473.png' alt="https://www.cimple.ink/static/images/202303071438473.png">
+不得不说，人家弄的这个就清晰。不过我自己的部分，没有弄的这么全面，所以我更需要把这个分层保存下来，方便后续，用到的时候来回顾。</p>
+<h3 class="heading-element" id="添加-dockerignore-文件"><span>添加 .dockerignore 文件</span>
+  <a href="#%e6%b7%bb%e5%8a%a0-dockerignore-%e6%96%87%e4%bb%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>添加这个文件后，复制文件的时候就会略过描述的文件，同 <code>gitignore</code> 一样，方便管理</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-txt"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">/vendor
+</span></span><span class="line"><span class="cl">/node_modules</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这两个大文件，不会被需要的。</p>
+<h3 class="heading-element" id="创建-docker-文件"><span>创建 docker 文件</span>
+  <a href="#%e5%88%9b%e5%bb%ba-docker-%e6%96%87%e4%bb%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Create args for PHP extensions and PECL packages we need to install.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># This makes it easier if we want to install packages,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># as we have to install them in multiple places.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># This helps keep ou Dockerfiles DRY -&gt; https://bit.ly/dry-code</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># You can see a list of required extensions for Laravel here: https://laravel.com/docs/8.x/deployment#server-requirements</span>
+</span></span><span class="line"><span class="cl">ARG <span class="nv">PHP_EXTS</span><span class="o">=</span><span class="s2">&#34;bcmath ctype fileinfo mbstring pdo pdo_mysql tokenizer dom pcntl&#34;</span>
+</span></span><span class="line"><span class="cl">ARG <span class="nv">PHP_PECL_EXTS</span><span class="o">=</span><span class="s2">&#34;redis&#34;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这里示例里面增加了两个参数，实际上新版的 php 镜像中已经包含了需要的扩展了，就没必要定义这两个扩展参数了。但是还是记录下来，万一以后能用到呢。</p>
+<h4 class="heading-element" id="composer-层"><span>composer 层</span>
+  <a href="#composer-%e5%b1%82" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># We need to build the Composer base to reuse packages we&#39;ve installed</span>
+</span></span><span class="line"><span class="cl">FROM composer:2.1 as composer_base
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We need to declare that we want to use the args in this build step</span>
+</span></span><span class="line"><span class="cl">ARG PHP_EXTS
+</span></span><span class="line"><span class="cl">ARG PHP_PECL_EXTS
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># First, create the application directory, and some auxilary directories for scripts and such</span>
+</span></span><span class="line"><span class="cl">RUN mkdir -p /opt/apps/laravel-in-kubernetes /opt/apps/laravel-in-kubernetes/bin
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Next, set our working directory</span>
+</span></span><span class="line"><span class="cl">WORKDIR /opt/apps/laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We need to create a composer group and user, and create a home directory for it, so we keep the rest of our image safe,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># And not accidentally run malicious scripts</span>
+</span></span><span class="line"><span class="cl">RUN addgroup -S composer <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="o">&amp;&amp;</span> adduser -S composer -G composer <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="o">&amp;&amp;</span> chown -R composer /opt/apps/laravel-in-kubernetes <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="o">&amp;&amp;</span> apk add --virtual build-dependencies --no-cache <span class="si">${</span><span class="nv">PHPIZE_DEPS</span><span class="si">}</span> openssl ca-certificates libxml2-dev oniguruma-dev <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="o">&amp;&amp;</span> docker-php-ext-install -j<span class="k">$(</span>nproc<span class="k">)</span> <span class="si">${</span><span class="nv">PHP_EXTS</span><span class="si">}</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="o">&amp;&amp;</span> pecl install <span class="si">${</span><span class="nv">PHP_PECL_EXTS</span><span class="si">}</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="o">&amp;&amp;</span> docker-php-ext-enable <span class="si">${</span><span class="nv">PHP_PECL_EXTS</span><span class="si">}</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="o">&amp;&amp;</span> apk del build-dependencies
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Next we want to switch over to the composer user before running installs.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># This is very important, so any extra scripts that composer wants to run,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># don&#39;t have access to the root filesystem.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># This especially important when installing packages from unverified sources.</span>
+</span></span><span class="line"><span class="cl">USER composer
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Copy in our dependency files.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># We want to leave the rest of the code base out for now,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># so Docker can build a cache of this layer,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># and only rebuild when the dependencies of our application changes.</span>
+</span></span><span class="line"><span class="cl">COPY --chown<span class="o">=</span>composer composer.json composer.lock ./
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Install all the dependencies without running any installation scripts.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># We skip scripts as the code base hasn&#39;t been copied in yet and script will likely fail,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># as `php artisan` available yet.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># This also helps us to cache previous runs and layers.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># As long as comoser.json and composer.lock doesn&#39;t change the install will be cached.</span>
+</span></span><span class="line"><span class="cl">RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Copy in our actual source code so we can run the installation scripts we need</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># At this point all the PHP packages have been installed, </span>
+</span></span><span class="line"><span class="cl"><span class="c1"># and all that is left to do, is to run any installation scripts which depends on the code base</span>
+</span></span><span class="line"><span class="cl">COPY --chown<span class="o">=</span>composer . .
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Now that the code base and packages are all available,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># we can run the install again, and let it run any install scripts.</span>
+</span></span><span class="line"><span class="cl">RUN composer install --no-dev --prefer-dist</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>注意版本号，及时使用最新版，当然配置也要跟着改进，比如 <code>--prefer-dist</code> 在新版本就没有了，而是采用 <code>--prefer-install=source/dist</code> 来弄，默认就是 dist，所以这个参数可以不用，写上的原因是更直观罢了。再比如在上面定义的 <code>PHPIZE_DEPS</code> 通篇文章都没有，那么这个参数是哪里来的呢，可以追溯 composer 镜像，再到 php 镜像，可以找到 <code>PHPIZE_DEPS</code> 的定义，这些都是我们在阅读源码的时候需要思考以及查询的。<code>PHPIZE_DEPS</code> 是使用 <code>ENV</code> 定义的，而我们在上面用了 <code>ARG</code> 这两个的区别看这里 <a href="https://yeasy.gitbook.io/docker_practice/image/dockerfile/arg" target="_blank" rel="external nofollow noopener noreferrer">https://yeasy.gitbook.io/docker_practice/image/dockerfile/arg</a>。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1"># We need to declare that we want to use the args in this build step
+</span></span></span><span class="line"><span class="cl"><span class="nx">ARG</span> <span class="nx">PHP_EXTS</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ARG</span> <span class="nx">PHP_PECL_EXTS</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>注意这段不要直接用，要像最上面那样，写全才可以。</p>
+<p>关于上面 composer 执行两次的问题，我思考了一下，主要是为了缓存，如果我们切换了顺序，可能就要每次都下载镜像了，浪费时间以及流量。不过这个在线上构建的时候是否有效不知道（比如 git action，或者 docker hub，我不知道他每次构建的时候是否会留有缓存，应该是没有的，每次都启动一个沙箱。），本地构建的时候确实是有缓存的。</p>
+<p>测试构建 comopser 阶段 <code>docker build . --target composer_base</code> 不报错就好，报错了，就继续排查。</p>
+<h4 class="heading-element" id="前端资源编译阶段"><span>前端资源编译阶段</span>
+  <a href="#%e5%89%8d%e7%ab%af%e8%b5%84%e6%ba%90%e7%bc%96%e8%af%91%e9%98%b6%e6%ae%b5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># For the frontend, we want to get all the Laravel files,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># and run a production compile</span>
+</span></span><span class="line"><span class="cl">FROM node:14 as frontend
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We need to copy in the Laravel files to make everything is available to our frontend compilation</span>
+</span></span><span class="line"><span class="cl">COPY --from<span class="o">=</span>composer_base /opt/apps/laravel-in-kubernetes /opt/apps/laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">WORKDIR /opt/apps/laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We want to install all the NPM packages,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># and compile the MIX bundle for production</span>
+</span></span><span class="line"><span class="cl">RUN npm install <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    npm run prod</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这层就很简单了，从上层复制文件，然后进行编译保存，不过本次我自己的项目，没有这一步，就跳过了，等有需要的时候在来测试</p>
+<h4 class="heading-element" id="cli-阶段"><span>cli 阶段</span>
+  <a href="#cli-%e9%98%b6%e6%ae%b5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># For running things like migrations, and queue jobs,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># we need a CLI container.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># It contains all the Composer packages,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># and just the basic CLI &#34;stuff&#34; in order for us to run commands,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># be that queues, migrations, tinker etc.</span>
+</span></span><span class="line"><span class="cl">FROM php:8.0-alpine as cli
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We need to declare that we want to use the args in this build step</span>
+</span></span><span class="line"><span class="cl">ARG PHP_EXTS
+</span></span><span class="line"><span class="cl">ARG PHP_PECL_EXTS
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">WORKDIR /opt/apps/laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We need to install some requirements into our image,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># used to compile our PHP extensions, as well as install all the extensions themselves.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># You can see a list of required extensions for Laravel here: https://laravel.com/docs/8.x/deployment#server-requirements</span>
+</span></span><span class="line"><span class="cl">RUN apk add --virtual build-dependencies --no-cache <span class="si">${</span><span class="nv">PHPIZE_DEPS</span><span class="si">}</span> openssl ca-certificates libxml2-dev oniguruma-dev <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    docker-php-ext-install -j<span class="k">$(</span>nproc<span class="k">)</span> <span class="si">${</span><span class="nv">PHP_EXTS</span><span class="si">}</span> <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    pecl install <span class="si">${</span><span class="nv">PHP_PECL_EXTS</span><span class="si">}</span> <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    docker-php-ext-enable <span class="si">${</span><span class="nv">PHP_PECL_EXTS</span><span class="si">}</span> <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    apk del build-dependencies
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Next we have to copy in our code base from our initial build which we installed in the previous stage</span>
+</span></span><span class="line"><span class="cl">COPY --from<span class="o">=</span>composer_base /opt/apps/laravel-in-kubernetes /opt/apps/laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">COPY --from<span class="o">=</span>frontend /opt/apps/laravel-in-kubernetes/public /opt/apps/laravel-in-kubernetes/public</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这个阶段主要是执行一些命令或者队列的，不过队列为什么不在 queue 阶段呢？
+这个也是从不同阶段复制过来资源就好了。其实后面都是复制资源，我就不多写了。</p>
+<h4 class="heading-element" id="fpm-阶段"><span>fpm 阶段</span>
+  <a href="#fpm-%e9%98%b6%e6%ae%b5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># We need a stage which contains FPM to actually run and process requests to our PHP application.</span>
+</span></span><span class="line"><span class="cl">FROM php:8.0-fpm-alpine as fpm_server
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We need to declare that we want to use the args in this build step</span>
+</span></span><span class="line"><span class="cl">ARG PHP_EXTS
+</span></span><span class="line"><span class="cl">ARG PHP_PECL_EXTS
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">WORKDIR /opt/apps/laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">RUN apk add --virtual build-dependencies --no-cache <span class="si">${</span><span class="nv">PHPIZE_DEPS</span><span class="si">}</span> openssl ca-certificates libxml2-dev oniguruma-dev <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    docker-php-ext-install -j<span class="k">$(</span>nproc<span class="k">)</span> <span class="si">${</span><span class="nv">PHP_EXTS</span><span class="si">}</span> <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    pecl install <span class="si">${</span><span class="nv">PHP_PECL_EXTS</span><span class="si">}</span> <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    docker-php-ext-enable <span class="si">${</span><span class="nv">PHP_PECL_EXTS</span><span class="si">}</span> <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    apk del build-dependencies
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="c1"># As FPM uses the www-data user when running our application,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># we need to make sure that we also use that user when starting up,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># so our user &#34;owns&#34; the application when running</span>
+</span></span><span class="line"><span class="cl">USER  www-data
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We have to copy in our code base from our initial build which we installed in the previous stage</span>
+</span></span><span class="line"><span class="cl">COPY --from<span class="o">=</span>composer_base --chown<span class="o">=</span>www-data /opt/apps/laravel-in-kubernetes /opt/apps/laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">COPY --from<span class="o">=</span>frontend --chown<span class="o">=</span>www-data /opt/apps/laravel-in-kubernetes/public /opt/apps/laravel-in-kubernetes/public
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We want to cache the event, routes, and views so we don&#39;t try to write them when we are in Kubernetes.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Docker builds should be as immutable as possible, and this removes a lot of the writing of the live application.</span>
+</span></span><span class="line"><span class="cl">RUN php artisan event:cache <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    php artisan route:cache <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    php artisan view:cache</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这一个阶段也是复制资源以及执行一些 <code>artisan</code> 在生产阶段的优化命令。</p>
+<h4 class="heading-element" id="web服务阶段"><span>web服务阶段</span>
+  <a href="#web%e6%9c%8d%e5%8a%a1%e9%98%b6%e6%ae%b5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>这个创建了一个 <code>docker</code> 文件夹，然后写入一个 <code>nginx.conf.template</code> 文件。这里面保存了 <code>nginx</code> 的配置，这里面就要根据实际需要进行编写了，下面这个就是个示例，都没有相关文件的缓存，在自己需要的时候得配置上</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">server <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    listen <span class="m">80</span> default_server<span class="p">;</span>
+</span></span><span class="line"><span class="cl">    listen <span class="o">[</span>::<span class="o">]</span>:80 default_server<span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># We need to set the root for our sevrer,</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># so any static file requests gets loaded from the correct path</span>
+</span></span><span class="line"><span class="cl">    root /opt/apps/laravel-in-kubernetes/public<span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    index index.php index.html index.htm index.nginx-debian.html<span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># _ makes sure that nginx does not try to map requests to a specific hostname</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># This allows us to specify the urls to our application as infrastructure changes,</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># without needing to change the application</span>
+</span></span><span class="line"><span class="cl">    server_name _<span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># At the root location,</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># we first check if there are any static files at the location, and serve those,</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># If not, we check whether there is an indexable folder which can be served,</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Otherwise we forward the request to the PHP server</span>
+</span></span><span class="line"><span class="cl">    location / <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># Using try_files here is quite important as a security concideration</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># to prevent injecting PHP code as static assets,</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># and then executing them via a URL.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># See https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/#passing-uncontrolled-requests-to-php</span>
+</span></span><span class="line"><span class="cl">        try_files <span class="nv">$uri</span> <span class="nv">$uri</span>/ /index.php?<span class="nv">$query_string</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Some static assets are loaded on every page load,</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># and logging these turns into a lot of useless logs.</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># If you would prefer to see these requests for catching 404&#39;s etc.</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Feel free to remove them</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">location</span> <span class="o">=</span> /favicon.ico <span class="o">{</span> access_log off<span class="p">;</span> log_not_found off<span class="p">;</span> <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">location</span> <span class="o">=</span> /robots.txt  <span class="o">{</span> access_log off<span class="p">;</span> log_not_found off<span class="p">;</span> <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># When a 404 is returned, we want to display our applications 404 page,</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># so we redirect it to index.php to load the correct page</span>
+</span></span><span class="line"><span class="cl">    error_page <span class="m">404</span> /index.php<span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Whenever we receive a PHP url, or our root location block gets to serving through fpm,</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># we want to pass the request to FPM for processing</span>
+</span></span><span class="line"><span class="cl">    location ~ <span class="se">\.</span>php$ <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">#NOTE: You should have &#34;cgi.fix_pathinfo = 0;&#34; in php.ini</span>
+</span></span><span class="line"><span class="cl">        include fastcgi_params<span class="p">;</span>
+</span></span><span class="line"><span class="cl">        fastcgi_intercept_errors on<span class="p">;</span>
+</span></span><span class="line"><span class="cl">        fastcgi_pass <span class="si">${</span><span class="nv">FPM_HOST</span><span class="si">}</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        fastcgi_param SCRIPT_FILENAME <span class="nv">$document_root</span>/<span class="nv">$fastcgi_script_name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    location ~ /<span class="se">\.</span>ht <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        deny all<span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    location ~ /<span class="se">\.</span><span class="o">(</span>?!well-known<span class="o">)</span>.* <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        deny all<span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># We need an nginx container which can pass requests to our FPM container,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># as well as serve any static content.</span>
+</span></span><span class="line"><span class="cl">FROM nginx:1.20-alpine as web_server
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">WORKDIR /opt/apps/laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We need to add our NGINX template to the container for startup,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># and configuration.</span>
+</span></span><span class="line"><span class="cl">COPY docker/nginx.conf.template /etc/nginx/templates/default.conf.template
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Copy in ONLY the public directory of our project.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># This is where all the static assets will live, which nginx will serve for us.</span>
+</span></span><span class="line"><span class="cl">COPY --from<span class="o">=</span>frontend /opt/apps/laravel-in-kubernetes/public /opt/apps/laravel-in-kubernetes/public</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>dockerfile 部分就是复制了 nginx 配置文件以及复制 public 文件，这里需要注意的是，由于我使用了 <code>Livewire</code> 有一部分文件不在 public 下，所以我复制了上层目录，这个可能不安全，所以我还得想想怎么弄，是不是可以把 livewire 的文件通过脚本复制出来更好一些？</p>
+<p>注意，上面的nginx 配置文件中的 <code>fastcgi_pass</code> 使用了变量，这里是个特性，docker 的 nginx 1.19 版本后支持了这个特性的时候，所以我们可以通过 env 的方式传递需要使用的的 <code>fpm</code> 路径，很合理。</p>
+<h4 class="heading-element" id="cron-阶段"><span>cron 阶段</span>
+  <a href="#cron-%e9%98%b6%e6%ae%b5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># We need a CRON container to the Laravel Scheduler.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># We&#39;ll start with the CLI container as our base,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># as we only need to override the CMD which the container starts with to point at cron</span>
+</span></span><span class="line"><span class="cl">FROM cli as cron
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">WORKDIR /opt/apps/laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># We want to create a laravel.cron file with Laravel cron settings, which we can import into crontab,</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># and run crond as the primary command in the forground</span>
+</span></span><span class="line"><span class="cl">RUN touch laravel.cron <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;* * * * * cd /opt/apps/laravel-in-kubernetes &amp;&amp; php artisan schedule:run&#34;</span> &gt;&gt; laravel.cron <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    crontab laravel.cron
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">CMD <span class="o">[</span><span class="s2">&#34;crond&#34;</span>, <span class="s2">&#34;-l&#34;</span>, <span class="s2">&#34;2&#34;</span>, <span class="s2">&#34;-f&#34;</span><span class="o">]</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这里我没明白为什么不单独一个文件到 <code>docker</code> 目录下，然后复制进去呢？然后直接执行定时任务。</p>
+<h3 class="heading-element" id="docker-compose"><span>docker-compose</span>
+  <a href="#docker-compose" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>这里就是替换本地 sail 默认的文件了</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">version: <span class="s1">&#39;3&#39;</span>
+</span></span><span class="line"><span class="cl">services:
+</span></span><span class="line"><span class="cl">    <span class="c1"># We need to run the FPM container for our application</span>
+</span></span><span class="line"><span class="cl">    laravel.fpm:
+</span></span><span class="line"><span class="cl">        build:
+</span></span><span class="line"><span class="cl">            context: .
+</span></span><span class="line"><span class="cl">            target: fpm_server
+</span></span><span class="line"><span class="cl">        image: laravel-in-kubernetes/fpm_server
+</span></span><span class="line"><span class="cl">        <span class="c1"># We can override any env values here.</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># By default the .env in the project root will be loaded as the environment for all containers</span>
+</span></span><span class="line"><span class="cl">        environment:
+</span></span><span class="line"><span class="cl">            APP_DEBUG: <span class="s2">&#34;true&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># Mount the codebase, so any code changes we make will be propagated to the running application</span>
+</span></span><span class="line"><span class="cl">        volumes:
+</span></span><span class="line"><span class="cl">            <span class="c1"># Here we mount in our codebase so any changes are immediately reflected into the container</span>
+</span></span><span class="line"><span class="cl">            - <span class="s1">&#39;.:/opt/apps/laravel-in-kubernetes&#39;</span>
+</span></span><span class="line"><span class="cl">        networks:
+</span></span><span class="line"><span class="cl">            - laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Run the web server container for static content, and proxying to our FPM container</span>
+</span></span><span class="line"><span class="cl">    laravel.web:
+</span></span><span class="line"><span class="cl">        build:
+</span></span><span class="line"><span class="cl">            context: .
+</span></span><span class="line"><span class="cl">            target: web_server
+</span></span><span class="line"><span class="cl">        image: laravel-in-kubernetes/web_server
+</span></span><span class="line"><span class="cl">        <span class="c1"># Expose our application port (80) through a port on our local machine (8080)</span>
+</span></span><span class="line"><span class="cl">        ports:
+</span></span><span class="line"><span class="cl">            - <span class="s1">&#39;8080:80&#39;</span>
+</span></span><span class="line"><span class="cl">        environment:
+</span></span><span class="line"><span class="cl">            <span class="c1"># We need to pass in the new FPM hst as the name of the fpm container on port 9000</span>
+</span></span><span class="line"><span class="cl">            FPM_HOST: <span class="s2">&#34;laravel.fpm:9000&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># Mount the public directory into the container so we can serve any static files directly when they change</span>
+</span></span><span class="line"><span class="cl">        volumes:
+</span></span><span class="line"><span class="cl">            <span class="c1"># Here we mount in our codebase so any changes are immediately reflected into the container</span>
+</span></span><span class="line"><span class="cl">            - <span class="s1">&#39;./public:/opt/apps/laravel-in-kubernetes/public&#39;</span>
+</span></span><span class="line"><span class="cl">        networks:
+</span></span><span class="line"><span class="cl">            - laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">    <span class="c1"># Run the Laravel Scheduler</span>
+</span></span><span class="line"><span class="cl">    laravel.cron:
+</span></span><span class="line"><span class="cl">        build:
+</span></span><span class="line"><span class="cl">            context: .
+</span></span><span class="line"><span class="cl">            target: cron
+</span></span><span class="line"><span class="cl">        image: laravel-in-kubernetes/cron
+</span></span><span class="line"><span class="cl">        <span class="c1"># Here we mount in our codebase so any changes are immediately reflected into the container</span>
+</span></span><span class="line"><span class="cl">        volumes:
+</span></span><span class="line"><span class="cl">            <span class="c1"># Here we mount in our codebase so any changes are immediately reflected into the container</span>
+</span></span><span class="line"><span class="cl">            - <span class="s1">&#39;.:/opt/apps/laravel-in-kubernetes&#39;</span>
+</span></span><span class="line"><span class="cl">        networks:
+</span></span><span class="line"><span class="cl">            - laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">    <span class="c1"># Run the frontend, and file watcher in a container, so any changes are immediately compiled and servable</span>
+</span></span><span class="line"><span class="cl">    laravel.frontend:
+</span></span><span class="line"><span class="cl">        build:
+</span></span><span class="line"><span class="cl">            context: .
+</span></span><span class="line"><span class="cl">            target: frontend
+</span></span><span class="line"><span class="cl">        <span class="c1"># Override the default CMD, so we can watch changes to frontend files, and re-transpile them.</span>
+</span></span><span class="line"><span class="cl">        command: <span class="o">[</span><span class="s2">&#34;npm&#34;</span>, <span class="s2">&#34;run&#34;</span>, <span class="s2">&#34;watch&#34;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">        image: laravel-in-kubernetes/frontend
+</span></span><span class="line"><span class="cl">        volumes:
+</span></span><span class="line"><span class="cl">            <span class="c1"># Here we mount in our codebase so any changes are immediately reflected into the container</span>
+</span></span><span class="line"><span class="cl">            - <span class="s1">&#39;.:/opt/apps/laravel-in-kubernetes&#39;</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># Add node_modeules as singular volume.</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># This prevents our local node_modules from being propagated into the container,</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># So the node_modules can be compiled for each of the different architectures (Local, Image)</span>
+</span></span><span class="line"><span class="cl">            - <span class="s1">&#39;/opt/app/node_modules/&#39;</span>
+</span></span><span class="line"><span class="cl">        networks:
+</span></span><span class="line"><span class="cl">            - laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">networks:
+</span></span><span class="line"><span class="cl">    laravel-in-kubernetes:</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>直接上示例就好了，没什么可以说的，我自己都理解了，如果你有不懂的地方，就需要查询一下了。注意上面 web 不分，就是用了，我刚才说的 nginx 变量</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">environment:
+</span></span><span class="line"><span class="cl">            <span class="c1"># We need to pass in the new FPM hst as the name of the fpm container on port 9000</span>
+</span></span><span class="line"><span class="cl">            FPM_HOST: <span class="s2">&#34;laravel.fpm:9000&#34;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="总结"><span>总结</span>
+  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>今天到先到这里，后续就开始要在服务器进行部署了。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2023-03-07 11:16:24">更新于 2023-03-07&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-1/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/2023%e5%b9%b403%e6%9c%8807%e6%97%a5%20Laravel%20in%20Kubernetes%20%e7%b3%bb%e5%88%97%e6%96%87%e7%ab%a0%e4%b8%aa%e4%ba%ba%e6%80%bb%e7%bb%93.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-1/" data-title="Laravel in Kubernetes 系列文章个人总结（1）" data-hashtags="laravel,kubernetes"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-1/" data-hashtag="laravel"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-1/" data-title="Laravel in Kubernetes 系列文章个人总结（1）"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/laravel/" class="post-tag" title="标签 - Laravel">Laravel</a><a href="/tags/kubernetes/" class="post-tag" title="标签 - Kubernetes">Kubernetes</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/laravel-livewire-form-builder-update/" class="post-nav-item" rel="prev" title="初步做完表单构造器后我又对它做了什么"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>初步做完表单构造器后我又对它做了什么</a><a href="/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-2/" class="post-nav-item" rel="next" title="Laravel in Kubernetes 系列文章个人总结（2）">Laravel in Kubernetes 系列文章个人总结（2）<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog">
+      <div class="toc">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#正文">正文</a>
+      <ul>
+        <li><a href="#修改-laravel-日子输出为-stdout">修改 laravel 日子输出为 stdout</a></li>
+        <li><a href="#session-驱动调整">Session 驱动调整</a></li>
+        <li><a href="#强制返回-https">强制返回 HTTPS</a></li>
+        <li><a href="#镜像分层规划">镜像分层规划</a></li>
+        <li><a href="#添加-dockerignore-文件">添加 .dockerignore 文件</a></li>
+        <li><a href="#创建-docker-文件">创建 docker 文件</a>
+          <ul>
+            <li><a href="#composer-层">composer 层</a></li>
+            <li><a href="#前端资源编译阶段">前端资源编译阶段</a></li>
+            <li><a href="#cli-阶段">cli 阶段</a></li>
+            <li><a href="#fpm-阶段">fpm 阶段</a></li>
+            <li><a href="#web服务阶段">web服务阶段</a></li>
+            <li><a href="#cron-阶段">cron 阶段</a></li>
+          </ul>
+        </li>
+        <li><a href="#docker-compose">docker-compose</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div><div id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" role="button" aria-label="目录"><i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/78997ac78ef44ccae0de8f86cddd3aac.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

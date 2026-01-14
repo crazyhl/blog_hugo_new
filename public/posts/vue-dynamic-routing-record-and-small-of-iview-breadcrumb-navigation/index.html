@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Vue 动态路由记录 以及 Iview 面包屑导航的小记录 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="最近使用 vue 的场景比较多，所以体会也就更多了，以前用过但是没有很明确印象的，也就发现的更多了，所以现在决定都记录下来。以后找起来也方便，记忆也能加深。
+这次动态路由用的比较多，所以在相同路由来回跳转的时候，url虽然跳转了，但是因为组件复用问题，没有调用vue的生命周期函数，导致数据没有刷新的问题也就明显的遇到的次数多了，vue-router 提供了两种解决方案，一种是 watch $router对象的变化，然后在变化的时候去刷新数据，另一种是调用 beforeRouteUpdate 设个导航守卫，昨天在弄这块的时候我还思考了一波 next 方法的调用时机，是先跳转在加载数据还是先加载数据在跳转呢？今天也算是想通了吧，在不同路由间跳转到的时候我们会因为用户体验问题，而去处理先加载数据在渲染页面，或者先渲染页面在加载数据。但是呢，这个 beforeRouteUpdate 是组件内的守卫方法，我们看下 vue-router 的说明:
+beforeRouteUpdate (to, from, next) { // 在当前路由改变，但是该组件被复用时调用 // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候， // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。 // 可以访问组件实例 this },
+通过说明我们可以知道了，这个就是在自己组建跳转的时候才会触发，而next就是处理url变化的方法，所以在next前后处理就很随意了。想怎么整就怎么整。不过如果需要对跳转进行更多的控制的时候还是需要注意顺序的了。
+好了，重要的笔记完事了，开始吐槽模式了，这个项目用了iview，在使用面包屑导航的时候，我发现传入to 跳转url是个 object的时候，他不会像 router-link 那样正确的渲染出来，我也看了他的源码，貌似也是处理好的了。其实这就是我想吐槽的地方了，为什么用字符串的时候就可以在a标签上面显示连接呢，明明用object的时候就不会显示href呢，其实应该也是ok的啊。真的难受，我一直以为渲染错误了呢，但是当你真正点击的时候却是正常跳转的了。
+">
+  <meta itemprop="name" content="vue 动态路由记录 以及 iview 面包屑导航的小记录">
+  <meta itemprop="description" content="最近使用 vue 的场景比较多，所以体会也就更多了，以前用过但是没有很明确印象的，也就发现的更多了，所以现在决定都记录下来。以后找起来也方便，记忆也能加深。
+这次动态路由用的比较多，所以在相同路由来回跳转的时候，url虽然跳转了，但是因为组件复用问题，没有调用vue的生命周期函数，导致数据没有刷新的问题也就明显的遇到的次数多了，vue-router 提供了两种解决方案，一种是 watch $router对象的变化，然后在变化的时候去刷新数据，另一种是调用 beforeRouteUpdate 设个导航守卫，昨天在弄这块的时候我还思考了一波 next 方法的调用时机，是先跳转在加载数据还是先加载数据在跳转呢？今天也算是想通了吧，在不同路由间跳转到的时候我们会因为用户体验问题，而去处理先加载数据在渲染页面，或者先渲染页面在加载数据。但是呢，这个 beforeRouteUpdate 是组件内的守卫方法，我们看下 vue-router 的说明:
+beforeRouteUpdate (to, from, next) { // 在当前路由改变，但是该组件被复用时调用 // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候， // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。 // 可以访问组件实例 this },
+通过说明我们可以知道了，这个就是在自己组建跳转的时候才会触发，而next就是处理url变化的方法，所以在next前后处理就很随意了。想怎么整就怎么整。不过如果需要对跳转进行更多的控制的时候还是需要注意顺序的了。
+好了，重要的笔记完事了，开始吐槽模式了，这个项目用了iview，在使用面包屑导航的时候，我发现传入to 跳转url是个 object的时候，他不会像 router-link 那样正确的渲染出来，我也看了他的源码，貌似也是处理好的了。其实这就是我想吐槽的地方了，为什么用字符串的时候就可以在a标签上面显示连接呢，明明用object的时候就不会显示href呢，其实应该也是ok的啊。真的难受，我一直以为渲染错误了呢，但是当你真正点击的时候却是正常跳转的了。">
+  <meta itemprop="datePublished" content="2019-04-26T14:24:01+00:00">
+  <meta itemprop="dateModified" content="2019-04-26T14:24:01+00:00">
+  <meta itemprop="wordCount" content="43">
+  <meta itemprop="keywords" content="前端"><meta property="og:url" content="http://localhost:1313/posts/vue-dynamic-routing-record-and-small-of-iview-breadcrumb-navigation/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="vue 动态路由记录 以及 iview 面包屑导航的小记录">
+  <meta property="og:description" content="最近使用 vue 的场景比较多，所以体会也就更多了，以前用过但是没有很明确印象的，也就发现的更多了，所以现在决定都记录下来。以后找起来也方便，记忆也能加深。
+这次动态路由用的比较多，所以在相同路由来回跳转的时候，url虽然跳转了，但是因为组件复用问题，没有调用vue的生命周期函数，导致数据没有刷新的问题也就明显的遇到的次数多了，vue-router 提供了两种解决方案，一种是 watch $router对象的变化，然后在变化的时候去刷新数据，另一种是调用 beforeRouteUpdate 设个导航守卫，昨天在弄这块的时候我还思考了一波 next 方法的调用时机，是先跳转在加载数据还是先加载数据在跳转呢？今天也算是想通了吧，在不同路由间跳转到的时候我们会因为用户体验问题，而去处理先加载数据在渲染页面，或者先渲染页面在加载数据。但是呢，这个 beforeRouteUpdate 是组件内的守卫方法，我们看下 vue-router 的说明:
+beforeRouteUpdate (to, from, next) { // 在当前路由改变，但是该组件被复用时调用 // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候， // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。 // 可以访问组件实例 this },
+通过说明我们可以知道了，这个就是在自己组建跳转的时候才会触发，而next就是处理url变化的方法，所以在next前后处理就很随意了。想怎么整就怎么整。不过如果需要对跳转进行更多的控制的时候还是需要注意顺序的了。
+好了，重要的笔记完事了，开始吐槽模式了，这个项目用了iview，在使用面包屑导航的时候，我发现传入to 跳转url是个 object的时候，他不会像 router-link 那样正确的渲染出来，我也看了他的源码，貌似也是处理好的了。其实这就是我想吐槽的地方了，为什么用字符串的时候就可以在a标签上面显示连接呢，明明用object的时候就不会显示href呢，其实应该也是ok的啊。真的难受，我一直以为渲染错误了呢，但是当你真正点击的时候却是正常跳转的了。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2019-04-26T14:24:01+00:00">
+    <meta property="article:modified_time" content="2019-04-26T14:24:01+00:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="vue 动态路由记录 以及 iview 面包屑导航的小记录">
+  <meta name="twitter:description" content="最近使用 vue 的场景比较多，所以体会也就更多了，以前用过但是没有很明确印象的，也就发现的更多了，所以现在决定都记录下来。以后找起来也方便，记忆也能加深。
+这次动态路由用的比较多，所以在相同路由来回跳转的时候，url虽然跳转了，但是因为组件复用问题，没有调用vue的生命周期函数，导致数据没有刷新的问题也就明显的遇到的次数多了，vue-router 提供了两种解决方案，一种是 watch $router对象的变化，然后在变化的时候去刷新数据，另一种是调用 beforeRouteUpdate 设个导航守卫，昨天在弄这块的时候我还思考了一波 next 方法的调用时机，是先跳转在加载数据还是先加载数据在跳转呢？今天也算是想通了吧，在不同路由间跳转到的时候我们会因为用户体验问题，而去处理先加载数据在渲染页面，或者先渲染页面在加载数据。但是呢，这个 beforeRouteUpdate 是组件内的守卫方法，我们看下 vue-router 的说明:
+beforeRouteUpdate (to, from, next) { // 在当前路由改变，但是该组件被复用时调用 // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候， // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。 // 可以访问组件实例 this },
+通过说明我们可以知道了，这个就是在自己组建跳转的时候才会触发，而next就是处理url变化的方法，所以在next前后处理就很随意了。想怎么整就怎么整。不过如果需要对跳转进行更多的控制的时候还是需要注意顺序的了。
+好了，重要的笔记完事了，开始吐槽模式了，这个项目用了iview，在使用面包屑导航的时候，我发现传入to 跳转url是个 object的时候，他不会像 router-link 那样正确的渲染出来，我也看了他的源码，貌似也是处理好的了。其实这就是我想吐槽的地方了，为什么用字符串的时候就可以在a标签上面显示连接呢，明明用object的时候就不会显示href呢，其实应该也是ok的啊。真的难受，我一直以为渲染错误了呢，但是当你真正点击的时候却是正常跳转的了。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/vue-dynamic-routing-record-and-small-of-iview-breadcrumb-navigation/" title="vue 动态路由记录 以及 iview 面包屑导航的小记录 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/dockercomopse-uses-a-small-summary/" title="docker-comopse 使用小总结" /><link rel="next" type="text/html" href="http://localhost:1313/posts/implement-a-simple-validator-yourself/" title="自己实现一个简易的 validator" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/vue-dynamic-routing-record-and-small-of-iview-breadcrumb-navigation/index.md" title="vue 动态路由记录 以及 iview 面包屑导航的小记录 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "vue 动态路由记录 以及 iview 面包屑导航的小记录",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/vue-dynamic-routing-record-and-small-of-iview-breadcrumb-navigation\/"
+    },"genre": "posts","wordcount":  43 ,
+    "url": "http:\/\/localhost:1313\/posts\/vue-dynamic-routing-record-and-small-of-iview-breadcrumb-navigation\/","datePublished": "2019-04-26T14:24:01+00:00","dateModified": "2019-04-26T14:24:01+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Vue 动态路由记录 以及 Iview 面包屑导航的小记录</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%89%8D%E7%AB%AF/" class="post-category" title="分类 - 前端"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 前端</a></span></div><div class="post-meta-line"><span title="发布于 2019-04-26 14:24:01"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2019-04-26">2019-04-26</time></span>&nbsp;<span title="43 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>最近使用 <code>vue</code> 的场景比较多，所以体会也就更多了，以前用过但是没有很明确印象的，也就发现的更多了，所以现在决定都记录下来。以后找起来也方便，记忆也能加深。</p>
+<p>这次动态路由用的比较多，所以在相同路由来回跳转的时候，<code>url</code>虽然跳转了，但是因为组件复用问题，没有调用vue的生命周期函数，导致数据没有刷新的问题也就明显的遇到的次数多了，<code>vue-router</code> 提供了两种解决方案，一种是 <code>watch</code> <code>$router</code>对象的变化，然后在变化的时候去刷新数据，另一种是调用 <code>beforeRouteUpdate</code> 设个导航守卫，昨天在弄这块的时候我还思考了一波 <code>next</code> 方法的调用时机，是先跳转在加载数据还是先加载数据在跳转呢？今天也算是想通了吧，在不同路由间跳转到的时候我们会因为用户体验问题，而去处理先加载数据在渲染页面，或者先渲染页面在加载数据。但是呢，这个 <code>beforeRouteUpdate</code> 是组件内的守卫方法，我们看下 <code>vue-router</code> 的说明:</p>
+<blockquote>
+<p>beforeRouteUpdate (to, from, next) {
+// 在当前路由改变，但是该组件被复用时调用
+// 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
+// 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
+// 可以访问组件实例 <code>this</code>
+},</p>
+</blockquote>
+<p>通过说明我们可以知道了，这个就是在自己组建跳转的时候才会触发，而<code>next</code>就是处理<code>url</code>变化的方法，所以在<code>next</code>前后处理就很随意了。想怎么整就怎么整。不过如果需要对跳转进行更多的控制的时候还是需要注意顺序的了。</p>
+<!-- more -->
+<p>好了，重要的笔记完事了，开始吐槽模式了，这个项目用了iview，在使用面包屑导航的时候，我发现传入<code>to</code> 跳转<code>url</code>是个 <code>object</code>的时候，他不会像 <code>router-link</code> 那样正确的渲染出来，我也看了他的源码，貌似也是处理好的了。其实这就是我想吐槽的地方了，为什么用字符串的时候就可以在<code>a</code>标签上面显示连接呢，明明用<code>object</code>的时候就不会显示<code>href</code>呢，其实应该也是ok的啊。真的难受，我一直以为渲染错误了呢，但是当你真正点击的时候却是正常跳转的了。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2019-04-26 14:24:01">更新于 2019-04-26&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/vue-dynamic-routing-record-and-small-of-iview-breadcrumb-navigation/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/vue-%e5%8a%a8%e6%80%81%e8%b7%af%e7%94%b1%e8%ae%b0%e5%bd%95-%e4%bb%a5%e5%8f%8a-iview-%e9%9d%a2%e5%8c%85%e5%b1%91%e5%af%bc%e8%88%aa%e7%9a%84%e5%b0%8f%e8%ae%b0%e5%bd%95.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/vue-dynamic-routing-record-and-small-of-iview-breadcrumb-navigation/" data-title="Vue 动态路由记录 以及 Iview 面包屑导航的小记录"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/vue-dynamic-routing-record-and-small-of-iview-breadcrumb-navigation/"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/vue-dynamic-routing-record-and-small-of-iview-breadcrumb-navigation/" data-title="Vue 动态路由记录 以及 Iview 面包屑导航的小记录"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/dockercomopse-uses-a-small-summary/" class="post-nav-item" rel="prev" title="Docker-Comopse 使用小总结"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Docker-Comopse 使用小总结</a><a href="/posts/implement-a-simple-validator-yourself/" class="post-nav-item" rel="next" title="自己实现一个简易的 Validator">自己实现一个简易的 Validator<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/fc11779f9224a73d652f255e98b57821.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

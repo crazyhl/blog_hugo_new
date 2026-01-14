@@ -1,0 +1,42 @@
+---
+title: deepin 添加 phpstorm 快捷方式到 application 目录
+tags: [debain, 快捷方式]
+categories: [技巧]
+slug: deepin-add-phpstorm-shortcut-to-the-application-directory
+date: 2017-04-29 13:20:00
+updated: 2017-04-29 13:20:00
+toc: false
+---
+
+首先创建 Phpstorm.desktop 文件，并把下面的代码输入
+
+```shell
+[Desktop Entry]
+Categories=Development;
+Comment[zh_CN]=
+Comment=
+Exec=/opt/phpstorm/bin/phpstorm.sh
+GenericName[zh_CN]=IDE
+GenericName=IDE
+Icon=/opt/phpstorm/bin/webide.png
+Name[zh_CN]=phpStorm　　　　　　　　　　　
+Name=phpStorm　　　　　　　
+Path=
+StartupNotify=true
+Terminal=false
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=Learn Programming
+```
+
+说明一下 Exec 是执行文件的路径，Icon 是图标的路径，Categories 是分类，这个根据系统来就可以了
+
+然后执行下面两行代码 
+```shell
+sudo mv Phpstorm.desktop /usr/share/applications/
+sudo chmod +x Phpstorm.desktop
+```
+
+这样就 ok 了，在 application 目录里面就会有 phpstorm了，就这么简单，这个适用于 debain 系列，其他应用也是这样添加就ok了

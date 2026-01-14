@@ -1,0 +1,56 @@
+# 使用 Laravel 开发时候的用户相关和发送邮件的小笔记
+
+
+最近又要开始开发一些自己的东西了，继续使用 PHP + Laravel 而不是使用之前的 golang + gin 这些。原因就是想要理解一些东西，而不是快速开发。我最近再看 Laravel 文档的时候发现了太多以前没有注意到的地方。所以这次就用 Laravel 了。说不定可以成功在弄出一些成果。
+
+## 用户相关
+
+用户这里只有一个需要记录的地方，就是邮箱认证。我在看 `Laravel Breeze` 起步框架的时候，发现虽然提供了邮箱确认的功能，但是在实例页面里面并没有提供入口。那么怎么能够开启呢，通过页面我可以看到如下的代码
+```html
+<div v-if="mustVerifyEmail && user.email_verified_at === null">
+    <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
+        Your email address is unverified.
+        <Link
+            :href="route('verification.send')"
+            method="post"
+            as="button"
+            class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+        >
+            Click here to re-send the verification email.
+        </Link>
+    </p>
+
+    <div
+        v-show="status === 'verification-link-sent'"
+        class="mt-2 font-medium text-sm text-green-600 dark:text-green-400"
+    >
+        A new verification link has been sent to your email address.
+    </div>
+</div>
+```
+在 `v-if="mustVerifyEmail` 这里有一个判断的开关，那么这部分从哪里来呢？
+```php
+/**
+* Display the user's profile form.
+*/
+public function edit(Request $request): Response
+{
+    return Inertia::render('Profile/Edit', [
+        'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+        'status' => session('status'),
+    ]);
+}
+```
+在 `Controller` 里面我们发现了这里，判断我们的登录用户是否是 `MustVerifyEmail` 的一个实例。虽然我们的 `User Model` 实现了 `MustVerifyEmail Trait` 但是我们没有声明实现 `MustVerifyEmail` 接口。所以解决方案就是这样 `class User extends Authenticatable implements MustVerifyEmail` 我们手动声明一下 `User Model`  实现 `MustVerifyEmail` 接口就解决了。
+
+## 发送邮件
+解决完上面的用户认证之后，就可以发送邮件了，那么问题就来了，如何定义邮件模板呢？ `Laravel` 官方文档可以看到 [https://laravel.com/docs/10.x/notifications#formatting-mail-messages](https://laravel.com/docs/10.x/notifications#formatting-mail-messages) 这里面提供了一份用法 `php artisan vendor:publish --tag=laravel-notifications` 这个可以修改通知的邮件消息内容模板，不过有时候仅仅修改这部分是没有办法充分定义模板的，所以我们还需要参考这份文档 [https://laravel.com/docs/10.x/mail#customizing-the-components](https://laravel.com/docs/10.x/mail#customizing-the-components) 这部分使用命令 `php artisan vendor:publish --tag=laravel-mail` 把完整的邮件模板导出，才能达到全面自定义的目的。
+
+## 结语
+好了，今天的笔记就到这里了，后续如果有什么需要记录的我还会记录下来。在最后我希望我能把这次要做的东西完整的发布出来。能够有人使用。
+
+---
+
+> 作者:   
+> URL: http://localhost:1313/posts/developing-with-laravel-a-brief-note-on-user-related-features-and-sending-emails/  
+

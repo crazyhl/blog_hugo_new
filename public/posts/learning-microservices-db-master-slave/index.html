@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>从零开始学习实践微服务 - 数据库读写分离篇 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="前言 这是一个长期的计划，从零开始学习并实践微服务。为什么要实践这个？因为火？并不是，实际上是在开发的这么多年里面，除了最初始是用lnmp自己维护过一些数据库之类的，其实就是安装了一下，配置都没有修改过什么。到了北京以后，一直都是在用云服务提供的组件。所以，这么多年的开发实际上自己并没有任何服务的运维经验，外加做 php 的研发微服务的经验也并不是很充足。所以就有了这次的计划，从数据库的读写分离配置开始，到最后整个服务从服务器上全部跑起来。预计这个计划在十一之前能够搞定吧。
+">
+  <meta itemprop="name" content="从零开始学习实践微服务 - 数据库读写分离篇">
+  <meta itemprop="description" content="前言 这是一个长期的计划，从零开始学习并实践微服务。为什么要实践这个？因为火？并不是，实际上是在开发的这么多年里面，除了最初始是用lnmp自己维护过一些数据库之类的，其实就是安装了一下，配置都没有修改过什么。到了北京以后，一直都是在用云服务提供的组件。所以，这么多年的开发实际上自己并没有任何服务的运维经验，外加做 php 的研发微服务的经验也并不是很充足。所以就有了这次的计划，从数据库的读写分离配置开始，到最后整个服务从服务器上全部跑起来。预计这个计划在十一之前能够搞定吧。">
+  <meta itemprop="datePublished" content="2020-05-14T20:08:26+08:00">
+  <meta itemprop="dateModified" content="2020-05-14T20:08:26+08:00">
+  <meta itemprop="wordCount" content="437">
+  <meta itemprop="keywords" content="PHP"><meta property="og:url" content="http://localhost:1313/posts/learning-microservices-db-master-slave/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="从零开始学习实践微服务 - 数据库读写分离篇">
+  <meta property="og:description" content="前言 这是一个长期的计划，从零开始学习并实践微服务。为什么要实践这个？因为火？并不是，实际上是在开发的这么多年里面，除了最初始是用lnmp自己维护过一些数据库之类的，其实就是安装了一下，配置都没有修改过什么。到了北京以后，一直都是在用云服务提供的组件。所以，这么多年的开发实际上自己并没有任何服务的运维经验，外加做 php 的研发微服务的经验也并不是很充足。所以就有了这次的计划，从数据库的读写分离配置开始，到最后整个服务从服务器上全部跑起来。预计这个计划在十一之前能够搞定吧。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2020-05-14T20:08:26+08:00">
+    <meta property="article:modified_time" content="2020-05-14T20:08:26+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="从零开始学习实践微服务 - 数据库读写分离篇">
+  <meta name="twitter:description" content="前言 这是一个长期的计划，从零开始学习并实践微服务。为什么要实践这个？因为火？并不是，实际上是在开发的这么多年里面，除了最初始是用lnmp自己维护过一些数据库之类的，其实就是安装了一下，配置都没有修改过什么。到了北京以后，一直都是在用云服务提供的组件。所以，这么多年的开发实际上自己并没有任何服务的运维经验，外加做 php 的研发微服务的经验也并不是很充足。所以就有了这次的计划，从数据库的读写分离配置开始，到最后整个服务从服务器上全部跑起来。预计这个计划在十一之前能够搞定吧。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/learning-microservices-db-master-slave/" title="从零开始学习实践微服务 - 数据库读写分离篇 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/jenkins-and-github-auto-deploy-hugo-blog/" title="利用Jenkins&#43;Github自动部署hugo博客" /><link rel="next" type="text/html" href="http://localhost:1313/posts/recent-developer-note-20200517/" title="聊聊最近开发近况" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/learning-microservices-db-master-slave/index.md" title="从零开始学习实践微服务 - 数据库读写分离篇 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "从零开始学习实践微服务 - 数据库读写分离篇",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/learning-microservices-db-master-slave\/"
+    },"genre": "posts","wordcount":  437 ,
+    "url": "http:\/\/localhost:1313\/posts\/learning-microservices-db-master-slave\/","datePublished": "2020-05-14T20:08:26+08:00","dateModified": "2020-05-14T20:08:26+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>从零开始学习实践微服务 - 数据库读写分离篇</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2020-05-14 20:08:26"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2020-05-14">2020-05-14</time></span>&nbsp;<span title="437 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 500 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#计划">计划</a></li>
+    <li><a href="#开始">开始</a>
+      <ul>
+        <li><a href="#数据库配置">数据库配置</a></li>
+        <li><a href="#数据库操作">数据库操作</a></li>
+      </ul>
+    </li>
+    <li><a href="#补充说明">补充说明</a></li>
+    <li><a href="#结语">结语</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 class="heading-element" id="前言"><span>前言</span>
+  <a href="#%e5%89%8d%e8%a8%80" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>这是一个长期的计划，从零开始学习并实践微服务。为什么要实践这个？因为火？并不是，实际上是在开发的这么多年里面，除了最初始是用lnmp自己维护过一些数据库之类的，其实就是安装了一下，配置都没有修改过什么。到了北京以后，一直都是在用云服务提供的组件。所以，这么多年的开发实际上自己并没有任何服务的运维经验，外加做 php 的研发微服务的经验也并不是很充足。所以就有了这次的计划，从数据库的读写分离配置开始，到最后整个服务从服务器上全部跑起来。预计这个计划在十一之前能够搞定吧。</p>
+<h2 class="heading-element" id="计划"><span>计划</span>
+  <a href="#%e8%ae%a1%e5%88%92" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ul>
+<li>mysql 读写分离</li>
+<li>基于 swoole 开始实现一个 mvc 框架</li>
+<li>mq 的使用</li>
+<li>es 的使用</li>
+<li>k8s 的使用</li>
+<li>vue 前端的配置和使用</li>
+<li>服务治理</li>
+<li>服务管理</li>
+</ul>
+<p>目前前四个是确认的了，后面的还得看计划在进行相应的变动在逐步完善</p>
+<h2 class="heading-element" id="开始"><span>开始</span>
+  <a href="#%e5%bc%80%e5%a7%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>今天开始弄读写分离，4个数据库，1主 3从，主跟其中一个从同步，另外两个从库跟前面的从库进行同步。</p>
+<h3 class="heading-element" id="数据库配置"><span>数据库配置</span>
+  <a href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e9%85%8d%e7%bd%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>我们采用 docker 来进行此次测试。
+docker-compose file如下:</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-docker"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-docker" data-lang="docker"><span class="line"><span class="cl">version: <span class="s1">&#39;3.1&#39;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl">services:<span class="err">
+</span></span></span><span class="line"><span class="cl">  db1:<span class="err">
+</span></span></span><span class="line"><span class="cl">    image: mysql:8<span class="err">
+</span></span></span><span class="line"><span class="cl">    command: --default-authentication-plugin<span class="o">=</span>mysql_native_password<span class="err">
+</span></span></span><span class="line"><span class="cl">    restart: always<span class="err">
+</span></span></span><span class="line"><span class="cl">    volumes:<span class="err">
+</span></span></span><span class="line"><span class="cl">      <span class="c1"># 配置文件</span><span class="err">
+</span></span></span><span class="line"><span class="cl">      - ./db1/conf/conf.d:/etc/mysql/conf.d:ro<span class="err">
+</span></span></span><span class="line"><span class="cl">    ports:<span class="err">
+</span></span></span><span class="line"><span class="cl">      - 33061:3306<span class="err">
+</span></span></span><span class="line"><span class="cl">    environment:<span class="err">
+</span></span></span><span class="line"><span class="cl">      MYSQL_ROOT_PASSWORD: <span class="m">123456789</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    networks:<span class="err">
+</span></span></span><span class="line"><span class="cl">      mynet:<span class="err">
+</span></span></span><span class="line"><span class="cl">        ipv4_address: 172.28.22.100<span class="err">
+</span></span></span><span class="line"><span class="cl">  db2:<span class="err">
+</span></span></span><span class="line"><span class="cl">    image: mysql:8<span class="err">
+</span></span></span><span class="line"><span class="cl">    command: --default-authentication-plugin<span class="o">=</span>mysql_native_password<span class="err">
+</span></span></span><span class="line"><span class="cl">    restart: always<span class="err">
+</span></span></span><span class="line"><span class="cl">    volumes:<span class="err">
+</span></span></span><span class="line"><span class="cl">      <span class="c1"># 配置文件</span><span class="err">
+</span></span></span><span class="line"><span class="cl">      - ./db2/conf/conf.d:/etc/mysql/conf.d:ro<span class="err">
+</span></span></span><span class="line"><span class="cl">    ports:<span class="err">
+</span></span></span><span class="line"><span class="cl">      - 33062:3306<span class="err">
+</span></span></span><span class="line"><span class="cl">    environment:<span class="err">
+</span></span></span><span class="line"><span class="cl">      MYSQL_ROOT_PASSWORD: <span class="m">123456789</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    networks:<span class="err">
+</span></span></span><span class="line"><span class="cl">      mynet:<span class="err">
+</span></span></span><span class="line"><span class="cl">        ipv4_address: 172.28.22.101<span class="err">
+</span></span></span><span class="line"><span class="cl">  db3:<span class="err">
+</span></span></span><span class="line"><span class="cl">    image: mysql:8<span class="err">
+</span></span></span><span class="line"><span class="cl">    command: --default-authentication-plugin<span class="o">=</span>mysql_native_password<span class="err">
+</span></span></span><span class="line"><span class="cl">    restart: always<span class="err">
+</span></span></span><span class="line"><span class="cl">    volumes:<span class="err">
+</span></span></span><span class="line"><span class="cl">      <span class="c1"># 配置文件</span><span class="err">
+</span></span></span><span class="line"><span class="cl">      - ./db3/conf/conf.d:/etc/mysql/conf.d:ro<span class="err">
+</span></span></span><span class="line"><span class="cl">    ports:<span class="err">
+</span></span></span><span class="line"><span class="cl">      - 33063:3306<span class="err">
+</span></span></span><span class="line"><span class="cl">    environment:<span class="err">
+</span></span></span><span class="line"><span class="cl">      MYSQL_ROOT_PASSWORD: <span class="m">123456789</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    networks:<span class="err">
+</span></span></span><span class="line"><span class="cl">      mynet:<span class="err">
+</span></span></span><span class="line"><span class="cl">        ipv4_address: 172.28.22.103<span class="err">
+</span></span></span><span class="line"><span class="cl">  db4:<span class="err">
+</span></span></span><span class="line"><span class="cl">    image: mysql:8<span class="err">
+</span></span></span><span class="line"><span class="cl">    command: --default-authentication-plugin<span class="o">=</span>mysql_native_password<span class="err">
+</span></span></span><span class="line"><span class="cl">    restart: always<span class="err">
+</span></span></span><span class="line"><span class="cl">    volumes:<span class="err">
+</span></span></span><span class="line"><span class="cl">      <span class="c1"># 配置文件</span><span class="err">
+</span></span></span><span class="line"><span class="cl">      - ./db4/conf/conf.d:/etc/mysql/conf.d:ro<span class="err">
+</span></span></span><span class="line"><span class="cl">    ports:<span class="err">
+</span></span></span><span class="line"><span class="cl">      - 33064:3306<span class="err">
+</span></span></span><span class="line"><span class="cl">    environment:<span class="err">
+</span></span></span><span class="line"><span class="cl">      MYSQL_ROOT_PASSWORD: <span class="m">123456789</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    networks:<span class="err">
+</span></span></span><span class="line"><span class="cl">      mynet:<span class="err">
+</span></span></span><span class="line"><span class="cl">        ipv4_address: 172.28.22.104<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl">networks:<span class="err">
+</span></span></span><span class="line"><span class="cl">  mynet:<span class="err">
+</span></span></span><span class="line"><span class="cl">    ipam:<span class="err">
+</span></span></span><span class="line"><span class="cl">      driver: default<span class="err">
+</span></span></span><span class="line"><span class="cl">      config:<span class="err">
+</span></span></span><span class="line"><span class="cl">        - subnet: 172.28.22.0/24</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>我们自定了ip，为了将来在读写分离授权的时候好处理。<code>command: --default-authentication-plugin=mysql_native_password</code> 这个命令是解决 mysql8 可以采用账号密码登录用的。</p>
+<p>我们新建了4个文件夹存储我们的配置文件，配置如下。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-docker"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-docker" data-lang="docker"><span class="line"><span class="cl">volumes:<span class="err">
+</span></span></span><span class="line"><span class="cl">      <span class="c1"># 配置文件</span><span class="err">
+</span></span></span><span class="line"><span class="cl">      - ./db4/conf/conf.d:/etc/mysql/conf.d:ro</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>主库 db1 的配置</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[mysqld]
+</span></span><span class="line"><span class="cl">server-id=1
+</span></span><span class="line"><span class="cl">log-bin=master-bin
+</span></span><span class="line"><span class="cl">log-bin-index=master-bin.index
+</span></span><span class="line"><span class="cl">sync_binlog = 1         #控制数据库的binlog刷到磁盘上去 , 0 不控制，性能最好，1每次事物提交都会刷到日志文件中，性能最差，最安全
+</span></span><span class="line"><span class="cl">binlog_format = mixed   #binlog日志格式，mysql默认采用statement，建议使用mixed
+</span></span><span class="line"><span class="cl">expire_logs_days = 7                           #binlog过期清理时间
+</span></span><span class="line"><span class="cl">max_binlog_size = 100m                    #binlog每个日志文件大小
+</span></span><span class="line"><span class="cl">binlog_cache_size = 4m                        #binlog缓存大小
+</span></span><span class="line"><span class="cl">max_binlog_cache_size= 512m              #最大binlog缓存大
+</span></span><span class="line"><span class="cl">slave-skip-errors = all #跳过从库错误</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>server-id=1 这是服务器的id，可以根据需求自己定，保证每个服务器的id不一致就可以了
+log-bin=master-bin binlog文件的命名前缀
+log-bin-index=master-bin.index binlog index 文件的名称
+剩下的配置可以看上面的注释</p>
+<p>从库 db1 配置</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[mysqld]
+</span></span><span class="line"><span class="cl">server-id=2
+</span></span><span class="line"><span class="cl">log-bin=slave-master-bin
+</span></span><span class="line"><span class="cl">log-bin-index=slave-master-bin.index
+</span></span><span class="line"><span class="cl">log_slave_updates=1
+</span></span><span class="line"><span class="cl">inlog_format = mixed   #binlog日志格式，mysql默认采用statement，建议使用mixed
+</span></span><span class="line"><span class="cl">expire_logs_days = 7                           #binlog过期清理时间
+</span></span><span class="line"><span class="cl">max_binlog_size = 100m                    #binlog每个日志文件大小
+</span></span><span class="line"><span class="cl">binlog_cache_size = 4m                        #binlog缓存大小
+</span></span><span class="line"><span class="cl">max_binlog_cache_size= 512m              #最大binlog缓存大
+</span></span><span class="line"><span class="cl">slave-skip-errors = all #跳过从库错误
+</span></span><span class="line"><span class="cl">replicate_wild_ignore_table=information_schema.%
+</span></span><span class="line"><span class="cl">replicate_wild_ignore_table=mysql.%
+</span></span><span class="line"><span class="cl">replicate_wild_ignore_table=sys.%
+</span></span><span class="line"><span class="cl">replicate_wild_ignore_table=performance_schema.%</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>log_slave_updates=1 log_slave_updates参数用来控制M01是否把所有的操作写入到binary log，默认的情况下mysql是关闭的。因为还有两个度要跟这个库同步，所以要开启这个参数。
+replicate_wild_ignore_table 这个是忽略同步的库</p>
+<p>db2 &amp; db3 配置</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[mysqld]
+</span></span><span class="line"><span class="cl">server-id=3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">replicate_wild_ignore_table=information_schema.%
+</span></span><span class="line"><span class="cl">replicate_wild_ignore_table=mysql.%
+</span></span><span class="line"><span class="cl">replicate_wild_ignore_table=sys.%
+</span></span><span class="line"><span class="cl">replicate_wild_ignore_table=performance_schema.%</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>参数是跟上面一样的，释义上面都有。</p>
+<p>配置完后，我们就可以启动数据库了，不出意外数据库就可以正常启动了。</p>
+<h3 class="heading-element" id="数据库操作"><span>数据库操作</span>
+  <a href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e6%93%8d%e4%bd%9c" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>主库 和 slave1</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-mysql"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">&#39;repl_user&#39;</span><span class="o">@</span><span class="s1">&#39;172.28.22.%&#39;</span><span class="w"> </span><span class="k">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;password&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">GRANT</span><span class="w"> </span><span class="n">REPLICATION</span><span class="w"> </span><span class="n">SLAVE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">&#39;repl_user&#39;</span><span class="o">@</span><span class="s1">&#39;172.28.22.%&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FLUSH</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>创建用户和授权，这个是用来进行同步用的，所以我们 ip 限制在了内网</p>
+<p>主库</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-mysql"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">SHOW</span><span class="w"> </span><span class="n">MASTER</span><span class="w"> </span><span class="n">STATUS</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>记录这个的参数下面要用</p>
+<p>slave1 进行同步配置</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-mysql"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="k">CHANGE</span><span class="w"> </span><span class="n">MASTER</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">MASTER_HOST</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;172.28.22.100&#39;</span><span class="p">,</span><span class="w">  </span><span class="n">MASTER_USER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;repl_user&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">MASTER_PASSWORD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;password&#39;</span><span class="p">,</span><span class="n">MASTER_PORT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3306</span><span class="p">,</span><span class="n">MASTER_LOG_FILE</span><span class="o">=</span><span class="s1">&#39;master-bin.000003&#39;</span><span class="p">,</span><span class="n">MASTER_LOG_POS</span><span class="o">=</span><span class="mi">1512</span><span class="p">,</span><span class="n">MASTER_HEARTBEAT_PERIOD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="n">slave_net_timeout</span><span class="o">=</span><span class="mi">25</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>MASTER_LOG_FILE=&lsquo;mysql-bin.000005&rsquo;,#与主库File 保持一致
+MASTER_LOG_POS=120 , #与主库Position 保持一致
+MASTER_HEARTBEAT_PERIOD 心跳时间保活的，用10 吧
+slave_net_timeout 从库超时重连时间，这个根据来设置吧，越短越好，要不然会延迟很大</p>
+<p>继续执行</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-mysql"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="n">START</span><span class="w"> </span><span class="n">SLAVE</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>然后执行 <code>SHOW SLAVE STATUS;</code> 查看 <code>SLAVE_IO_RUNNING</code> 和 <code>SLAVE_SQL_RUNNING</code> 是否是 <code>Yes</code> 如果是就成功了，如果不是，应该会有报错提示的，或者没有执行 <code>start slave</code></p>
+<p>继续执行
+<code>SHOW MASTER STATUS</code>
+继续下来给后面用</p>
+<p>slave2 和 slave 3
+跟上面一样，配置 master 并开启同步。记得查看状态，如果没出问题，我们在主库执行操作，后面的数据就都可以同步过来了。</p>
+<h2 class="heading-element" id="补充说明"><span>补充说明</span>
+  <a href="#%e8%a1%a5%e5%85%85%e8%af%b4%e6%98%8e" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>这个是全新同步用的，如果是前置有数据的话，可以先把后续数据补充进去，在进行同步，这个我们下篇文章再说。</p>
+<h2 class="heading-element" id="结语"><span>结语</span>
+  <a href="#%e7%bb%93%e8%af%ad" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>数据库同步就完事了。完事了么？如果是demo级别，算是完事了，但是实际上呢，这还是个开始，根据请求量的提升，我们要逐步优化参数的，所以我们会在后续在服务器上部署后，进行优化，到时候我们再来补充。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2020-05-14 20:08:26">更新于 2020-05-14&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/learning-microservices-db-master-slave/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/20200514%e4%bb%8e%e9%9b%b6%e5%bc%80%e5%a7%8b%e5%ad%a6%e4%b9%a0%e5%ae%9e%e8%b7%b5%e5%be%ae%e6%9c%8d%e5%8a%a1%20-%20%e6%95%b0%e6%8d%ae%e5%ba%93%e8%af%bb%e5%86%99%e5%88%86%e7%a6%bb.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/learning-microservices-db-master-slave/" data-title="从零开始学习实践微服务 - 数据库读写分离篇"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/learning-microservices-db-master-slave/"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/learning-microservices-db-master-slave/" data-title="从零开始学习实践微服务 - 数据库读写分离篇"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/jenkins-and-github-auto-deploy-hugo-blog/" class="post-nav-item" rel="prev" title="利用Jenkins&#43;Github自动部署hugo博客"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>利用Jenkins&#43;Github自动部署hugo博客</a><a href="/posts/recent-developer-note-20200517/" class="post-nav-item" rel="next" title="聊聊最近开发近况">聊聊最近开发近况<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog">
+      <div class="toc">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#计划">计划</a></li>
+    <li><a href="#开始">开始</a>
+      <ul>
+        <li><a href="#数据库配置">数据库配置</a></li>
+        <li><a href="#数据库操作">数据库操作</a></li>
+      </ul>
+    </li>
+    <li><a href="#补充说明">补充说明</a></li>
+    <li><a href="#结语">结语</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div><div id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" role="button" aria-label="目录"><i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/5686b9064a1aabbe5f74677933d59e39.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

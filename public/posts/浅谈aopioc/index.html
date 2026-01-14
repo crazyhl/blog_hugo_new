@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>浅谈AOP、IOC - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="为什么要说这个东西呢，是因为前几天我媳妇在面试一个小姐姐的时候那个小姐姐的简历提到了了解 IOC、AOP。我忽然就笑了起来，13年来北京实习的时候面试准备的就是IOC、AOP。当时还记得面试辅导老师给我们讲，背下来背下来，几乎都会问道，但是具体让我们背下来多少概念，到现在我也记不清了，但是当提到这两个词我总会想起那些日子。
+兜兜转转开发做到现在，估计你要在面试的时候问我这些概念，什么叫面相切面，什么叫控制反转，我估计我很难回答到让面试官满意的程度，毕竟我真的不想背那些东西。所以，我想用这篇文章说说说我自己的理解。希望有什么不对的地方，大家交流交流。
+下面我会开始说我的理解，还会结合 php 我能想到的一些框架进行说明。
+先说 AOP 吧，这个东西我唯一能说出来的东西就是面相切面编程。那么什么是切面呢，这个我的理解就是在一个完整的请求过程中，我们想插入操作的一些位置就叫做切面。为什么要这么做呢，就是要跟我们的主逻辑解耦，在修改或者替换的时候造成的影响最小，比如 Tp3.2 里面就会有一些 before 、 after 的方法定义。在 laravel 这类的主流框架中实现了 AOP 的东西就是中间件了。我们可以在任何想要进行前置处理或者后置处理的位置插入一个中间件。比如请求的验证就是前置操作，比如成功后的通知、这个操作的会影响的操作都可以作为后置操作。为什么要这么拆分，首先我们要保证主体流程稳定，不要因为插入了某些操作就出了问题，所以，把一些方法抽出到前置或者后置操作上就不会更改主业务部分的代码。纠错方便了，替换也方便了，比如把邮件通知换成站内信通知，只要把后置操作的中间件替换一下就ok了，主业务完全不动，laravel 这类的就在路由那边就修改了。
+再说说 IOC、DI 这个说起来就会很大了，我感觉我说的也会乱乱的，不管，乱也要分析一波。什么叫依赖注入控制反转啥的，我认为这一切都要建立在一个中心容器上面的，我们回来配置文件中，或者什么地方，约定好，什么接口的实现类是什么，约定好一些常量值。在我们有需要的时候，跟容器申请，那么申请回来的实现类是单例的，还是每次都是初始化的，这个也都是在配置文件约定好的。IOC 其实到这就差不多了，上面虽然没怎么说控制反转，其实也是说了的，什么是反转啊，反转了什么啊，以前的操作，我们就是各种 new 就完了，反转以后，不用 new 了，我们跟容器申请，这就是我理解的控制反转。有了 IOC 就有了 DI，这是个什么东西呢，在容器的初期，我们比如要 A，这个 A 依赖 B 和 C，我们就得从容器申请到 B 和 C，然后在申请 A 并把B 和 C 传递进去用来初始化 A，这本来没什么，毕竟程序员懒，不想这样复杂，所以就有了 DI，这东西是怎么运行的呢，就是利用反射技术，让容器自己分析依赖并且从容器中获取回来，并且初始化。由于 DI 用了反射，所以会使效率降低一些不过也有优化方案不用担心的
+上面就是我的理解了，简单来说，就是为了不背锅，减少风险，写代码轻松，技术就是这么进步的。下篇文章上一个自己理解的简单的容器把。
+"><meta name="keywords" content='IOC, DI, AOP, 依赖注入, 控制反转, 面向切面编程'>
+  <meta itemprop="name" content="浅谈AOP、IOC">
+  <meta itemprop="description" content="为什么要说这个东西呢，是因为前几天我媳妇在面试一个小姐姐的时候那个小姐姐的简历提到了了解 IOC、AOP。我忽然就笑了起来，13年来北京实习的时候面试准备的就是IOC、AOP。当时还记得面试辅导老师给我们讲，背下来背下来，几乎都会问道，但是具体让我们背下来多少概念，到现在我也记不清了，但是当提到这两个词我总会想起那些日子。
+兜兜转转开发做到现在，估计你要在面试的时候问我这些概念，什么叫面相切面，什么叫控制反转，我估计我很难回答到让面试官满意的程度，毕竟我真的不想背那些东西。所以，我想用这篇文章说说说我自己的理解。希望有什么不对的地方，大家交流交流。
+下面我会开始说我的理解，还会结合 php 我能想到的一些框架进行说明。
+先说 AOP 吧，这个东西我唯一能说出来的东西就是面相切面编程。那么什么是切面呢，这个我的理解就是在一个完整的请求过程中，我们想插入操作的一些位置就叫做切面。为什么要这么做呢，就是要跟我们的主逻辑解耦，在修改或者替换的时候造成的影响最小，比如 Tp3.2 里面就会有一些 before 、 after 的方法定义。在 laravel 这类的主流框架中实现了 AOP 的东西就是中间件了。我们可以在任何想要进行前置处理或者后置处理的位置插入一个中间件。比如请求的验证就是前置操作，比如成功后的通知、这个操作的会影响的操作都可以作为后置操作。为什么要这么拆分，首先我们要保证主体流程稳定，不要因为插入了某些操作就出了问题，所以，把一些方法抽出到前置或者后置操作上就不会更改主业务部分的代码。纠错方便了，替换也方便了，比如把邮件通知换成站内信通知，只要把后置操作的中间件替换一下就ok了，主业务完全不动，laravel 这类的就在路由那边就修改了。
+再说说 IOC、DI 这个说起来就会很大了，我感觉我说的也会乱乱的，不管，乱也要分析一波。什么叫依赖注入控制反转啥的，我认为这一切都要建立在一个中心容器上面的，我们回来配置文件中，或者什么地方，约定好，什么接口的实现类是什么，约定好一些常量值。在我们有需要的时候，跟容器申请，那么申请回来的实现类是单例的，还是每次都是初始化的，这个也都是在配置文件约定好的。IOC 其实到这就差不多了，上面虽然没怎么说控制反转，其实也是说了的，什么是反转啊，反转了什么啊，以前的操作，我们就是各种 new 就完了，反转以后，不用 new 了，我们跟容器申请，这就是我理解的控制反转。有了 IOC 就有了 DI，这是个什么东西呢，在容器的初期，我们比如要 A，这个 A 依赖 B 和 C，我们就得从容器申请到 B 和 C，然后在申请 A 并把B 和 C 传递进去用来初始化 A，这本来没什么，毕竟程序员懒，不想这样复杂，所以就有了 DI，这东西是怎么运行的呢，就是利用反射技术，让容器自己分析依赖并且从容器中获取回来，并且初始化。由于 DI 用了反射，所以会使效率降低一些不过也有优化方案不用担心的
+上面就是我的理解了，简单来说，就是为了不背锅，减少风险，写代码轻松，技术就是这么进步的。下篇文章上一个自己理解的简单的容器把。">
+  <meta itemprop="datePublished" content="2020-03-26T10:08:46+08:00">
+  <meta itemprop="dateModified" content="2020-03-26T10:08:46+08:00">
+  <meta itemprop="wordCount" content="50">
+  <meta itemprop="keywords" content="IOC,DI,AOP,依赖注入,控制反转,面向切面编程"><meta property="og:url" content="http://localhost:1313/posts/%E6%B5%85%E8%B0%88aopioc/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="浅谈AOP、IOC">
+  <meta property="og:description" content="为什么要说这个东西呢，是因为前几天我媳妇在面试一个小姐姐的时候那个小姐姐的简历提到了了解 IOC、AOP。我忽然就笑了起来，13年来北京实习的时候面试准备的就是IOC、AOP。当时还记得面试辅导老师给我们讲，背下来背下来，几乎都会问道，但是具体让我们背下来多少概念，到现在我也记不清了，但是当提到这两个词我总会想起那些日子。
+兜兜转转开发做到现在，估计你要在面试的时候问我这些概念，什么叫面相切面，什么叫控制反转，我估计我很难回答到让面试官满意的程度，毕竟我真的不想背那些东西。所以，我想用这篇文章说说说我自己的理解。希望有什么不对的地方，大家交流交流。
+下面我会开始说我的理解，还会结合 php 我能想到的一些框架进行说明。
+先说 AOP 吧，这个东西我唯一能说出来的东西就是面相切面编程。那么什么是切面呢，这个我的理解就是在一个完整的请求过程中，我们想插入操作的一些位置就叫做切面。为什么要这么做呢，就是要跟我们的主逻辑解耦，在修改或者替换的时候造成的影响最小，比如 Tp3.2 里面就会有一些 before 、 after 的方法定义。在 laravel 这类的主流框架中实现了 AOP 的东西就是中间件了。我们可以在任何想要进行前置处理或者后置处理的位置插入一个中间件。比如请求的验证就是前置操作，比如成功后的通知、这个操作的会影响的操作都可以作为后置操作。为什么要这么拆分，首先我们要保证主体流程稳定，不要因为插入了某些操作就出了问题，所以，把一些方法抽出到前置或者后置操作上就不会更改主业务部分的代码。纠错方便了，替换也方便了，比如把邮件通知换成站内信通知，只要把后置操作的中间件替换一下就ok了，主业务完全不动，laravel 这类的就在路由那边就修改了。
+再说说 IOC、DI 这个说起来就会很大了，我感觉我说的也会乱乱的，不管，乱也要分析一波。什么叫依赖注入控制反转啥的，我认为这一切都要建立在一个中心容器上面的，我们回来配置文件中，或者什么地方，约定好，什么接口的实现类是什么，约定好一些常量值。在我们有需要的时候，跟容器申请，那么申请回来的实现类是单例的，还是每次都是初始化的，这个也都是在配置文件约定好的。IOC 其实到这就差不多了，上面虽然没怎么说控制反转，其实也是说了的，什么是反转啊，反转了什么啊，以前的操作，我们就是各种 new 就完了，反转以后，不用 new 了，我们跟容器申请，这就是我理解的控制反转。有了 IOC 就有了 DI，这是个什么东西呢，在容器的初期，我们比如要 A，这个 A 依赖 B 和 C，我们就得从容器申请到 B 和 C，然后在申请 A 并把B 和 C 传递进去用来初始化 A，这本来没什么，毕竟程序员懒，不想这样复杂，所以就有了 DI，这东西是怎么运行的呢，就是利用反射技术，让容器自己分析依赖并且从容器中获取回来，并且初始化。由于 DI 用了反射，所以会使效率降低一些不过也有优化方案不用担心的
+上面就是我的理解了，简单来说，就是为了不背锅，减少风险，写代码轻松，技术就是这么进步的。下篇文章上一个自己理解的简单的容器把。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2020-03-26T10:08:46+08:00">
+    <meta property="article:modified_time" content="2020-03-26T10:08:46+08:00">
+    <meta property="article:tag" content="IOC">
+    <meta property="article:tag" content="DI">
+    <meta property="article:tag" content="AOP">
+    <meta property="article:tag" content="依赖注入">
+    <meta property="article:tag" content="控制反转">
+    <meta property="article:tag" content="面向切面编程">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="浅谈AOP、IOC">
+  <meta name="twitter:description" content="为什么要说这个东西呢，是因为前几天我媳妇在面试一个小姐姐的时候那个小姐姐的简历提到了了解 IOC、AOP。我忽然就笑了起来，13年来北京实习的时候面试准备的就是IOC、AOP。当时还记得面试辅导老师给我们讲，背下来背下来，几乎都会问道，但是具体让我们背下来多少概念，到现在我也记不清了，但是当提到这两个词我总会想起那些日子。
+兜兜转转开发做到现在，估计你要在面试的时候问我这些概念，什么叫面相切面，什么叫控制反转，我估计我很难回答到让面试官满意的程度，毕竟我真的不想背那些东西。所以，我想用这篇文章说说说我自己的理解。希望有什么不对的地方，大家交流交流。
+下面我会开始说我的理解，还会结合 php 我能想到的一些框架进行说明。
+先说 AOP 吧，这个东西我唯一能说出来的东西就是面相切面编程。那么什么是切面呢，这个我的理解就是在一个完整的请求过程中，我们想插入操作的一些位置就叫做切面。为什么要这么做呢，就是要跟我们的主逻辑解耦，在修改或者替换的时候造成的影响最小，比如 Tp3.2 里面就会有一些 before 、 after 的方法定义。在 laravel 这类的主流框架中实现了 AOP 的东西就是中间件了。我们可以在任何想要进行前置处理或者后置处理的位置插入一个中间件。比如请求的验证就是前置操作，比如成功后的通知、这个操作的会影响的操作都可以作为后置操作。为什么要这么拆分，首先我们要保证主体流程稳定，不要因为插入了某些操作就出了问题，所以，把一些方法抽出到前置或者后置操作上就不会更改主业务部分的代码。纠错方便了，替换也方便了，比如把邮件通知换成站内信通知，只要把后置操作的中间件替换一下就ok了，主业务完全不动，laravel 这类的就在路由那边就修改了。
+再说说 IOC、DI 这个说起来就会很大了，我感觉我说的也会乱乱的，不管，乱也要分析一波。什么叫依赖注入控制反转啥的，我认为这一切都要建立在一个中心容器上面的，我们回来配置文件中，或者什么地方，约定好，什么接口的实现类是什么，约定好一些常量值。在我们有需要的时候，跟容器申请，那么申请回来的实现类是单例的，还是每次都是初始化的，这个也都是在配置文件约定好的。IOC 其实到这就差不多了，上面虽然没怎么说控制反转，其实也是说了的，什么是反转啊，反转了什么啊，以前的操作，我们就是各种 new 就完了，反转以后，不用 new 了，我们跟容器申请，这就是我理解的控制反转。有了 IOC 就有了 DI，这是个什么东西呢，在容器的初期，我们比如要 A，这个 A 依赖 B 和 C，我们就得从容器申请到 B 和 C，然后在申请 A 并把B 和 C 传递进去用来初始化 A，这本来没什么，毕竟程序员懒，不想这样复杂，所以就有了 DI，这东西是怎么运行的呢，就是利用反射技术，让容器自己分析依赖并且从容器中获取回来，并且初始化。由于 DI 用了反射，所以会使效率降低一些不过也有优化方案不用担心的
+上面就是我的理解了，简单来说，就是为了不背锅，减少风险，写代码轻松，技术就是这么进步的。下篇文章上一个自己理解的简单的容器把。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/%E6%B5%85%E8%B0%88aopioc/" title="浅谈AOP、IOC - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/build-dockerfile-and-publish-to-docker-hub/" title="从构建镜像到发布到docker Hub" /><link rel="next" type="text/html" href="http://localhost:1313/posts/dfa-with-php/" title="争取能让大家都能看懂的 DFA 算法" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/%E6%B5%85%E8%B0%88aopioc/index.md" title="浅谈AOP、IOC - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "浅谈AOP、IOC",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/%E6%B5%85%E8%B0%88aopioc\/"
+    },"genre": "posts","keywords": "IOC, DI, AOP, 依赖注入, 控制反转, 面向切面编程","wordcount":  50 ,
+    "url": "http:\/\/localhost:1313\/posts\/%E6%B5%85%E8%B0%88aopioc\/","datePublished": "2020-03-26T10:08:46+08:00","dateModified": "2020-03-26T10:08:46+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>浅谈AOP、IOC</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2020-03-26 10:08:46"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2020-03-26">2020-03-26</time></span>&nbsp;<span title="50 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>为什么要说这个东西呢，是因为前几天我媳妇在面试一个小姐姐的时候那个小姐姐的简历提到了了解 IOC、AOP。我忽然就笑了起来，13年来北京实习的时候面试准备的就是IOC、AOP。当时还记得面试辅导老师给我们讲，背下来背下来，几乎都会问道，但是具体让我们背下来多少概念，到现在我也记不清了，但是当提到这两个词我总会想起那些日子。</p>
+<p>兜兜转转开发做到现在，估计你要在面试的时候问我这些概念，什么叫面相切面，什么叫控制反转，我估计我很难回答到让面试官满意的程度，毕竟我真的不想背那些东西。所以，我想用这篇文章说说说我自己的理解。希望有什么不对的地方，大家交流交流。</p>
+<p>下面我会开始说我的理解，还会结合 <code>php</code> 我能想到的一些框架进行说明。</p>
+<p>先说 <code>AOP</code> 吧，这个东西我唯一能说出来的东西就是面相切面编程。那么什么是切面呢，这个我的理解就是在一个完整的请求过程中，我们想插入操作的一些位置就叫做切面。为什么要这么做呢，就是要跟我们的主逻辑解耦，在修改或者替换的时候造成的影响最小，比如 <code>Tp3.2</code> 里面就会有一些 <code>before</code> 、 <code>after</code> 的方法定义。在 <code>laravel</code> 这类的主流框架中实现了 <code>AOP</code> 的东西就是中间件了。我们可以在任何想要进行前置处理或者后置处理的位置插入一个中间件。比如请求的验证就是前置操作，比如成功后的通知、这个操作的会影响的操作都可以作为后置操作。为什么要这么拆分，首先我们要保证主体流程稳定，不要因为插入了某些操作就出了问题，所以，把一些方法抽出到前置或者后置操作上就不会更改主业务部分的代码。纠错方便了，替换也方便了，比如把邮件通知换成站内信通知，只要把后置操作的中间件替换一下就ok了，主业务完全不动，<code>laravel</code> 这类的就在路由那边就修改了。</p>
+<p>再说说 <code>IOC</code>、<code>DI</code> 这个说起来就会很大了，我感觉我说的也会乱乱的，不管，乱也要分析一波。什么叫依赖注入控制反转啥的，我认为这一切都要建立在一个中心容器上面的，我们回来配置文件中，或者什么地方，约定好，什么接口的实现类是什么，约定好一些常量值。在我们有需要的时候，跟容器申请，那么申请回来的实现类是单例的，还是每次都是初始化的，这个也都是在配置文件约定好的。<code>IOC</code> 其实到这就差不多了，上面虽然没怎么说控制反转，其实也是说了的，什么是反转啊，反转了什么啊，以前的操作，我们就是各种 <code>new</code> 就完了，反转以后，不用 <code>new</code> 了，我们跟容器申请，这就是我理解的控制反转。有了 <code>IOC</code> 就有了 <code>DI</code>，这是个什么东西呢，在容器的初期，我们比如要 <code>A</code>，这个 <code>A</code> 依赖 <code>B</code> 和 <code>C</code>，我们就得从容器申请到 <code>B</code> 和 <code>C</code>，然后在申请 <code>A</code> 并把<code>B</code> 和 <code>C</code> 传递进去用来初始化 <code>A</code>，这本来没什么，毕竟程序员懒，不想这样复杂，所以就有了 <code>DI</code>，这东西是怎么运行的呢，就是利用<code>反射</code>技术，让容器自己分析依赖并且从容器中获取回来，并且初始化。由于 <code>DI</code> 用了反射，所以会使效率降低一些不过也有优化方案不用担心的</p>
+<p>上面就是我的理解了，简单来说，就是为了不背锅，减少风险，写代码轻松，技术就是这么进步的。下篇文章上一个自己理解的简单的容器把。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2020-03-26 10:08:46">更新于 2020-03-26&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/%E6%B5%85%E8%B0%88aopioc/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/%e6%b5%85%e8%b0%88AOP%e3%80%81IOC.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/%E6%B5%85%E8%B0%88aopioc/" data-title="浅谈AOP、IOC" data-hashtags="IOC,DI,AOP,依赖注入,控制反转,面向切面编程"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/%E6%B5%85%E8%B0%88aopioc/" data-hashtag="IOC"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/%E6%B5%85%E8%B0%88aopioc/" data-title="浅谈AOP、IOC"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/ioc/" class="post-tag" title="标签 - IOC">IOC</a><a href="/tags/di/" class="post-tag" title="标签 - DI">DI</a><a href="/tags/aop/" class="post-tag" title="标签 - AOP">AOP</a><a href="/tags/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/" class="post-tag" title="标签 - 依赖注入">依赖注入</a><a href="/tags/%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%AC/" class="post-tag" title="标签 - 控制反转">控制反转</a><a href="/tags/%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/" class="post-tag" title="标签 - 面向切面编程">面向切面编程</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/build-dockerfile-and-publish-to-docker-hub/" class="post-nav-item" rel="prev" title="从构建镜像到发布到docker Hub"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>从构建镜像到发布到docker Hub</a><a href="/posts/dfa-with-php/" class="post-nav-item" rel="next" title="争取能让大家都能看懂的 DFA 算法">争取能让大家都能看懂的 DFA 算法<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/742db1197e9c913c6053132a7f208592.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

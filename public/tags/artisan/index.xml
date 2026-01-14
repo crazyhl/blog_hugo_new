@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Artisan - 标签 - Miracle Hao</title>
+    <link>http://localhost:1313/tags/artisan/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 16 Sep 2018 06:26:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/artisan/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>laravel 自定义 artisan 命令</title>
+      <link>http://localhost:1313/posts/laravel-custom-artisan-command/</link>
+      <pubDate>Sun, 16 Sep 2018 06:26:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/laravel-custom-artisan-command/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;p&gt;laravel 的命令，以前就是简单的用了，并没有很仔细的用。&lt;/p&gt;&#xA;&lt;p&gt;今天在写一个 artisan 命令的时候就踩了很多坑，其实可能就是自己以前并没有注意过，所以这次要记录下来。&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;/**&#xA;     * The name and signature of the console command.&#xA;     *&#xA;     * @var string&#xA;     */&#xA;    protected $signature = &amp;#39;user:create &#xA;                            {password : the user password}&#xA;                            {--username=admin : the user username}&#xA;                            {--email=admin@email.com : the user email}&amp;#39;;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;冒号后面可以写说明文字，在用 &amp;ndash;help 的时候可以看到&lt;/p&gt;&#xA;&lt;p&gt;在 输出 table 的时候 还得注意穿进去的 row 得是个二维数组&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

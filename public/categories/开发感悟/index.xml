@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>开发感悟 - 分类 - Miracle Hao</title>
+    <link>http://localhost:1313/categories/%E5%BC%80%E5%8F%91%E6%84%9F%E6%82%9F/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 25 Jul 2022 10:08:50 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/%E5%BC%80%E5%8F%91%E6%84%9F%E6%82%9F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>黑板报小工具阶段总结</title>
+      <link>http://localhost:1313/posts/yzyx-materials-1.0-milestone-summary/</link>
+      <pubDate>Mon, 25 Jul 2022 10:08:50 +0800</pubDate>
+      <guid>http://localhost:1313/posts/yzyx-materials-1.0-milestone-summary/</guid>
+      <category domain="http://localhost:1313/categories/%E5%BC%80%E5%8F%91%E6%84%9F%E6%82%9F/">开发感悟</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;关于在未知行业开发东西的难度&#34;&gt;&lt;span&gt;关于在未知行业开发东西的难度&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%85%b3%e4%ba%8e%e5%9c%a8%e6%9c%aa%e7%9f%a5%e8%a1%8c%e4%b8%9a%e5%bc%80%e5%8f%91%e4%b8%9c%e8%a5%bf%e7%9a%84%e9%9a%be%e5%ba%a6&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;写代码不难，关键是逻辑。由于是给自己写的东西，逻辑方面还好说，跟着自己的需求走就完了。但是，如果不是自己的需求呢？那么就要把产品侧和真正需求侧的需求完整对齐。否则，就是面临着改需求，返工的头疼难题，当然我在开发自己的东西的时候也有推倒重建的情况发生，不过推倒重建时功能的升级。而不是最开始就是错的。所以，升级可接受，但是一开始路就走错了，那就是难受的事情。那么在开始需求之前，就要把需求彻底弄清，不要节约这个时间。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>日志不仅仅是记录的而且要用起来</title>
+      <link>http://localhost:1313/posts/log-is-important/</link>
+      <pubDate>Fri, 26 Feb 2021 10:20:59 +0800</pubDate>
+      <guid>http://localhost:1313/posts/log-is-important/</guid>
+      <category domain="http://localhost:1313/categories/%E5%BC%80%E5%8F%91%E6%84%9F%E6%82%9F/">开发感悟</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;为何要记录日志&#34;&gt;&lt;span&gt;为何要记录日志&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e4%b8%ba%e4%bd%95%e8%a6%81%e8%ae%b0%e5%bd%95%e6%97%a5%e5%bf%97&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;在开发的时候，经常要记录日志，并且在不同的环境开启不同的日志级别。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>关于学习一些课程的思考</title>
+      <link>http://localhost:1313/posts/thoughts-on-learning-some-courses/</link>
+      <pubDate>Fri, 28 Aug 2020 09:39:19 +0800</pubDate>
+      <guid>http://localhost:1313/posts/thoughts-on-learning-some-courses/</guid>
+      <category domain="http://localhost:1313/categories/%E5%BC%80%E5%8F%91%E6%84%9F%E6%82%9F/">开发感悟</category>
+      <description>&lt;p&gt;这几年在网上买了很多可能，一般都是几十或者几百块，这些课程，对于我来说可以很明白的区分，对我有用，对我些许有用，以及不太适合我。但是今年在34月份的时候，因为疫情在家工作，我居然脑子抽了花了上万买了一个架构课。这是一个让我很迷茫的课程，对我有用么，有，对我没用么，也可以说没有。学习到了东西，但是很多东西却在实际工作中用不上，或者说没有机会场景用。这就让我有了今年的这个思考。&lt;/p&gt;&#xA;&lt;p&gt;其实这个思考早就有了，只不过是一直拖到了现在才去写，一是害怕当时思考的太简单，二是觉得可能是我自己的问题明明是没有学会学懂缺怪罪到课程对我意义不大。但是经过了差不多 2 个月之后，我可以放心的动手写这个了。因为我觉得现在的思考，有助于以后的复盘并且也没有那么盲目了。&lt;/p&gt;&#xA;&lt;p&gt;首先啊，任何课程对于任何人都是有帮助的，但是帮助的程度都是要依靠个人的。因为每个人的程度并不同所以每个人的吸收理解都会不同，就比如跟投资一样，一个基金经理会给出预期，但是实际上还是需要看真正运行一样。课程就是给出了预期，实际运行就是我们每个人的学习情况，以及每个人的真实能力值。如果刚好匹配就会学的很爽，体会很深。&lt;/p&gt;&#xA;&lt;p&gt;如果跟课程的匹配程度不那么高的话，可能就会像我一样学习来有些吃力，外加挫败感。其实这种感受会让很会丧很颓废，甚至有时候会让我产生是我的脑子不行，可能不太适合程序员的工作。应该回到老家干个面馆，实现我多年的梦想。哈哈哈。&lt;/p&gt;&#xA;&lt;p&gt;但是事后仔细想想呢，其实也并不是我不太行，是我没接触过东西，所以就很难深入的思考。外加我有个个人的毛病就是遇到一些东西，总是先用自己瞬间的想法去回答。并没有深入的思考后在去回答。&lt;/p&gt;&#xA;&lt;p&gt;这两个问题，第一个没办法解决，等待工作遇到，或者自己想办法创造场景去解决。第一个既然不那么容易解决，那么就优化第二点，以后当遇到问题点的时候，就不要那么盲目，而是冷静下来，仔细思考。&lt;/p&gt;&#xA;&lt;p&gt;其实还有另一个思考，市面上所谓的各种企业级，中心的逻辑并没有什么更好的方案，企业级就是兜底兜底兜底，减少错误减少失败。一开始我是很不屑的。但是现在我理解的可能更好一点了。其实项目大了就是要稳，稳中求进的第一个字也是稳。&lt;/p&gt;&#xA;&lt;p&gt;所以，这个就跟上面的思考一样，要冷静下来，多花点时间思考才行。&lt;/p&gt;&#xA;&lt;p&gt;最后，现在市面上的课程太多了，选择一个跟自己匹配的还是有些难的，要自己对比选择一个最合适的才是好的。步子迈的大了，容易扯到蛋。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

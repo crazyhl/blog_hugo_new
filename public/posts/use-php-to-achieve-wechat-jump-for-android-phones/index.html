@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>用 Php 来实现微信跳一跳 （适用于安卓手机） - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="作为一个程序员，当微信出了跳一跳后，排行榜的前三名就没有低于 1k 分的，我甚是伤心，所以 php 也要来跳一跳，今天发出来的版本貌似已经是第五版了，每天晚上都回家写一个方法，分数越来越高，到了现在，运行速度和分数都已经让我满意了。刚才打的最高分。
+github 地址: https://github.com/crazyhl/php_jump_auto
+下面说一下实现的思路，先用 adb 截图，然后再这个截图上寻找小人的位置，以及需要跳跃到的方块的位置，最后再利用 adb 模拟长按跳过去就行了。
+分开说下，如何找小人。利用先确认一个小人身上的色块的色值，然后在再整图上找这个色值区间值的一个范围。
+如下图 再调整色块值之后，我觉得这个范围比较合适，所以我就定了下来，然后再计算这个范围的中心点，当做小人的中心点。
+然后再去寻找需要需要跳跃的目标，这里有个优化后的方法，首先我们确认了小人的位置，然后就搜索半张图就可以了，然后寻找两个点，跟标准值差异的最高点以及最右的一个点，为什么不寻找左侧点，是因为有阴影会影响搜索的。
+等找到最高点和最右点之后，取两个点的交点就确认跳跃的目标点了。
+这样人物点位和目标点都确认好了，然后利用勾股定理就可以计算出来距离了。这个距离跟最终的长按时间是有一个比例了，这个比例自己测一测就能大概找出来了。
+这样，一个跟 php 没有太大关系的辅助就成了，最后，铺天盖地求 star
+">
+  <meta itemprop="name" content="用 php 来实现微信跳一跳 （适用于安卓手机）">
+  <meta itemprop="description" content="作为一个程序员，当微信出了跳一跳后，排行榜的前三名就没有低于 1k 分的，我甚是伤心，所以 php 也要来跳一跳，今天发出来的版本貌似已经是第五版了，每天晚上都回家写一个方法，分数越来越高，到了现在，运行速度和分数都已经让我满意了。刚才打的最高分。
+github 地址: https://github.com/crazyhl/php_jump_auto
+下面说一下实现的思路，先用 adb 截图，然后再这个截图上寻找小人的位置，以及需要跳跃到的方块的位置，最后再利用 adb 模拟长按跳过去就行了。
+分开说下，如何找小人。利用先确认一个小人身上的色块的色值，然后在再整图上找这个色值区间值的一个范围。
+如下图 再调整色块值之后，我觉得这个范围比较合适，所以我就定了下来，然后再计算这个范围的中心点，当做小人的中心点。
+然后再去寻找需要需要跳跃的目标，这里有个优化后的方法，首先我们确认了小人的位置，然后就搜索半张图就可以了，然后寻找两个点，跟标准值差异的最高点以及最右的一个点，为什么不寻找左侧点，是因为有阴影会影响搜索的。
+等找到最高点和最右点之后，取两个点的交点就确认跳跃的目标点了。
+这样人物点位和目标点都确认好了，然后利用勾股定理就可以计算出来距离了。这个距离跟最终的长按时间是有一个比例了，这个比例自己测一测就能大概找出来了。
+这样，一个跟 php 没有太大关系的辅助就成了，最后，铺天盖地求 star">
+  <meta itemprop="datePublished" content="2018-01-05T21:15:00+00:00">
+  <meta itemprop="dateModified" content="2018-01-05T21:15:00+00:00">
+  <meta itemprop="wordCount" content="23">
+  <meta itemprop="keywords" content="PHP"><meta property="og:url" content="http://localhost:1313/posts/use-php-to-achieve-wechat-jump-for-android-phones/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="用 php 来实现微信跳一跳 （适用于安卓手机）">
+  <meta property="og:description" content="作为一个程序员，当微信出了跳一跳后，排行榜的前三名就没有低于 1k 分的，我甚是伤心，所以 php 也要来跳一跳，今天发出来的版本貌似已经是第五版了，每天晚上都回家写一个方法，分数越来越高，到了现在，运行速度和分数都已经让我满意了。刚才打的最高分。
+github 地址: https://github.com/crazyhl/php_jump_auto
+下面说一下实现的思路，先用 adb 截图，然后再这个截图上寻找小人的位置，以及需要跳跃到的方块的位置，最后再利用 adb 模拟长按跳过去就行了。
+分开说下，如何找小人。利用先确认一个小人身上的色块的色值，然后在再整图上找这个色值区间值的一个范围。
+如下图 再调整色块值之后，我觉得这个范围比较合适，所以我就定了下来，然后再计算这个范围的中心点，当做小人的中心点。
+然后再去寻找需要需要跳跃的目标，这里有个优化后的方法，首先我们确认了小人的位置，然后就搜索半张图就可以了，然后寻找两个点，跟标准值差异的最高点以及最右的一个点，为什么不寻找左侧点，是因为有阴影会影响搜索的。
+等找到最高点和最右点之后，取两个点的交点就确认跳跃的目标点了。
+这样人物点位和目标点都确认好了，然后利用勾股定理就可以计算出来距离了。这个距离跟最终的长按时间是有一个比例了，这个比例自己测一测就能大概找出来了。
+这样，一个跟 php 没有太大关系的辅助就成了，最后，铺天盖地求 star">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2018-01-05T21:15:00+00:00">
+    <meta property="article:modified_time" content="2018-01-05T21:15:00+00:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="用 php 来实现微信跳一跳 （适用于安卓手机）">
+  <meta name="twitter:description" content="作为一个程序员，当微信出了跳一跳后，排行榜的前三名就没有低于 1k 分的，我甚是伤心，所以 php 也要来跳一跳，今天发出来的版本貌似已经是第五版了，每天晚上都回家写一个方法，分数越来越高，到了现在，运行速度和分数都已经让我满意了。刚才打的最高分。
+github 地址: https://github.com/crazyhl/php_jump_auto
+下面说一下实现的思路，先用 adb 截图，然后再这个截图上寻找小人的位置，以及需要跳跃到的方块的位置，最后再利用 adb 模拟长按跳过去就行了。
+分开说下，如何找小人。利用先确认一个小人身上的色块的色值，然后在再整图上找这个色值区间值的一个范围。
+如下图 再调整色块值之后，我觉得这个范围比较合适，所以我就定了下来，然后再计算这个范围的中心点，当做小人的中心点。
+然后再去寻找需要需要跳跃的目标，这里有个优化后的方法，首先我们确认了小人的位置，然后就搜索半张图就可以了，然后寻找两个点，跟标准值差异的最高点以及最右的一个点，为什么不寻找左侧点，是因为有阴影会影响搜索的。
+等找到最高点和最右点之后，取两个点的交点就确认跳跃的目标点了。
+这样人物点位和目标点都确认好了，然后利用勾股定理就可以计算出来距离了。这个距离跟最终的长按时间是有一个比例了，这个比例自己测一测就能大概找出来了。
+这样，一个跟 php 没有太大关系的辅助就成了，最后，铺天盖地求 star">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/use-php-to-achieve-wechat-jump-for-android-phones/" title="用 php 来实现微信跳一跳 （适用于安卓手机） - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/dijkstra-algorithm-php-implementation/" title="dijkstra算法 PHP 实现" /><link rel="next" type="text/html" href="http://localhost:1313/posts/%E5%8D%87%E7%BA%A7-homestead-%E5%B0%8F%E8%AE%B0%E5%BD%95/" title="升级 homestead 小记录" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/use-php-to-achieve-wechat-jump-for-android-phones/index.md" title="用 php 来实现微信跳一跳 （适用于安卓手机） - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "用 php 来实现微信跳一跳 （适用于安卓手机）",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/use-php-to-achieve-wechat-jump-for-android-phones\/"
+    },"genre": "posts","wordcount":  23 ,
+    "url": "http:\/\/localhost:1313\/posts\/use-php-to-achieve-wechat-jump-for-android-phones\/","datePublished": "2018-01-05T21:15:00+00:00","dateModified": "2018-01-05T21:15:00+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>用 Php 来实现微信跳一跳 （适用于安卓手机）</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2018-01-05 21:15:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2018-01-05">2018-01-05</time></span>&nbsp;<span title="23 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>作为一个程序员，当微信出了跳一跳后，排行榜的前三名就没有低于 1k 分的，我甚是伤心，所以 php 也要来跳一跳，今天发出来的版本貌似已经是第五版了，每天晚上都回家写一个方法，分数越来越高，到了现在，运行速度和分数都已经让我满意了。刚才打的最高分。</p>
+<p>github 地址: <a href="https://github.com/crazyhl/php_jump_auto" target="_blank" rel="external nofollow noopener noreferrer">https://github.com/crazyhl/php_jump_auto</a></p>
+<p><img loading="lazy" src='https://www.cimple.ink/images/2018/01/06/uvh7x1ap9v7z83w206rtcd8hlc9jijd3.jpg' alt="分数"></p>
+<p>下面说一下实现的思路，先用 adb 截图，然后再这个截图上寻找小人的位置，以及需要跳跃到的方块的位置，最后再利用 adb 模拟长按跳过去就行了。</p>
+<p>分开说下，如何找小人。利用先确认一个小人身上的色块的色值，然后在再整图上找这个色值区间值的一个范围。</p>
+<p>如下图
+<img loading="lazy" src='https://www.cimple.ink/images/2018/01/06/dbjtrgkcj7u6wpveu9292aiog8ao80ey.png' alt="图片alt"></p>
+<p>再调整色块值之后，我觉得这个范围比较合适，所以我就定了下来，然后再计算这个范围的中心点，当做小人的中心点。</p>
+<p>然后再去寻找需要需要跳跃的目标，这里有个优化后的方法，首先我们确认了小人的位置，然后就搜索半张图就可以了，然后寻找两个点，跟标准值差异的最高点以及最右的一个点，为什么不寻找左侧点，是因为有阴影会影响搜索的。</p>
+<p>等找到最高点和最右点之后，取两个点的交点就确认跳跃的目标点了。</p>
+<p>这样人物点位和目标点都确认好了，然后利用勾股定理就可以计算出来距离了。这个距离跟最终的长按时间是有一个比例了，这个比例自己测一测就能大概找出来了。</p>
+<p>这样，一个跟 php 没有太大关系的辅助就成了，最后，铺天盖地求 star</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2018-01-05 21:15:00">更新于 2018-01-05&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/use-php-to-achieve-wechat-jump-for-android-phones/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/%e7%94%a8-php-%e6%9d%a5%e5%ae%9e%e7%8e%b0%e5%be%ae%e4%bf%a1%e8%b7%b3%e4%b8%80%e8%b7%b3-%ef%bc%88%e9%80%82%e7%94%a8%e4%ba%8e%e5%ae%89%e5%8d%93%e6%89%8b%e6%9c%ba%ef%bc%89.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/use-php-to-achieve-wechat-jump-for-android-phones/" data-title="用 Php 来实现微信跳一跳 （适用于安卓手机）"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/use-php-to-achieve-wechat-jump-for-android-phones/"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/use-php-to-achieve-wechat-jump-for-android-phones/" data-title="用 Php 来实现微信跳一跳 （适用于安卓手机）"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/dijkstra-algorithm-php-implementation/" class="post-nav-item" rel="prev" title="Dijkstra算法 PHP 实现"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Dijkstra算法 PHP 实现</a><a href="/posts/%E5%8D%87%E7%BA%A7-homestead-%E5%B0%8F%E8%AE%B0%E5%BD%95/" class="post-nav-item" rel="next" title="升级 Homestead 小记录">升级 Homestead 小记录<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/1fac00f3e503e86dcbd01313f45389f7.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

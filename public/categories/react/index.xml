@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>React - 分类 - Miracle Hao</title>
+    <link>http://localhost:1313/categories/react/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 18 Oct 2021 14:31:49 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/react/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用 React Template 构建前端应用</title>
+      <link>http://localhost:1313/posts/build-react-application-with-typescript/</link>
+      <pubDate>Mon, 18 Oct 2021 14:31:49 +0800</pubDate>
+      <guid>http://localhost:1313/posts/build-react-application-with-typescript/</guid>
+      <category domain="http://localhost:1313/categories/%E5%89%8D%E7%AB%AF/">前端</category>
+      <category domain="http://localhost:1313/categories/react/">React</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前言&#34;&gt;&lt;span&gt;前言&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e8%a8%80&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;原本我一直都是用 vue 的，但是呢，我主力还是后端，所以前端这方面的东西也是属于浅尝辄止的。最近想弄一些前端的东西，观察了一圈，react 貌似还是要比 vue 的生态好一些。既然如此，那就开始用 react 好了。另外为什么要用 typescript 呢，当我在用 vue + typescript 的时候我名没有太明显的感受到跟 js 的区别。但是当我在用 ts 实现公司的一个真实的东西的时候，我体会到了 ts 的爽。所以从那以后我都是尽可能的用 ts 了。好了，正式开始吧，不知道关于 react 的东西会写几篇文章呢。目标是超过 tdd 那个的 5 篇。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

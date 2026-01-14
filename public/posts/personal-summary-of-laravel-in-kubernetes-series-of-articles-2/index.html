@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Laravel in Kubernetes 系列文章个人总结（2） - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="前言 本篇我们继续总结 https://chris-vermeulen.com/laravel-in-kubernetes/ 系列文章，上一篇我们总结完毕了 docker-composer 本地测试部分。后面还有几篇是集群设置的，这个我就没有总结，因为他的设置有平台依赖。那么在真实使用中，我们可以用公有云服务，到时候我们只要弄后面总计的配置就好了，或者自己搭建集群。 单节点测试集群可以看我之前的文章 https://www.cimple.ink/2022/04/06/ubuntu-install-k8s-and-use-metallb-with-nginx-ingerss/ https://www.cimple.ink/2022/04/17/ubuntu-k8s-stateful-mysql/。
+"><meta name="keywords" content='laravel, kubernetes'>
+  <meta itemprop="name" content="Laravel in Kubernetes 系列文章个人总结（2）">
+  <meta itemprop="description" content="前言 本篇我们继续总结 https://chris-vermeulen.com/laravel-in-kubernetes/ 系列文章，上一篇我们总结完毕了 docker-composer 本地测试部分。后面还有几篇是集群设置的，这个我就没有总结，因为他的设置有平台依赖。那么在真实使用中，我们可以用公有云服务，到时候我们只要弄后面总计的配置就好了，或者自己搭建集群。 单节点测试集群可以看我之前的文章 https://www.cimple.ink/2022/04/06/ubuntu-install-k8s-and-use-metallb-with-nginx-ingerss/ https://www.cimple.ink/2022/04/17/ubuntu-k8s-stateful-mysql/。">
+  <meta itemprop="datePublished" content="2023-03-09T10:49:43+08:00">
+  <meta itemprop="dateModified" content="2023-03-09T10:49:43+08:00">
+  <meta itemprop="wordCount" content="781">
+  <meta itemprop="keywords" content="Laravel,Kubernetes"><meta property="og:url" content="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-2/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="Laravel in Kubernetes 系列文章个人总结（2）">
+  <meta property="og:description" content="前言 本篇我们继续总结 https://chris-vermeulen.com/laravel-in-kubernetes/ 系列文章，上一篇我们总结完毕了 docker-composer 本地测试部分。后面还有几篇是集群设置的，这个我就没有总结，因为他的设置有平台依赖。那么在真实使用中，我们可以用公有云服务，到时候我们只要弄后面总计的配置就好了，或者自己搭建集群。 单节点测试集群可以看我之前的文章 https://www.cimple.ink/2022/04/06/ubuntu-install-k8s-and-use-metallb-with-nginx-ingerss/ https://www.cimple.ink/2022/04/17/ubuntu-k8s-stateful-mysql/。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-03-09T10:49:43+08:00">
+    <meta property="article:modified_time" content="2023-03-09T10:49:43+08:00">
+    <meta property="article:tag" content="Laravel">
+    <meta property="article:tag" content="Kubernetes">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Laravel in Kubernetes 系列文章个人总结（2）">
+  <meta name="twitter:description" content="前言 本篇我们继续总结 https://chris-vermeulen.com/laravel-in-kubernetes/ 系列文章，上一篇我们总结完毕了 docker-composer 本地测试部分。后面还有几篇是集群设置的，这个我就没有总结，因为他的设置有平台依赖。那么在真实使用中，我们可以用公有云服务，到时候我们只要弄后面总计的配置就好了，或者自己搭建集群。 单节点测试集群可以看我之前的文章 https://www.cimple.ink/2022/04/06/ubuntu-install-k8s-and-use-metallb-with-nginx-ingerss/ https://www.cimple.ink/2022/04/17/ubuntu-k8s-stateful-mysql/。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-2/" title="Laravel in Kubernetes 系列文章个人总结（2） - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-1/" title="Laravel in Kubernetes 系列文章个人总结（1）" /><link rel="next" type="text/html" href="http://localhost:1313/posts/determining-whether-a-bloom-filter-element-exists/" title="关于布隆过滤器是否存在的判定" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-2/index.md" title="Laravel in Kubernetes 系列文章个人总结（2） - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Laravel in Kubernetes 系列文章个人总结（2）",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/personal-summary-of-laravel-in-kubernetes-series-of-articles-2\/"
+    },"genre": "posts","keywords": "laravel, kubernetes","wordcount":  781 ,
+    "url": "http:\/\/localhost:1313\/posts\/personal-summary-of-laravel-in-kubernetes-series-of-articles-2\/","datePublished": "2023-03-09T10:49:43+08:00","dateModified": "2023-03-09T10:49:43+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Laravel in Kubernetes 系列文章个人总结（2）</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a>&ensp;<a href="/categories/%E8%BF%90%E7%BB%B4/" class="post-category" title="分类 - 运维"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 运维</a></span></div><div class="post-meta-line"><span title="发布于 2023-03-09 10:49:43"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-03-09">2023-03-09</time></span>&nbsp;<span title="781 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 800 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#正文">正文</a>
+      <ul>
+        <li><a href="#创建配置文件目录">创建配置文件目录</a></li>
+        <li><a href="#configmap-and-secret">ConfigMap And Secret</a></li>
+        <li><a href="#fpm-部署">fpm 部署</a></li>
+        <li><a href="#web-部署">web 部署</a></li>
+        <li><a href="#队列部署">队列部署</a></li>
+        <li><a href="#定时任务">定时任务</a></li>
+      </ul>
+    </li>
+    <li><a href="#总计">总计</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 class="heading-element" id="前言"><span>前言</span>
+  <a href="#%e5%89%8d%e8%a8%80" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>本篇我们继续总结 <a href="https://chris-vermeulen.com/laravel-in-kubernetes/" target="_blank" rel="external nofollow noopener noreferrer">https://chris-vermeulen.com/laravel-in-kubernetes/</a> 系列文章，上一篇我们总结完毕了 docker-composer 本地测试部分。后面还有几篇是集群设置的，这个我就没有总结，因为他的设置有平台依赖。那么在真实使用中，我们可以用公有云服务，到时候我们只要弄后面总计的配置就好了，或者自己搭建集群。
+单节点测试集群可以看我之前的文章
+<a href="https://www.cimple.ink/2022/04/06/ubuntu-install-k8s-and-use-metallb-with-nginx-ingerss/" target="_blank" rel="external nofollow noopener noreferrer">https://www.cimple.ink/2022/04/06/ubuntu-install-k8s-and-use-metallb-with-nginx-ingerss/</a>
+<a href="https://www.cimple.ink/2022/04/17/ubuntu-k8s-stateful-mysql/" target="_blank" rel="external nofollow noopener noreferrer">https://www.cimple.ink/2022/04/17/ubuntu-k8s-stateful-mysql/</a>。</p>
+<h2 class="heading-element" id="正文"><span>正文</span>
+  <a href="#%e6%ad%a3%e6%96%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="创建配置文件目录"><span>创建配置文件目录</span>
+  <a href="#%e5%88%9b%e5%bb%ba%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e7%9b%ae%e5%bd%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir -p laravel-in-kubernetes-deployment
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> laravel-in-kubernetes-deployment</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>我们所有的配置文件都会保存在这里，不得不说他的这个目录规划也是很棒，让我学到了很多东西。</p>
+<h3 class="heading-element" id="configmap-and-secret"><span>ConfigMap And Secret</span>
+  <a href="#configmap-and-secret" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>创建 <code>common</code> 目录，保存通用信息。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apiVersion: v1
+</span></span><span class="line"><span class="cl">kind: ConfigMap
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">data:
+</span></span><span class="line"><span class="cl">  APP_NAME: <span class="s2">&#34;Laravel&#34;</span>
+</span></span><span class="line"><span class="cl">  APP_ENV: <span class="s2">&#34;local&#34;</span>
+</span></span><span class="line"><span class="cl">  APP_DEBUG: <span class="s2">&#34;true&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># Once you have an external URL for your application, you can add it here. </span>
+</span></span><span class="line"><span class="cl">  APP_URL: <span class="s2">&#34;http://laravel-in-kubernetes.test&#34;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1"># Update the LOG_CHANNEL to stdout for Kubernetes</span>
+</span></span><span class="line"><span class="cl">  LOG_CHANNEL: <span class="s2">&#34;stdout&#34;</span>
+</span></span><span class="line"><span class="cl">  LOG_LEVEL: <span class="s2">&#34;debug&#34;</span>
+</span></span><span class="line"><span class="cl">  DB_CONNECTION: <span class="s2">&#34;mysql&#34;</span>
+</span></span><span class="line"><span class="cl">  DB_HOST: <span class="s2">&#34;mysql&#34;</span>
+</span></span><span class="line"><span class="cl">  DB_PORT: <span class="s2">&#34;3306&#34;</span>
+</span></span><span class="line"><span class="cl">  DB_DATABASE: <span class="s2">&#34;laravel_in_kubernetes&#34;</span>
+</span></span><span class="line"><span class="cl">  BROADCAST_DRIVER: <span class="s2">&#34;log&#34;</span>
+</span></span><span class="line"><span class="cl">  CACHE_DRIVER: <span class="s2">&#34;file&#34;</span>
+</span></span><span class="line"><span class="cl">  FILESYSTEM_DRIVER: <span class="s2">&#34;local&#34;</span>
+</span></span><span class="line"><span class="cl">  QUEUE_CONNECTION: <span class="s2">&#34;sync&#34;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1"># Update the Session driver to Redis, based off part-2 of series</span>
+</span></span><span class="line"><span class="cl">  SESSION_DRIVER: <span class="s2">&#34;redis&#34;</span>
+</span></span><span class="line"><span class="cl">  SESSION_LIFETIME: <span class="s2">&#34;120&#34;</span>
+</span></span><span class="line"><span class="cl">  MEMCACHED_HOST: <span class="s2">&#34;memcached&#34;</span>
+</span></span><span class="line"><span class="cl">  REDIS_HOST: <span class="s2">&#34;redis&#34;</span>
+</span></span><span class="line"><span class="cl">  REDIS_PORT: <span class="s2">&#34;6379&#34;</span>
+</span></span><span class="line"><span class="cl">  MAIL_MAILER: <span class="s2">&#34;smtp&#34;</span>
+</span></span><span class="line"><span class="cl">  MAIL_HOST: <span class="s2">&#34;mailhog&#34;</span>
+</span></span><span class="line"><span class="cl">  MAIL_PORT: <span class="s2">&#34;1025&#34;</span>
+</span></span><span class="line"><span class="cl">  MAIL_ENCRYPTION: <span class="s2">&#34;null&#34;</span>
+</span></span><span class="line"><span class="cl">  MAIL_FROM_ADDRESS: <span class="s2">&#34;null&#34;</span>
+</span></span><span class="line"><span class="cl">  MAIL_FROM_NAME: <span class="s2">&#34;</span><span class="si">${</span><span class="nv">APP_NAME</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  AWS_DEFAULT_REGION: <span class="s2">&#34;us-east-1&#34;</span>
+</span></span><span class="line"><span class="cl">  AWS_BUCKET: <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  AWS_USE_PATH_STYLE_ENDPOINT: <span class="s2">&#34;false&#34;</span>
+</span></span><span class="line"><span class="cl">  PUSHER_APP_ID: <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">  PUSHER_APP_CLUSTER: <span class="s2">&#34;mt1&#34;</span>
+</span></span><span class="line"><span class="cl">  MIX_PUSHER_APP_KEY: <span class="s2">&#34;</span><span class="si">${</span><span class="nv">PUSHER_APP_KEY</span><span class="si">}</span><span class="s2">&#34;</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apiVersion: v1
+</span></span><span class="line"><span class="cl">kind: Secret
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">name: laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">type: Opaque
+</span></span><span class="line"><span class="cl">stringData:
+</span></span><span class="line"><span class="cl">APP_KEY: <span class="s2">&#34;base64:eQrCXchv9wpGiOqRFaeIGPnqklzvU+A6CZYSMosh1to=&#34;</span>
+</span></span><span class="line"><span class="cl">DB_USERNAME: <span class="s2">&#34;sail&#34;</span>
+</span></span><span class="line"><span class="cl">DB_PASSWORD: <span class="s2">&#34;password&#34;</span>
+</span></span><span class="line"><span class="cl">REDIS_PASSWORD: <span class="s2">&#34;null&#34;</span>
+</span></span><span class="line"><span class="cl">MAIL_USERNAME: <span class="s2">&#34;null&#34;</span>
+</span></span><span class="line"><span class="cl">MAIL_PASSWORD: <span class="s2">&#34;null&#34;</span>
+</span></span><span class="line"><span class="cl">AWS_ACCESS_KEY_ID: <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">AWS_SECRET_ACCESS_KEY: <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">PUSHER_APP_KEY: <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">PUSHER_APP_SECRET: <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">MIX_PUSHER_APP_KEY: <span class="s2">&#34;</span><span class="si">${</span><span class="nv">PUSHER_APP_KEY</span><span class="si">}</span><span class="s2">&#34;</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>上面两个分别是config 和 secrect，用 secret 的目的就是为了信息安全。
+在我们真实使用中，要把上面的参数替换成自己的，尤其是 <code>APP_ENV: &quot;production&quot;</code> 和 <code>APP_DEBUG: &quot;false&quot;</code> 一定要改成这样。</p>
+<p>这两个配置文件都是保存在 <code>common</code> 目录下的 <code>app-config.yaml</code> 和 <code>app-secret.yaml</code> 文件中。当我们编辑完文件后，执行下面的命令</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl apply -f common/</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这样就把整个目录的文件都应用了，每次修改完都可以应用整个目录，因为只有被修改的会触发更新，没有修改的会跳过。</p>
+<p>注意啊，当我们真实部署以后，更新 config or secret 后，并不会触发 pods 的滚动更新。所以，我们采用 <a href="https://jimmysong.io/kubernetes-handbook/concepts/configmap-hot-update.html" target="_blank" rel="external nofollow noopener noreferrer">https://jimmysong.io/kubernetes-handbook/concepts/configmap-hot-update.html</a> 这篇文章的 <code>ConfigMap 更新后滚动更新 Pod</code> 这个段落的方案，给 pod 增加一个 注解，每次更新后，更新注解的方式来更新pod ，当然这是我们管理少量镜像的方案，要是项目大了，还得搞配置中心才行。
+<img loading="lazy" src='https://www.cimple.ink/static/images/202303091153736.png' alt="https://www.cimple.ink/static/images/202303091153736.png">
+注解的方式如上图。</p>
+<h3 class="heading-element" id="fpm-部署"><span>fpm 部署</span>
+  <a href="#fpm-%e9%83%a8%e7%bd%b2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>创建 <code>fpm</code> 目录，在此目录下创建 <code>deployment.yml</code> 文件</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apiVersion: apps/v1
+</span></span><span class="line"><span class="cl">kind: Deployment
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: laravel-in-kubernetes-fpm
+</span></span><span class="line"><span class="cl">  labels:
+</span></span><span class="line"><span class="cl">    tier: backend
+</span></span><span class="line"><span class="cl">    layer: fpm
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  replicas: <span class="m">1</span>
+</span></span><span class="line"><span class="cl">  selector:
+</span></span><span class="line"><span class="cl">    matchLabels:
+</span></span><span class="line"><span class="cl">      tier: backend
+</span></span><span class="line"><span class="cl">      layer: fpm
+</span></span><span class="line"><span class="cl">  template:
+</span></span><span class="line"><span class="cl">    metadata:
+</span></span><span class="line"><span class="cl">      labels:
+</span></span><span class="line"><span class="cl">        tier: backend
+</span></span><span class="line"><span class="cl">        layer: fpm
+</span></span><span class="line"><span class="cl">      annotations:
+</span></span><span class="line"><span class="cl">        version/config: <span class="s2">&#34;xxxx&#34;</span>
+</span></span><span class="line"><span class="cl">    spec:
+</span></span><span class="line"><span class="cl">      initContainers:
+</span></span><span class="line"><span class="cl">        - name: migrations
+</span></span><span class="line"><span class="cl">          image: <span class="o">[</span>your_registry_url<span class="o">]</span>/cli:v0.0.1
+</span></span><span class="line"><span class="cl">          command:
+</span></span><span class="line"><span class="cl">            - php
+</span></span><span class="line"><span class="cl">          args:
+</span></span><span class="line"><span class="cl">            - artisan
+</span></span><span class="line"><span class="cl">            - migrate
+</span></span><span class="line"><span class="cl">            - --force
+</span></span><span class="line"><span class="cl">          envFrom:
+</span></span><span class="line"><span class="cl">            - configMapRef:
+</span></span><span class="line"><span class="cl">                name: laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">            - secretRef:
+</span></span><span class="line"><span class="cl">                name: laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">      containers:
+</span></span><span class="line"><span class="cl">        - name: fpm
+</span></span><span class="line"><span class="cl">          image: <span class="o">[</span>your_registry_url<span class="o">]</span>/fpm_server:v0.0.1
+</span></span><span class="line"><span class="cl">          ports:
+</span></span><span class="line"><span class="cl">            - containerPort: <span class="m">9000</span>
+</span></span><span class="line"><span class="cl">          envFrom:
+</span></span><span class="line"><span class="cl">            - configMapRef:
+</span></span><span class="line"><span class="cl">                name: laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">            - secretRef:
+</span></span><span class="line"><span class="cl">                name: laravel-in-kubernetes</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这里注意点就很少了，修改配置版本号，以及自己的镜像位置。可以看到我们通过 <code>envFrom</code> 的方式因为如了我们上面的配置，name 就是在 config 和 secret 里面设置的 meta。还有一个就是 <code>initContainers</code> ，我们通过这个方式来初始化我们的数据库。
+在<code>fpm</code> 目录下继续创建 <code>service.yml</code> 文件</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apiVersion: v1
+</span></span><span class="line"><span class="cl">kind: Service
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: laravel-in-kubernetes-fpm
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  selector:
+</span></span><span class="line"><span class="cl">    tier: backend
+</span></span><span class="line"><span class="cl">    layer: fpm
+</span></span><span class="line"><span class="cl">  ports:
+</span></span><span class="line"><span class="cl">    - protocol: TCP
+</span></span><span class="line"><span class="cl">      port: <span class="m">9000</span>
+</span></span><span class="line"><span class="cl">      targetPort: <span class="m">9000</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><h3 class="heading-element" id="web-部署"><span>web 部署</span>
+  <a href="#web-%e9%83%a8%e7%bd%b2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>创建 <code>web</code> 目录，且创建 <code>deploy.yml</code> 和 <code>secret.yml</code> 文件</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apiVersion: apps/v1
+</span></span><span class="line"><span class="cl">kind: Deployment
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: laravel-in-kubernetes-webserver
+</span></span><span class="line"><span class="cl">  labels:
+</span></span><span class="line"><span class="cl">    tier: backend
+</span></span><span class="line"><span class="cl">    layer: webserver
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  replicas: <span class="m">1</span>
+</span></span><span class="line"><span class="cl">  selector:
+</span></span><span class="line"><span class="cl">    matchLabels:
+</span></span><span class="line"><span class="cl">      tier: backend
+</span></span><span class="line"><span class="cl">      layer: webserver
+</span></span><span class="line"><span class="cl">  template:
+</span></span><span class="line"><span class="cl">    metadata:
+</span></span><span class="line"><span class="cl">      labels:
+</span></span><span class="line"><span class="cl">        tier: backend
+</span></span><span class="line"><span class="cl">        layer: webserver
+</span></span><span class="line"><span class="cl">    spec:
+</span></span><span class="line"><span class="cl">      containers:
+</span></span><span class="line"><span class="cl">        - name: webserver
+</span></span><span class="line"><span class="cl">          image: <span class="o">[</span>your_registry_url<span class="o">]</span>/web_server:v0.0.1
+</span></span><span class="line"><span class="cl">          ports:
+</span></span><span class="line"><span class="cl">            - containerPort: <span class="m">80</span>
+</span></span><span class="line"><span class="cl">          env:
+</span></span><span class="line"><span class="cl">            <span class="c1"># Inject the FPM Host as we did with Docker Compose</span>
+</span></span><span class="line"><span class="cl">            - name: FPM_HOST
+</span></span><span class="line"><span class="cl">              value: laravel-in-kubernetes-fpm:9000</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apiVersion: v1
+</span></span><span class="line"><span class="cl">kind: Service
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: laravel-in-kubernetes-webserver
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  selector:
+</span></span><span class="line"><span class="cl">    tier: backend
+</span></span><span class="line"><span class="cl">    layer: webserver
+</span></span><span class="line"><span class="cl">  ports:
+</span></span><span class="line"><span class="cl">    - protocol: TCP
+</span></span><span class="line"><span class="cl">      port: <span class="m">80</span>
+</span></span><span class="line"><span class="cl">      targetPort: <span class="m">80</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这里也没什么的注意的了，只有 deploy 里面的通过 <code>env</code> 的方式，设置 <code>FPM_HOST</code>。这里面的网站，对应上面 <code>fpm service</code> 的 <code>meta name</code>。</p>
+<h3 class="heading-element" id="队列部署"><span>队列部署</span>
+  <a href="#%e9%98%9f%e5%88%97%e9%83%a8%e7%bd%b2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>创建 <code>queue-works</code> 目录。 编写 <code>deployment-default.yml</code> 文件。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apiVersion: apps/v1
+</span></span><span class="line"><span class="cl">kind: Deployment
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: laravel-in-kubernetes-queue-worker-default
+</span></span><span class="line"><span class="cl">  labels:
+</span></span><span class="line"><span class="cl">    tier: backend
+</span></span><span class="line"><span class="cl">    layer: queue-worker
+</span></span><span class="line"><span class="cl">    queue: default
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  replicas: <span class="m">1</span>
+</span></span><span class="line"><span class="cl">  selector:
+</span></span><span class="line"><span class="cl">    matchLabels:
+</span></span><span class="line"><span class="cl">      tier: backend
+</span></span><span class="line"><span class="cl">      layer: queue-worker
+</span></span><span class="line"><span class="cl">      queue: default
+</span></span><span class="line"><span class="cl">  template:
+</span></span><span class="line"><span class="cl">    metadata:
+</span></span><span class="line"><span class="cl">      labels:
+</span></span><span class="line"><span class="cl">        tier: backend
+</span></span><span class="line"><span class="cl">        layer: queue-worker
+</span></span><span class="line"><span class="cl">        queue: default
+</span></span><span class="line"><span class="cl">    spec:
+</span></span><span class="line"><span class="cl">      containers:
+</span></span><span class="line"><span class="cl">        - name: queue-worker
+</span></span><span class="line"><span class="cl">          image: <span class="o">[</span>your_registry_url<span class="o">]</span>/cli:v0.0.1
+</span></span><span class="line"><span class="cl">          command:
+</span></span><span class="line"><span class="cl">            - php
+</span></span><span class="line"><span class="cl">          args:
+</span></span><span class="line"><span class="cl">            - artisan
+</span></span><span class="line"><span class="cl">            - queue:work
+</span></span><span class="line"><span class="cl">            - --queue<span class="o">=</span>default
+</span></span><span class="line"><span class="cl">            - --max-jobs<span class="o">=</span><span class="m">200</span>
+</span></span><span class="line"><span class="cl">          ports:
+</span></span><span class="line"><span class="cl">            - containerPort: <span class="m">9000</span>
+</span></span><span class="line"><span class="cl">          envFrom:
+</span></span><span class="line"><span class="cl">            - configMapRef:
+</span></span><span class="line"><span class="cl">                name: laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">            - secretRef:
+</span></span><span class="line"><span class="cl">                name: laravel-in-kubernetes</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这里就采用我们之前编译的 cli 来执行队列了。没什么注意的，就是看 laravel 官方文档基本都能明白了。如果有多个队列怎么办呢？在创建 <code>deployment-{queueName}.yml</code> 文件即可，再把配置里面的 <code>--queue={queueName}</code> 替换为具体的队列名称就好了。</p>
+<p>日后如果想更新数据库，我们就可以通过队列来预埋一个命令，就可以实时更新数据库了。</p>
+<h3 class="heading-element" id="定时任务"><span>定时任务</span>
+  <a href="#%e5%ae%9a%e6%97%b6%e4%bb%bb%e5%8a%a1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>创建 <code>cron</code> 目录，创建 <code>cronjob.yml</code> 文件。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apiVersion: batch/v1
+</span></span><span class="line"><span class="cl">kind: CronJob
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: laravel-in-kubernetes-scheduler
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  schedule: <span class="s2">&#34;* * * * *&#34;</span>
+</span></span><span class="line"><span class="cl">  jobTemplate:
+</span></span><span class="line"><span class="cl">    spec:
+</span></span><span class="line"><span class="cl">      template:
+</span></span><span class="line"><span class="cl">        spec:
+</span></span><span class="line"><span class="cl">          containers:
+</span></span><span class="line"><span class="cl">          - name: scheduler
+</span></span><span class="line"><span class="cl">            image: <span class="o">[</span>your_registry_url<span class="o">]</span>/cli:v0.0.1
+</span></span><span class="line"><span class="cl">            command:
+</span></span><span class="line"><span class="cl">              - php
+</span></span><span class="line"><span class="cl">            args:
+</span></span><span class="line"><span class="cl">              - artisan
+</span></span><span class="line"><span class="cl">              - schedule:run
+</span></span><span class="line"><span class="cl">            envFrom:
+</span></span><span class="line"><span class="cl">              - configMapRef:
+</span></span><span class="line"><span class="cl">                  name: laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">              - secretRef:
+</span></span><span class="line"><span class="cl">                  name: laravel-in-kubernetes
+</span></span><span class="line"><span class="cl">          restartPolicy: OnFailure</span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>文中还说了，用之前编译的cron 在写一个deployment。但是我觉得还是用 cronJob 比较合适。所以那个方案我就没记录。</p>
+<h2 class="heading-element" id="总计"><span>总计</span>
+  <a href="#%e6%80%bb%e8%ae%a1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>至此，所有的笔记就全都记录好了，还有两个弄 lb 和 证书的，我就没弄，因为依赖平台，如果是云平台就用云平台的就好，如果自建还是看上面那两篇文章。
+好了，又弄完一个大活，接下来会休息休息，看看书，然后几句我的那个小组件。计划了。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2023-03-09 10:49:43">更新于 2023-03-09&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-2/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/2023%e5%b9%b403%e6%9c%8809%e6%97%a5%20Laravel%20in%20Kubernetes%20%e7%b3%bb%e5%88%97%e6%96%87%e7%ab%a0%e4%b8%aa%e4%ba%ba%e6%80%bb%e7%bb%93%282%29.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-2/" data-title="Laravel in Kubernetes 系列文章个人总结（2）" data-hashtags="laravel,kubernetes"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-2/" data-hashtag="laravel"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-2/" data-title="Laravel in Kubernetes 系列文章个人总结（2）"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/laravel/" class="post-tag" title="标签 - Laravel">Laravel</a><a href="/tags/kubernetes/" class="post-tag" title="标签 - Kubernetes">Kubernetes</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/personal-summary-of-laravel-in-kubernetes-series-of-articles-1/" class="post-nav-item" rel="prev" title="Laravel in Kubernetes 系列文章个人总结（1）"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Laravel in Kubernetes 系列文章个人总结（1）</a><a href="/posts/determining-whether-a-bloom-filter-element-exists/" class="post-nav-item" rel="next" title="关于布隆过滤器是否存在的判定">关于布隆过滤器是否存在的判定<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog">
+      <div class="toc">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#正文">正文</a>
+      <ul>
+        <li><a href="#创建配置文件目录">创建配置文件目录</a></li>
+        <li><a href="#configmap-and-secret">ConfigMap And Secret</a></li>
+        <li><a href="#fpm-部署">fpm 部署</a></li>
+        <li><a href="#web-部署">web 部署</a></li>
+        <li><a href="#队列部署">队列部署</a></li>
+        <li><a href="#定时任务">定时任务</a></li>
+      </ul>
+    </li>
+    <li><a href="#总计">总计</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div><div id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" role="button" aria-label="目录"><i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/b44770a26a4c5a763bb535da09865b57.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

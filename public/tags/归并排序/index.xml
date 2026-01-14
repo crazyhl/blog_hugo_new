@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>归并排序 - 标签 - Miracle Hao</title>
+    <link>http://localhost:1313/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 25 Sep 2016 22:23:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PHP归并排序</title>
+      <link>http://localhost:1313/posts/php-merge-sort/</link>
+      <pubDate>Sun, 25 Sep 2016 22:23:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/php-merge-sort/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <category domain="http://localhost:1313/categories/%E7%AE%97%E6%B3%95/">算法</category>
+      <description>&lt;pre&gt;&lt;code&gt;&amp;lt;?php&#xA;&#xA;function sortArr($arr) {&#xA;    if (count($arr) &amp;lt; 2) {&#xA;        return $arr;&#xA;    }&#xA;    $mid = count($arr) / 2;&#xA;    $arr1 = array_slice($arr, 0, $mid);&#xA;    $arr2 = array_slice($arr, $mid, count($arr));&#xA;    $arr1 = sortArr($arr1);&#xA;    $arr2 = sortArr($arr2);&#xA;&#xA;    return mergeArr($arr1, $arr2);&#xA;}&#xA;&#xA;function mergeArr($arr1, $arr2) {&#xA;&#xA;    if (!is_array($arr1)) {&#xA;        $arr1[] = $arr1;&#xA;    }&#xA;    if (!is_array($arr2)) {&#xA;        $arr2[] = $arr2;&#xA;    }&#xA;&#xA;    $i =0;&#xA;    $j = 0;&#xA;    $arr1Length = count($arr1);&#xA;    $arr2Length = count($arr2);&#xA;    $returnArr = [];&#xA;    while($i &amp;lt; $arr1Length &amp;amp;&amp;amp; $j &amp;lt; $arr2Length) {&#xA;        if($arr1[$i] &amp;gt; $arr2[$j]) {&#xA;            $returnArr[] = $arr2[$j];&#xA;            $j&amp;#43;&amp;#43;;&#xA;        } else {&#xA;            $returnArr[] = $arr1[$i];&#xA;            $i&amp;#43;&amp;#43;;&#xA;        }&#xA;    }&#xA;    for($tmp = $i; $tmp &amp;lt; $arr1Length; $tmp&amp;#43;&amp;#43;) {&#xA;        $returnArr[] = $arr1[$tmp];&#xA;    }&#xA;    for($tmp = $j; $tmp &amp;lt; $arr2Length; $tmp&amp;#43;&amp;#43;) {&#xA;        $returnArr[] = $arr2[$tmp];&#xA;    }&#xA;    return $returnArr;&#xA;}&#xA;&#xA;$arr = [1,3,2,5,7,9,3,1];&#xA;&#xA;&#xA;$sortableArr = sortArr($arr);&#xA;&#xA;foreach ($sortableArr as $a) {&#xA;    print_r($a . &amp;#34;\n&amp;#34;);&#xA;}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;说实话，算法这东西，挺好玩的，以前还搞过快排，但是忘却了，今天这个归并排序应该很难忘记了，毕竟理解起来要比快排好得多，但是快排回来后面补充&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

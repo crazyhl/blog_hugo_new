@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Typecho 源码分析（3） - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="前情提要 通过之前我们的分析，我们已经把安装流程搞定了，本篇开始，我们分析前台相关的流程。
+"><meta name="keywords" content='Typecho 源码分析'>
+  <meta itemprop="name" content="Typecho 源码分析（3）">
+  <meta itemprop="description" content="前情提要 通过之前我们的分析，我们已经把安装流程搞定了，本篇开始，我们分析前台相关的流程。">
+  <meta itemprop="datePublished" content="2019-11-13T10:50:52+00:00">
+  <meta itemprop="dateModified" content="2019-11-13T10:50:52+00:00">
+  <meta itemprop="wordCount" content="297">
+  <meta itemprop="keywords" content="Typecho 源码分析"><meta property="og:url" content="http://localhost:1313/posts/typecho-source-code-analysis-3/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="Typecho 源码分析（3）">
+  <meta property="og:description" content="前情提要 通过之前我们的分析，我们已经把安装流程搞定了，本篇开始，我们分析前台相关的流程。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2019-11-13T10:50:52+00:00">
+    <meta property="article:modified_time" content="2019-11-13T10:50:52+00:00">
+    <meta property="article:tag" content="Typecho 源码分析">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Typecho 源码分析（3）">
+  <meta name="twitter:description" content="前情提要 通过之前我们的分析，我们已经把安装流程搞定了，本篇开始，我们分析前台相关的流程。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/typecho-source-code-analysis-3/" title="Typecho 源码分析（3） - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/typecho-source-code-analysis-2/" title="Typecho 源码分析（2）" /><link rel="next" type="text/html" href="http://localhost:1313/posts/typecho-source-code-analysis-4/" title="Typecho 源码分析（4）" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/typecho-source-code-analysis-3/index.md" title="Typecho 源码分析（3） - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Typecho 源码分析（3）",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/typecho-source-code-analysis-3\/"
+    },"genre": "posts","keywords": "Typecho 源码分析","wordcount":  297 ,
+    "url": "http:\/\/localhost:1313\/posts\/typecho-source-code-analysis-3\/","datePublished": "2019-11-13T10:50:52+00:00","dateModified": "2019-11-13T10:50:52+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Typecho 源码分析（3）</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2019-11-13 10:50:52"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2019-11-13">2019-11-13</time></span>&nbsp;<span title="297 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前情提要">前情提要</a></li>
+    <li><a href="#正文开始">正文开始</a></li>
+    <li><a href="#下期预告">下期预告</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 class="heading-element" id="前情提要"><span>前情提要</span>
+  <a href="#%e5%89%8d%e6%83%85%e6%8f%90%e8%a6%81" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>通过之前我们的分析，我们已经把安装流程搞定了，本篇开始，我们分析前台相关的流程。</p>
+<h2 class="heading-element" id="正文开始"><span>正文开始</span>
+  <a href="#%e6%ad%a3%e6%96%87%e5%bc%80%e5%a7%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>我们又一次回到了 <code>index.php</code> 在第一篇说完前几行判断是否安装之后，我们就暂时离开了这个文件，当我们安装完以后，进入首页就又回到了这里，我们跳过判断安装那一块，直接看后面。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/** 初始化组件 */</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Typecho_Widget</span><span class="o">::</span><span class="na">widget</span><span class="p">(</span><span class="s1">&#39;Widget_Init&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="sd">/** 注册一个初始化插件 */</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Typecho_Plugin</span><span class="o">::</span><span class="na">factory</span><span class="p">(</span><span class="s1">&#39;index.php&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">begin</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="sd">/** 开始路由分发 */</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Typecho_Router</span><span class="o">::</span><span class="na">dispatch</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="sd">/** 注册一个结束插件 */</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Typecho_Plugin</span><span class="o">::</span><span class="na">factory</span><span class="p">(</span><span class="s1">&#39;index.php&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">end</span><span class="p">();</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>别看只有4行，却是大量的精髓都在这边，我们一行一行看。
+第一行，初始化组件，我们进入代码</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd">    * 工厂方法,将类静态化放置到列表中
+</span></span></span><span class="line"><span class="cl"><span class="sd">    *
+</span></span></span><span class="line"><span class="cl"><span class="sd">    * @access public
+</span></span></span><span class="line"><span class="cl"><span class="sd">    * @param string $alias 组件别名
+</span></span></span><span class="line"><span class="cl"><span class="sd">    * @param mixed $params 传递的参数
+</span></span></span><span class="line"><span class="cl"><span class="sd">    * @param mixed $request 前端参数
+</span></span></span><span class="line"><span class="cl"><span class="sd">    * @param boolean $enableResponse 是否允许http回执
+</span></span></span><span class="line"><span class="cl"><span class="sd">    * @return Typecho_Widget
+</span></span></span><span class="line"><span class="cl"><span class="sd">    * @throws Typecho_Exception
+</span></span></span><span class="line"><span class="cl"><span class="sd">    */</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">widget</span><span class="p">(</span><span class="nv">$alias</span><span class="p">,</span> <span class="nv">$params</span> <span class="o">=</span> <span class="k">NULL</span><span class="p">,</span> <span class="nv">$request</span> <span class="o">=</span> <span class="k">NULL</span><span class="p">,</span> <span class="nv">$enableResponse</span> <span class="o">=</span> <span class="k">true</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$parts</span> <span class="o">=</span> <span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">,</span> <span class="nv">$alias</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$className</span> <span class="o">=</span> <span class="nv">$parts</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$alias</span> <span class="o">=</span> <span class="k">empty</span><span class="p">(</span><span class="nv">$parts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">?</span> <span class="nv">$className</span> <span class="o">:</span> <span class="nv">$parts</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nx">self</span><span class="o">::</span><span class="nv">$_widgetAlias</span><span class="p">[</span><span class="nv">$className</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$className</span> <span class="o">=</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$_widgetAlias</span><span class="p">[</span><span class="nv">$className</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nx">self</span><span class="o">::</span><span class="nv">$_widgetPool</span><span class="p">[</span><span class="nv">$alias</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="sd">/** 如果类不存在 */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">class_exists</span><span class="p">(</span><span class="nv">$className</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="k">new</span> <span class="nx">Typecho_Widget_Exception</span><span class="p">(</span><span class="nv">$className</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="sd">/** 初始化request */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$request</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$requestObject</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Typecho_Request</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$requestObject</span><span class="o">-&gt;</span><span class="na">setParams</span><span class="p">(</span><span class="nv">$request</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$requestObject</span> <span class="o">=</span> <span class="nx">Typecho_Request</span><span class="o">::</span><span class="na">getInstance</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="sd">/** 初始化response */</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$responseObject</span> <span class="o">=</span> <span class="nv">$enableResponse</span> <span class="o">?</span> <span class="nx">Typecho_Response</span><span class="o">::</span><span class="na">getInstance</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="o">:</span> <span class="nx">Typecho_Widget_Helper_Empty</span><span class="o">::</span><span class="na">getInstance</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="sd">/** 初始化组件 */</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$widget</span> <span class="o">=</span> <span class="k">new</span> <span class="nv">$className</span><span class="p">(</span><span class="nv">$requestObject</span><span class="p">,</span> <span class="nv">$responseObject</span><span class="p">,</span> <span class="nv">$params</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nv">$widget</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">self</span><span class="o">::</span><span class="nv">$_widgetPool</span><span class="p">[</span><span class="nv">$alias</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$widget</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$_widgetPool</span><span class="p">[</span><span class="nv">$alias</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>先看第一个参数 <code>$alias</code> 第一步把传入的变量利用 <code>@</code> 拆分成两个变量，一个是要初始化的类名，另一个是个别名，如果没有别名的设置，雷德明就是别名。 然后在判断别名池里面有没有这个别名，如果包含了这个别名，类名就变成别名池设置的类名。这个别名池，在这个类下的 <code>alias</code> 方法中可以设置，当前这个方法貌似没有使用。</p>
+<p>继续下去，如果组件池里面没有这个实例，就要初始化这个类，先初始化了，<code>request</code>，初始化的时候，会把 <code>get</code> 和 <code>pos</code>t 参数，设置到 <code>request</code> 的 <code>$_widgetAlias</code> 里面。然后调用了 <code>request</code> 的 <code>setParams</code> 把 <code>widget</code> 方法传入的 <code>params</code> 参数传入，这个方法，会把 <code>params</code> 设置到 <code>request</code> 的 <code>_params</code> 里面。当然，如果传入的 <code>request</code> 参数不是空，则会获取已经存在的 <code>request</code>，不过 <code>request</code> 的 <code>getInstance</code> 方法中不存在 <code>request</code> 实例的话，也会重新初始化一下。</p>
+<p>紧接着会根据 <code>$enableResponse</code> 是否为 <code>true</code> 决定，是创建 <code>resposne</code> 或者 <code>Typecho_Widget_Helper_Empty</code>。<code>Typecho_Widget_Helper_Empty</code> 这个类，我们后面再说。</p>
+<p>最后，初始化我们传入的 <code>class</code> ，并且执行 <code>execute</code> 方法。最后把 <code>class</code> 实例，放入到组件池当中，并且把组件返回。</p>
+<p>好了，现在我们说说初始化的 <code>Widget_Init</code> 类。这个类继承了 <code>Typecho_Widget</code> 类，这个类是个组件根类，这里面封装了不少数据结构，以及 <code>request</code> 、<code>response</code> 之类的东西，这个类，我们在后面用到的时候分别来说再说。初始化 <code>Typecho_Widget</code> 的时候，会传入 <code>request</code> 、<code>resposne</code> 、<code>$params</code>。<code>request</code> 、<code>resposne</code> 会赋值给实例的 <code>request</code> 、<code>resposne</code>。紧接着初始化了 <code>Typecho_Config</code>, 这个类就当做数组看就行了。再把 <code>$params</code> 调用给 <code>Typecho_Config</code> 的 <code>setDefault</code> 方法，设置初始值。</p>
+<h2 class="heading-element" id="下期预告"><span>下期预告</span>
+  <a href="#%e4%b8%8b%e6%9c%9f%e9%a2%84%e5%91%8a" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>紧接着我们看看 <code>Widget_Init</code> 类的 <code>execute</code> 方法。这里面方法也很复杂，我们下期再说。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2019-11-13 10:50:52">更新于 2019-11-13&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/typecho-source-code-analysis-3/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/Typecho%20%e6%ba%90%e7%a0%81%e5%88%86%e6%9e%90%ef%bc%883%ef%bc%89.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/typecho-source-code-analysis-3/" data-title="Typecho 源码分析（3）" data-hashtags="Typecho 源码分析"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/typecho-source-code-analysis-3/" data-hashtag="Typecho 源码分析"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/typecho-source-code-analysis-3/" data-title="Typecho 源码分析（3）"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/typecho-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-tag" title="标签 - Typecho 源码分析">Typecho 源码分析</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/typecho-source-code-analysis-2/" class="post-nav-item" rel="prev" title="Typecho 源码分析（2）"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Typecho 源码分析（2）</a><a href="/posts/typecho-source-code-analysis-4/" class="post-nav-item" rel="next" title="Typecho 源码分析（4）">Typecho 源码分析（4）<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog">
+      <div class="toc">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#前情提要">前情提要</a></li>
+    <li><a href="#正文开始">正文开始</a></li>
+    <li><a href="#下期预告">下期预告</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div><div id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" role="button" aria-label="目录"><i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/8591ca83627edc19ccb34de5fb2e863b.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

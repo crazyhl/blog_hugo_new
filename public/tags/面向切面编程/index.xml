@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>面向切面编程 - 标签 - Miracle Hao</title>
+    <link>http://localhost:1313/tags/%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 26 Mar 2020 10:08:46 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>浅谈AOP、IOC</title>
+      <link>http://localhost:1313/posts/%E6%B5%85%E8%B0%88aopioc/</link>
+      <pubDate>Thu, 26 Mar 2020 10:08:46 +0800</pubDate>
+      <guid>http://localhost:1313/posts/%E6%B5%85%E8%B0%88aopioc/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;p&gt;为什么要说这个东西呢，是因为前几天我媳妇在面试一个小姐姐的时候那个小姐姐的简历提到了了解 IOC、AOP。我忽然就笑了起来，13年来北京实习的时候面试准备的就是IOC、AOP。当时还记得面试辅导老师给我们讲，背下来背下来，几乎都会问道，但是具体让我们背下来多少概念，到现在我也记不清了，但是当提到这两个词我总会想起那些日子。&lt;/p&gt;&#xA;&lt;p&gt;兜兜转转开发做到现在，估计你要在面试的时候问我这些概念，什么叫面相切面，什么叫控制反转，我估计我很难回答到让面试官满意的程度，毕竟我真的不想背那些东西。所以，我想用这篇文章说说说我自己的理解。希望有什么不对的地方，大家交流交流。&lt;/p&gt;&#xA;&lt;p&gt;下面我会开始说我的理解，还会结合 &lt;code&gt;php&lt;/code&gt; 我能想到的一些框架进行说明。&lt;/p&gt;&#xA;&lt;p&gt;先说 &lt;code&gt;AOP&lt;/code&gt; 吧，这个东西我唯一能说出来的东西就是面相切面编程。那么什么是切面呢，这个我的理解就是在一个完整的请求过程中，我们想插入操作的一些位置就叫做切面。为什么要这么做呢，就是要跟我们的主逻辑解耦，在修改或者替换的时候造成的影响最小，比如 &lt;code&gt;Tp3.2&lt;/code&gt; 里面就会有一些 &lt;code&gt;before&lt;/code&gt; 、 &lt;code&gt;after&lt;/code&gt; 的方法定义。在 &lt;code&gt;laravel&lt;/code&gt; 这类的主流框架中实现了 &lt;code&gt;AOP&lt;/code&gt; 的东西就是中间件了。我们可以在任何想要进行前置处理或者后置处理的位置插入一个中间件。比如请求的验证就是前置操作，比如成功后的通知、这个操作的会影响的操作都可以作为后置操作。为什么要这么拆分，首先我们要保证主体流程稳定，不要因为插入了某些操作就出了问题，所以，把一些方法抽出到前置或者后置操作上就不会更改主业务部分的代码。纠错方便了，替换也方便了，比如把邮件通知换成站内信通知，只要把后置操作的中间件替换一下就ok了，主业务完全不动，&lt;code&gt;laravel&lt;/code&gt; 这类的就在路由那边就修改了。&lt;/p&gt;&#xA;&lt;p&gt;再说说 &lt;code&gt;IOC&lt;/code&gt;、&lt;code&gt;DI&lt;/code&gt; 这个说起来就会很大了，我感觉我说的也会乱乱的，不管，乱也要分析一波。什么叫依赖注入控制反转啥的，我认为这一切都要建立在一个中心容器上面的，我们回来配置文件中，或者什么地方，约定好，什么接口的实现类是什么，约定好一些常量值。在我们有需要的时候，跟容器申请，那么申请回来的实现类是单例的，还是每次都是初始化的，这个也都是在配置文件约定好的。&lt;code&gt;IOC&lt;/code&gt; 其实到这就差不多了，上面虽然没怎么说控制反转，其实也是说了的，什么是反转啊，反转了什么啊，以前的操作，我们就是各种 &lt;code&gt;new&lt;/code&gt; 就完了，反转以后，不用 &lt;code&gt;new&lt;/code&gt; 了，我们跟容器申请，这就是我理解的控制反转。有了 &lt;code&gt;IOC&lt;/code&gt; 就有了 &lt;code&gt;DI&lt;/code&gt;，这是个什么东西呢，在容器的初期，我们比如要 &lt;code&gt;A&lt;/code&gt;，这个 &lt;code&gt;A&lt;/code&gt; 依赖 &lt;code&gt;B&lt;/code&gt; 和 &lt;code&gt;C&lt;/code&gt;，我们就得从容器申请到 &lt;code&gt;B&lt;/code&gt; 和 &lt;code&gt;C&lt;/code&gt;，然后在申请 &lt;code&gt;A&lt;/code&gt; 并把&lt;code&gt;B&lt;/code&gt; 和 &lt;code&gt;C&lt;/code&gt; 传递进去用来初始化 &lt;code&gt;A&lt;/code&gt;，这本来没什么，毕竟程序员懒，不想这样复杂，所以就有了 &lt;code&gt;DI&lt;/code&gt;，这东西是怎么运行的呢，就是利用&lt;code&gt;反射&lt;/code&gt;技术，让容器自己分析依赖并且从容器中获取回来，并且初始化。由于 &lt;code&gt;DI&lt;/code&gt; 用了反射，所以会使效率降低一些不过也有优化方案不用担心的&lt;/p&gt;&#xA;&lt;p&gt;上面就是我的理解了，简单来说，就是为了不背锅，减少风险，写代码轻松，技术就是这么进步的。下篇文章上一个自己理解的简单的容器把。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

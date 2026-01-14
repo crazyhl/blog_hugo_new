@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Let&#39;s Build a Forum With Laravel and TDD 笔记 003 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="
+今天学习了第三集和第四集，下面依然是个人总结
+没错，第三集用到了单元测试也就是 unit 的部分，跟我之前看其他文章了了解的差不多， feature 主要用来测试面向用户的功能 unit 是用来测试我们内部功能的，也就是一个个的最小单元，或者其他的合并单元，然后由这些单元组合成为 controller 里面的代码最终呈现给用户，然后 feature 再来测试 controller 里面的代码。 关于测试以前都是弄出一个数据然后我们自己调试页面然后观察数据，现在就可以用 unit 和 feature 来让机器帮我们判定了。我们期待什么值，就让他来断言一下就ok了，但是个人还是比较担心出问题，比如数据不全神马的，这个还得后期继续考虑一下 factory 中 make 和 create 的区别， make 仅仅是生成了数据，create 不仅仅是生成了数据，并且将数据保存到数据库中，所以 create 可以理解为首先 make 然后 save 了。 在测试文件中 be 方法的作用，就是把当前我们生成的用户，设置为登录状态 在测试的时候不仅要测试正常的情况，也要测试异常的情况 功能职责要分清楚，比如发布 Reply 的时候就应该把方法写入到 ReplyController 中 关联关系居然可以添加数据，详情参见这里吧 https://laravel.com/docs/5.6/eloquent-relationships#the-create-method "><meta name="keywords" content='Let&#39;s Build A Forum with Laravel and TDD'>
+  <meta itemprop="name" content="Let&#39;s Build A Forum with Laravel and TDD 笔记 003">
+  <meta itemprop="description" content="今天学习了第三集和第四集，下面依然是个人总结
+没错，第三集用到了单元测试也就是 unit 的部分，跟我之前看其他文章了了解的差不多， feature 主要用来测试面向用户的功能 unit 是用来测试我们内部功能的，也就是一个个的最小单元，或者其他的合并单元，然后由这些单元组合成为 controller 里面的代码最终呈现给用户，然后 feature 再来测试 controller 里面的代码。 关于测试以前都是弄出一个数据然后我们自己调试页面然后观察数据，现在就可以用 unit 和 feature 来让机器帮我们判定了。我们期待什么值，就让他来断言一下就ok了，但是个人还是比较担心出问题，比如数据不全神马的，这个还得后期继续考虑一下 factory 中 make 和 create 的区别， make 仅仅是生成了数据，create 不仅仅是生成了数据，并且将数据保存到数据库中，所以 create 可以理解为首先 make 然后 save 了。 在测试文件中 be 方法的作用，就是把当前我们生成的用户，设置为登录状态 在测试的时候不仅要测试正常的情况，也要测试异常的情况 功能职责要分清楚，比如发布 Reply 的时候就应该把方法写入到 ReplyController 中 关联关系居然可以添加数据，详情参见这里吧 https://laravel.com/docs/5.6/eloquent-relationships#the-create-method">
+  <meta itemprop="datePublished" content="2018-06-02T15:09:00+00:00">
+  <meta itemprop="dateModified" content="2018-06-02T15:09:00+00:00">
+  <meta itemprop="wordCount" content="45">
+  <meta itemprop="keywords" content="Let&#39;s Build a Forum With Laravel and TDD"><meta property="og:url" content="http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-003/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="Let&#39;s Build A Forum with Laravel and TDD 笔记 003">
+  <meta property="og:description" content="今天学习了第三集和第四集，下面依然是个人总结
+没错，第三集用到了单元测试也就是 unit 的部分，跟我之前看其他文章了了解的差不多， feature 主要用来测试面向用户的功能 unit 是用来测试我们内部功能的，也就是一个个的最小单元，或者其他的合并单元，然后由这些单元组合成为 controller 里面的代码最终呈现给用户，然后 feature 再来测试 controller 里面的代码。 关于测试以前都是弄出一个数据然后我们自己调试页面然后观察数据，现在就可以用 unit 和 feature 来让机器帮我们判定了。我们期待什么值，就让他来断言一下就ok了，但是个人还是比较担心出问题，比如数据不全神马的，这个还得后期继续考虑一下 factory 中 make 和 create 的区别， make 仅仅是生成了数据，create 不仅仅是生成了数据，并且将数据保存到数据库中，所以 create 可以理解为首先 make 然后 save 了。 在测试文件中 be 方法的作用，就是把当前我们生成的用户，设置为登录状态 在测试的时候不仅要测试正常的情况，也要测试异常的情况 功能职责要分清楚，比如发布 Reply 的时候就应该把方法写入到 ReplyController 中 关联关系居然可以添加数据，详情参见这里吧 https://laravel.com/docs/5.6/eloquent-relationships#the-create-method">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2018-06-02T15:09:00+00:00">
+    <meta property="article:modified_time" content="2018-06-02T15:09:00+00:00">
+    <meta property="article:tag" content="Let&#39;s Build a Forum With Laravel and TDD">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Let&#39;s Build A Forum with Laravel and TDD 笔记 003">
+  <meta name="twitter:description" content="今天学习了第三集和第四集，下面依然是个人总结
+没错，第三集用到了单元测试也就是 unit 的部分，跟我之前看其他文章了了解的差不多， feature 主要用来测试面向用户的功能 unit 是用来测试我们内部功能的，也就是一个个的最小单元，或者其他的合并单元，然后由这些单元组合成为 controller 里面的代码最终呈现给用户，然后 feature 再来测试 controller 里面的代码。 关于测试以前都是弄出一个数据然后我们自己调试页面然后观察数据，现在就可以用 unit 和 feature 来让机器帮我们判定了。我们期待什么值，就让他来断言一下就ok了，但是个人还是比较担心出问题，比如数据不全神马的，这个还得后期继续考虑一下 factory 中 make 和 create 的区别， make 仅仅是生成了数据，create 不仅仅是生成了数据，并且将数据保存到数据库中，所以 create 可以理解为首先 make 然后 save 了。 在测试文件中 be 方法的作用，就是把当前我们生成的用户，设置为登录状态 在测试的时候不仅要测试正常的情况，也要测试异常的情况 功能职责要分清楚，比如发布 Reply 的时候就应该把方法写入到 ReplyController 中 关联关系居然可以添加数据，详情参见这里吧 https://laravel.com/docs/5.6/eloquent-relationships#the-create-method">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-003/" title="Let&#39;s Build A Forum with Laravel and TDD 笔记 003 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-002/" title="Let&#39;s Build A Forum with Laravel and TDD 笔记 002" /><link rel="next" type="text/html" href="http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-004/" title="Let&#39;s Build A Forum with Laravel and TDD 笔记 004" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-003/index.md" title="Let's Build A Forum with Laravel and TDD 笔记 003 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Let's Build A Forum with Laravel and TDD 笔记 003",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/lets-build-a-forum-with-laravel-and-tdd-notes-003\/"
+    },"genre": "posts","keywords": "Let\u0027s Build A Forum with Laravel and TDD","wordcount":  45 ,
+    "url": "http:\/\/localhost:1313\/posts\/lets-build-a-forum-with-laravel-and-tdd-notes-003\/","datePublished": "2018-06-02T15:09:00+00:00","dateModified": "2018-06-02T15:09:00+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Let&#39;s Build a Forum With Laravel and TDD 笔记 003</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2018-06-02 15:09:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2018-06-02">2018-06-02</time></span>&nbsp;<span title="45 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p><img loading="lazy" src='https://www.cimple.ink/images/2018/05/30/89a4759f89f6e8680d9c06d0661d13db.png' alt="图片alt"></p>
+<p>今天学习了第三集和第四集，下面依然是个人总结</p>
+<ol>
+<li>没错，第三集用到了单元测试也就是 <code>unit</code> 的部分，跟我之前看其他文章了了解的差不多， <code>feature</code> 主要用来测试面向用户的功能 <code>unit</code> 是用来测试我们内部功能的，也就是一个个的最小单元，或者其他的合并单元，然后由这些单元组合成为 <code>controller</code> 里面的代码最终呈现给用户，然后 <code>feature</code> 再来测试 <code>controller</code> 里面的代码。</li>
+<li>关于测试以前都是弄出一个数据然后我们自己调试页面然后观察数据，现在就可以用 <code>unit</code> 和 <code>feature</code> 来让机器帮我们判定了。我们期待什么值，就让他来断言一下就ok了，但是个人还是比较担心出问题，比如数据不全神马的，这个还得后期继续考虑一下</li>
+<li><code>factory</code> 中 <code>make</code> 和 <code>create</code> 的区别， <code>make</code> 仅仅是生成了数据，<code>create</code> 不仅仅是生成了数据，并且将数据保存到数据库中，所以 <code>create</code> 可以理解为首先 <code>make</code> 然后 <code>save</code> 了。</li>
+<li>在测试文件中 <code>be</code> 方法的作用，就是把当前我们生成的用户，设置为登录状态</li>
+<li>在测试的时候不仅要测试正常的情况，也要测试异常的情况</li>
+<li>功能职责要分清楚，比如发布 <code>Reply</code> 的时候就应该把方法写入到 <code>ReplyController</code> 中</li>
+<li>关联关系居然可以添加数据，详情参见这里吧 <a href="https://laravel.com/docs/5.6/eloquent-relationships#the-create-method" target="_blank" rel="external nofollow noopener noreferrer">https://laravel.com/docs/5.6/eloquent-relationships#the-create-method</a></li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2018-06-02 15:09:00">更新于 2018-06-02&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/lets-build-a-forum-with-laravel-and-tdd-notes-003/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/Let-s-Build-A-Forum-with-Laravel-and-TDD-%e7%ac%94%e8%ae%b0-003.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-003/" data-title="Let&#39;s Build a Forum With Laravel and TDD 笔记 003" data-hashtags="Let&#39;s Build A Forum with Laravel and TDD"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-003/" data-hashtag="Let&#39;s Build A Forum with Laravel and TDD"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/lets-build-a-forum-with-laravel-and-tdd-notes-003/" data-title="Let&#39;s Build a Forum With Laravel and TDD 笔记 003"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/lets-build-a-forum-with-laravel-and-tdd/" class="post-tag" title="标签 - Let&#39;s Build a Forum With Laravel and TDD">Let&#39;s Build a Forum With Laravel and TDD</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/lets-build-a-forum-with-laravel-and-tdd-notes-002/" class="post-nav-item" rel="prev" title="Let&#39;s Build a Forum With Laravel and TDD 笔记 002"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Let&#39;s Build a Forum With Laravel and TDD 笔记 002</a><a href="/posts/lets-build-a-forum-with-laravel-and-tdd-notes-004/" class="post-nav-item" rel="next" title="Let&#39;s Build a Forum With Laravel and TDD 笔记 004">Let&#39;s Build a Forum With Laravel and TDD 笔记 004<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/610cd33344bbec04da7db56f0fb4f3b7.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

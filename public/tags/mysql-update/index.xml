@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mysql Update - 标签 - Miracle Hao</title>
+    <link>http://localhost:1313/tags/mysql-update/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 11 Sep 2016 21:16:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/mysql-update/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mysql 批量更新多行笔记</title>
+      <link>http://localhost:1313/posts/mysql-batch-update-multiline-notes/</link>
+      <pubDate>Sun, 11 Sep 2016 21:16:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/mysql-batch-update-multiline-notes/</guid>
+      <category domain="http://localhost:1313/categories/mysql/">MySql</category>
+      <description>&lt;p&gt;今天在公司写代码的时候使用到了 mysql 的批量更新，但是呢，自己之前对其了解的果然不够多啊。所以，回家以后赶紧查查，做好笔记，让自己有更深的记忆。以及更多的了解。&lt;/p&gt;&#xA;&lt;p&gt;首先我们构造好了一个测试表，如下图&lt;/p&gt;&#xA;&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://www.cimple.ink/images/2019/03/06/387ea4a3dff34a73889d73dcda85d1d3.png&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

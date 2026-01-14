@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Php 细节补全 - 标签 - Miracle Hao</title>
+    <link>http://localhost:1313/tags/php-%E7%BB%86%E8%8A%82%E8%A1%A5%E5%85%A8/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 19 Sep 2017 22:50:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/php-%E7%BB%86%E8%8A%82%E8%A1%A5%E5%85%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PHP 细节补全计划：引用</title>
+      <link>http://localhost:1313/posts/php-detail-completion-plan-reference/</link>
+      <pubDate>Tue, 19 Sep 2017 22:50:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/php-detail-completion-plan-reference/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://www.cimple.ink/images/2019/03/06/0664506a46a7649adc31545165d08f41.jpg&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;最近在公司比较忙，以前有空闲的时候没有发现的东西，反而再忙的时候会加深体会。所以就动了心思准备写一个 php 细节补全的系列，不知道能写多少，慢慢来吧，这个就是第一篇了。&lt;/p&gt;&#xA;&lt;p&gt;其实，平时我个人觉得再使用&lt;code&gt;引用&lt;/code&gt;的时候机会并没有那么多，但是呢，&lt;code&gt;引用&lt;/code&gt;这个东西是绝对不可以忽略的。&lt;/p&gt;&#xA;&lt;p&gt;引用平时就我个人来说使用的场景有如下几个：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;有批量处理数组数据的时候会使用引用，这样再方法里面就不用在单独返回了，比较省事&lt;/li&gt;&#xA;&lt;li&gt;再有递归调用的时候也会使用，但是使用的时候需要注意小心踩坑&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;剩下的貌似就不是很多了，但是这两天看过几个面试题，让我平时没注意的一些东西或者说没有深入考虑的东西，有了更深入的理解。&lt;/p&gt;&#xA;&lt;p&gt;先看下面这个题：&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

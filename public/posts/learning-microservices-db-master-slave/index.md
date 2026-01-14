@@ -1,0 +1,204 @@
+# 从零开始学习实践微服务 - 数据库读写分离篇
+
+
+## 前言
+这是一个长期的计划，从零开始学习并实践微服务。为什么要实践这个？因为火？并不是，实际上是在开发的这么多年里面，除了最初始是用lnmp自己维护过一些数据库之类的，其实就是安装了一下，配置都没有修改过什么。到了北京以后，一直都是在用云服务提供的组件。所以，这么多年的开发实际上自己并没有任何服务的运维经验，外加做 php 的研发微服务的经验也并不是很充足。所以就有了这次的计划，从数据库的读写分离配置开始，到最后整个服务从服务器上全部跑起来。预计这个计划在十一之前能够搞定吧。
+
+## 计划
+
+* mysql 读写分离
+* 基于 swoole 开始实现一个 mvc 框架
+* mq 的使用 
+* es 的使用
+* k8s 的使用
+* vue 前端的配置和使用
+* 服务治理
+* 服务管理
+
+目前前四个是确认的了，后面的还得看计划在进行相应的变动在逐步完善
+
+## 开始
+今天开始弄读写分离，4个数据库，1主 3从，主跟其中一个从同步，另外两个从库跟前面的从库进行同步。
+### 数据库配置
+我们采用 docker 来进行此次测试。
+docker-compose file如下:
+```docker
+version: '3.1'
+
+services:
+  db1:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      # 配置文件
+      - ./db1/conf/conf.d:/etc/mysql/conf.d:ro
+    ports:
+      - 33061:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456789
+    networks:
+      mynet:
+        ipv4_address: 172.28.22.100
+  db2:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      # 配置文件
+      - ./db2/conf/conf.d:/etc/mysql/conf.d:ro
+    ports:
+      - 33062:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456789
+    networks:
+      mynet:
+        ipv4_address: 172.28.22.101
+  db3:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      # 配置文件
+      - ./db3/conf/conf.d:/etc/mysql/conf.d:ro
+    ports:
+      - 33063:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456789
+    networks:
+      mynet:
+        ipv4_address: 172.28.22.103
+  db4:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      # 配置文件
+      - ./db4/conf/conf.d:/etc/mysql/conf.d:ro
+    ports:
+      - 33064:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456789
+    networks:
+      mynet:
+        ipv4_address: 172.28.22.104
+
+networks:
+  mynet:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.22.0/24
+```
+我们自定了ip，为了将来在读写分离授权的时候好处理。`command: --default-authentication-plugin=mysql_native_password` 这个命令是解决 mysql8 可以采用账号密码登录用的。
+
+我们新建了4个文件夹存储我们的配置文件，配置如下。
+```docker
+volumes:
+      # 配置文件
+      - ./db4/conf/conf.d:/etc/mysql/conf.d:ro
+```
+主库 db1 的配置
+```conf
+[mysqld]
+server-id=1
+log-bin=master-bin
+log-bin-index=master-bin.index
+sync_binlog = 1         #控制数据库的binlog刷到磁盘上去 , 0 不控制，性能最好，1每次事物提交都会刷到日志文件中，性能最差，最安全
+binlog_format = mixed   #binlog日志格式，mysql默认采用statement，建议使用mixed
+expire_logs_days = 7                           #binlog过期清理时间
+max_binlog_size = 100m                    #binlog每个日志文件大小
+binlog_cache_size = 4m                        #binlog缓存大小
+max_binlog_cache_size= 512m              #最大binlog缓存大
+slave-skip-errors = all #跳过从库错误
+```
+server-id=1 这是服务器的id，可以根据需求自己定，保证每个服务器的id不一致就可以了
+log-bin=master-bin binlog文件的命名前缀
+log-bin-index=master-bin.index binlog index 文件的名称
+剩下的配置可以看上面的注释
+
+从库 db1 配置
+```conf
+[mysqld]
+server-id=2
+log-bin=slave-master-bin
+log-bin-index=slave-master-bin.index
+log_slave_updates=1
+inlog_format = mixed   #binlog日志格式，mysql默认采用statement，建议使用mixed
+expire_logs_days = 7                           #binlog过期清理时间
+max_binlog_size = 100m                    #binlog每个日志文件大小
+binlog_cache_size = 4m                        #binlog缓存大小
+max_binlog_cache_size= 512m              #最大binlog缓存大
+slave-skip-errors = all #跳过从库错误
+replicate_wild_ignore_table=information_schema.%
+replicate_wild_ignore_table=mysql.%
+replicate_wild_ignore_table=sys.%
+replicate_wild_ignore_table=performance_schema.%
+```
+log_slave_updates=1 log_slave_updates参数用来控制M01是否把所有的操作写入到binary log，默认的情况下mysql是关闭的。因为还有两个度要跟这个库同步，所以要开启这个参数。
+replicate_wild_ignore_table 这个是忽略同步的库
+
+db2 & db3 配置
+```conf
+[mysqld]
+server-id=3
+
+replicate_wild_ignore_table=information_schema.%
+replicate_wild_ignore_table=mysql.%
+replicate_wild_ignore_table=sys.%
+replicate_wild_ignore_table=performance_schema.%
+```
+参数是跟上面一样的，释义上面都有。
+
+配置完后，我们就可以启动数据库了，不出意外数据库就可以正常启动了。
+
+### 数据库操作
+主库 和 slave1 
+```mysql
+CREATE USER 'repl_user'@'172.28.22.%' IDENTIFIED BY 'password';
+GRANT REPLICATION SLAVE ON *.* TO 'repl_user'@'172.28.22.%';
+FLUSH PRIVILEGES;
+```
+创建用户和授权，这个是用来进行同步用的，所以我们 ip 限制在了内网
+
+主库
+```mysql
+SHOW MASTER STATUS;
+```
+记录这个的参数下面要用
+
+slave1 进行同步配置
+```mysql
+CHANGE MASTER TO MASTER_HOST = '172.28.22.100',  MASTER_USER = 'repl_user', MASTER_PASSWORD = 'password',MASTER_PORT = 3306,MASTER_LOG_FILE='master-bin.000003',MASTER_LOG_POS=1512,MASTER_HEARTBEAT_PERIOD = 10,slave_net_timeout=25;
+```
+MASTER_LOG_FILE='mysql-bin.000005',#与主库File 保持一致
+MASTER_LOG_POS=120 , #与主库Position 保持一致
+MASTER_HEARTBEAT_PERIOD 心跳时间保活的，用10 吧
+slave_net_timeout 从库超时重连时间，这个根据来设置吧，越短越好，要不然会延迟很大
+
+继续执行
+```mysql
+START SLAVE;
+```
+
+然后执行 `SHOW SLAVE STATUS;` 查看 `SLAVE_IO_RUNNING` 和 `SLAVE_SQL_RUNNING` 是否是 `Yes` 如果是就成功了，如果不是，应该会有报错提示的，或者没有执行 `start slave`
+
+继续执行 
+`SHOW MASTER STATUS`
+继续下来给后面用
+
+slave2 和 slave 3
+跟上面一样，配置 master 并开启同步。记得查看状态，如果没出问题，我们在主库执行操作，后面的数据就都可以同步过来了。
+
+## 补充说明
+这个是全新同步用的，如果是前置有数据的话，可以先把后续数据补充进去，在进行同步，这个我们下篇文章再说。
+
+
+## 结语
+数据库同步就完事了。完事了么？如果是demo级别，算是完事了，但是实际上呢，这还是个开始，根据请求量的提升，我们要逐步优化参数的，所以我们会在后续在服务器上部署后，进行优化，到时候我们再来补充。
+
+---
+
+> 作者:   
+> URL: http://localhost:1313/posts/learning-microservices-db-master-slave/  
+

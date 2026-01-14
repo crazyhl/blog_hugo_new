@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>PHP归并排序 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content=" 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 &lt;?php function sortArr($arr) { if (count($arr) &lt; 2) { return $arr; } $mid = count($arr) / 2; $arr1 = array_slice($arr, 0, $mid); $arr2 = array_slice($arr, $mid, count($arr)); $arr1 = sortArr($arr1); $arr2 = sortArr($arr2); return mergeArr($arr1, $arr2); } function mergeArr($arr1, $arr2) { if (!is_array($arr1)) { $arr1[] = $arr1; } if (!is_array($arr2)) { $arr2[] = $arr2; } $i =0; $j = 0; $arr1Length = count($arr1); $arr2Length = count($arr2); $returnArr = []; while($i &lt; $arr1Length &amp;&amp; $j &lt; $arr2Length) { if($arr1[$i] &gt; $arr2[$j]) { $returnArr[] = $arr2[$j]; $j&#43;&#43;; } else { $returnArr[] = $arr1[$i]; $i&#43;&#43;; } } for($tmp = $i; $tmp &lt; $arr1Length; $tmp&#43;&#43;) { $returnArr[] = $arr1[$tmp]; } for($tmp = $j; $tmp &lt; $arr2Length; $tmp&#43;&#43;) { $returnArr[] = $arr2[$tmp]; } return $returnArr; } $arr = [1,3,2,5,7,9,3,1]; $sortableArr = sortArr($arr); foreach ($sortableArr as $a) { print_r($a . &#34;\n&#34;); } 说实话，算法这东西，挺好玩的，以前还搞过快排，但是忘却了，今天这个归并排序应该很难忘记了，毕竟理解起来要比快排好得多，但是快排回来后面补充
+"><meta name="keywords" content='排序, 归并排序'>
+  <meta itemprop="name" content="PHP归并排序">
+  <meta itemprop="description" content="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 &lt;?php function sortArr($arr) { if (count($arr) &lt; 2) { return $arr; } $mid = count($arr) / 2; $arr1 = array_slice($arr, 0, $mid); $arr2 = array_slice($arr, $mid, count($arr)); $arr1 = sortArr($arr1); $arr2 = sortArr($arr2); return mergeArr($arr1, $arr2); } function mergeArr($arr1, $arr2) { if (!is_array($arr1)) { $arr1[] = $arr1; } if (!is_array($arr2)) { $arr2[] = $arr2; } $i =0; $j = 0; $arr1Length = count($arr1); $arr2Length = count($arr2); $returnArr = []; while($i &lt; $arr1Length &amp;&amp; $j &lt; $arr2Length) { if($arr1[$i] &gt; $arr2[$j]) { $returnArr[] = $arr2[$j]; $j&#43;&#43;; } else { $returnArr[] = $arr1[$i]; $i&#43;&#43;; } } for($tmp = $i; $tmp &lt; $arr1Length; $tmp&#43;&#43;) { $returnArr[] = $arr1[$tmp]; } for($tmp = $j; $tmp &lt; $arr2Length; $tmp&#43;&#43;) { $returnArr[] = $arr2[$tmp]; } return $returnArr; } $arr = [1,3,2,5,7,9,3,1]; $sortableArr = sortArr($arr); foreach ($sortableArr as $a) { print_r($a . &#34;\n&#34;); } 说实话，算法这东西，挺好玩的，以前还搞过快排，但是忘却了，今天这个归并排序应该很难忘记了，毕竟理解起来要比快排好得多，但是快排回来后面补充">
+  <meta itemprop="datePublished" content="2016-09-25T22:23:00+00:00">
+  <meta itemprop="dateModified" content="2016-09-25T22:23:00+00:00">
+  <meta itemprop="wordCount" content="192">
+  <meta itemprop="keywords" content="排序,归并排序"><meta property="og:url" content="http://localhost:1313/posts/php-merge-sort/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="PHP归并排序">
+  <meta property="og:description" content="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 &lt;?php function sortArr($arr) { if (count($arr) &lt; 2) { return $arr; } $mid = count($arr) / 2; $arr1 = array_slice($arr, 0, $mid); $arr2 = array_slice($arr, $mid, count($arr)); $arr1 = sortArr($arr1); $arr2 = sortArr($arr2); return mergeArr($arr1, $arr2); } function mergeArr($arr1, $arr2) { if (!is_array($arr1)) { $arr1[] = $arr1; } if (!is_array($arr2)) { $arr2[] = $arr2; } $i =0; $j = 0; $arr1Length = count($arr1); $arr2Length = count($arr2); $returnArr = []; while($i &lt; $arr1Length &amp;&amp; $j &lt; $arr2Length) { if($arr1[$i] &gt; $arr2[$j]) { $returnArr[] = $arr2[$j]; $j&#43;&#43;; } else { $returnArr[] = $arr1[$i]; $i&#43;&#43;; } } for($tmp = $i; $tmp &lt; $arr1Length; $tmp&#43;&#43;) { $returnArr[] = $arr1[$tmp]; } for($tmp = $j; $tmp &lt; $arr2Length; $tmp&#43;&#43;) { $returnArr[] = $arr2[$tmp]; } return $returnArr; } $arr = [1,3,2,5,7,9,3,1]; $sortableArr = sortArr($arr); foreach ($sortableArr as $a) { print_r($a . &#34;\n&#34;); } 说实话，算法这东西，挺好玩的，以前还搞过快排，但是忘却了，今天这个归并排序应该很难忘记了，毕竟理解起来要比快排好得多，但是快排回来后面补充">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2016-09-25T22:23:00+00:00">
+    <meta property="article:modified_time" content="2016-09-25T22:23:00+00:00">
+    <meta property="article:tag" content="排序">
+    <meta property="article:tag" content="归并排序">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PHP归并排序">
+  <meta name="twitter:description" content="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 &lt;?php function sortArr($arr) { if (count($arr) &lt; 2) { return $arr; } $mid = count($arr) / 2; $arr1 = array_slice($arr, 0, $mid); $arr2 = array_slice($arr, $mid, count($arr)); $arr1 = sortArr($arr1); $arr2 = sortArr($arr2); return mergeArr($arr1, $arr2); } function mergeArr($arr1, $arr2) { if (!is_array($arr1)) { $arr1[] = $arr1; } if (!is_array($arr2)) { $arr2[] = $arr2; } $i =0; $j = 0; $arr1Length = count($arr1); $arr2Length = count($arr2); $returnArr = []; while($i &lt; $arr1Length &amp;&amp; $j &lt; $arr2Length) { if($arr1[$i] &gt; $arr2[$j]) { $returnArr[] = $arr2[$j]; $j&#43;&#43;; } else { $returnArr[] = $arr1[$i]; $i&#43;&#43;; } } for($tmp = $i; $tmp &lt; $arr1Length; $tmp&#43;&#43;) { $returnArr[] = $arr1[$tmp]; } for($tmp = $j; $tmp &lt; $arr2Length; $tmp&#43;&#43;) { $returnArr[] = $arr2[$tmp]; } return $returnArr; } $arr = [1,3,2,5,7,9,3,1]; $sortableArr = sortArr($arr); foreach ($sortableArr as $a) { print_r($a . &#34;\n&#34;); } 说实话，算法这东西，挺好玩的，以前还搞过快排，但是忘却了，今天这个归并排序应该很难忘记了，毕竟理解起来要比快排好得多，但是快排回来后面补充">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/php-merge-sort/" title="PHP归并排序 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/redis-zsets-data-type-inconsistency/" title="Redis zSets 数据类型不一致踏坑记" /><link rel="next" type="text/html" href="http://localhost:1313/posts/reserved-php-regular-expression-implementation-%E6%9F%90%E4%BA%BA/" title="[转载] php正则表达式实现@某人" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/php-merge-sort/index.md" title="PHP归并排序 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "PHP归并排序",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/php-merge-sort\/"
+    },"genre": "posts","keywords": "排序, 归并排序","wordcount":  192 ,
+    "url": "http:\/\/localhost:1313\/posts\/php-merge-sort\/","datePublished": "2016-09-25T22:23:00+00:00","dateModified": "2016-09-25T22:23:00+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>PHP归并排序</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a>&ensp;<a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category" title="分类 - 算法"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 算法</a></span></div><div class="post-meta-line"><span title="发布于 2016-09-25 22:23:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2016-09-25">2016-09-25</time></span>&nbsp;<span title="192 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 200 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">sortArr</span><span class="p">(</span><span class="nv">$arr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">count</span><span class="p">(</span><span class="nv">$arr</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nv">$arr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$mid</span> <span class="o">=</span> <span class="nx">count</span><span class="p">(</span><span class="nv">$arr</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$arr1</span> <span class="o">=</span> <span class="nx">array_slice</span><span class="p">(</span><span class="nv">$arr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">$mid</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$arr2</span> <span class="o">=</span> <span class="nx">array_slice</span><span class="p">(</span><span class="nv">$arr</span><span class="p">,</span> <span class="nv">$mid</span><span class="p">,</span> <span class="nx">count</span><span class="p">(</span><span class="nv">$arr</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$arr1</span> <span class="o">=</span> <span class="nx">sortArr</span><span class="p">(</span><span class="nv">$arr1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$arr2</span> <span class="o">=</span> <span class="nx">sortArr</span><span class="p">(</span><span class="nv">$arr2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">mergeArr</span><span class="p">(</span><span class="nv">$arr1</span><span class="p">,</span> <span class="nv">$arr2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">mergeArr</span><span class="p">(</span><span class="nv">$arr1</span><span class="p">,</span> <span class="nv">$arr2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">is_array</span><span class="p">(</span><span class="nv">$arr1</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$arr1</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$arr1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">is_array</span><span class="p">(</span><span class="nv">$arr2</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$arr2</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$arr2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">$i</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$arr1Length</span> <span class="o">=</span> <span class="nx">count</span><span class="p">(</span><span class="nv">$arr1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$arr2Length</span> <span class="o">=</span> <span class="nx">count</span><span class="p">(</span><span class="nv">$arr2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$returnArr</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$arr1Length</span> <span class="o">&amp;&amp;</span> <span class="nv">$j</span> <span class="o">&lt;</span> <span class="nv">$arr2Length</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nv">$arr1</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nv">$arr2</span><span class="p">[</span><span class="nv">$j</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$returnArr</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$arr2</span><span class="p">[</span><span class="nv">$j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$j</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$returnArr</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$arr1</span><span class="p">[</span><span class="nv">$i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span><span class="p">(</span><span class="nv">$tmp</span> <span class="o">=</span> <span class="nv">$i</span><span class="p">;</span> <span class="nv">$tmp</span> <span class="o">&lt;</span> <span class="nv">$arr1Length</span><span class="p">;</span> <span class="nv">$tmp</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$returnArr</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$arr1</span><span class="p">[</span><span class="nv">$tmp</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span><span class="p">(</span><span class="nv">$tmp</span> <span class="o">=</span> <span class="nv">$j</span><span class="p">;</span> <span class="nv">$tmp</span> <span class="o">&lt;</span> <span class="nv">$arr2Length</span><span class="p">;</span> <span class="nv">$tmp</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$returnArr</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$arr2</span><span class="p">[</span><span class="nv">$tmp</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nv">$returnArr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$sortableArr</span> <span class="o">=</span> <span class="nx">sortArr</span><span class="p">(</span><span class="nv">$arr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span> <span class="p">(</span><span class="nv">$sortableArr</span> <span class="k">as</span> <span class="nv">$a</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">print_r</span><span class="p">(</span><span class="nv">$a</span> <span class="o">.</span> <span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>说实话，算法这东西，挺好玩的，以前还搞过快排，但是忘却了，今天这个归并排序应该很难忘记了，毕竟理解起来要比快排好得多，但是快排回来后面补充</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2016-09-25 22:23:00">更新于 2016-09-25&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/php-merge-sort/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/PHP%e5%bd%92%e5%b9%b6%e6%8e%92%e5%ba%8f.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/php-merge-sort/" data-title="PHP归并排序" data-hashtags="排序,归并排序"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/php-merge-sort/" data-hashtag="排序"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/php-merge-sort/" data-title="PHP归并排序"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/%E6%8E%92%E5%BA%8F/" class="post-tag" title="标签 - 排序">排序</a><a href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" class="post-tag" title="标签 - 归并排序">归并排序</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/redis-zsets-data-type-inconsistency/" class="post-nav-item" rel="prev" title="Redis ZSets 数据类型不一致踏坑记"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Redis ZSets 数据类型不一致踏坑记</a><a href="/posts/reserved-php-regular-expression-implementation-%E6%9F%90%E4%BA%BA/" class="post-nav-item" rel="next" title="[转载] Php正则表达式实现@某人">[转载] Php正则表达式实现@某人<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/2c32121f265bde0cb087fcb4907f318e.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

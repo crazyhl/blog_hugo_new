@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Typecho 源码分析（2） - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="前情提要 上一篇我们分析到了 install.php 文件的 set_include_path。今天我们继续。
+"><meta name="keywords" content='Typecho 源码分析'>
+  <meta itemprop="name" content="Typecho 源码分析（2）">
+  <meta itemprop="description" content="前情提要 上一篇我们分析到了 install.php 文件的 set_include_path。今天我们继续。">
+  <meta itemprop="datePublished" content="2019-11-09T10:50:52+00:00">
+  <meta itemprop="dateModified" content="2019-11-09T10:50:52+00:00">
+  <meta itemprop="wordCount" content="1986">
+  <meta itemprop="keywords" content="Typecho 源码分析"><meta property="og:url" content="http://localhost:1313/posts/typecho-source-code-analysis-2/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="Typecho 源码分析（2）">
+  <meta property="og:description" content="前情提要 上一篇我们分析到了 install.php 文件的 set_include_path。今天我们继续。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2019-11-09T10:50:52+00:00">
+    <meta property="article:modified_time" content="2019-11-09T10:50:52+00:00">
+    <meta property="article:tag" content="Typecho 源码分析">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Typecho 源码分析（2）">
+  <meta name="twitter:description" content="前情提要 上一篇我们分析到了 install.php 文件的 set_include_path。今天我们继续。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/typecho-source-code-analysis-2/" title="Typecho 源码分析（2） - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/talk-about-the-loading-of-php-files/" title="说说 php 文件的加载" /><link rel="next" type="text/html" href="http://localhost:1313/posts/typecho-source-code-analysis-3/" title="Typecho 源码分析（3）" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/typecho-source-code-analysis-2/index.md" title="Typecho 源码分析（2） - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Typecho 源码分析（2）",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/typecho-source-code-analysis-2\/"
+    },"genre": "posts","keywords": "Typecho 源码分析","wordcount":  1986 ,
+    "url": "http:\/\/localhost:1313\/posts\/typecho-source-code-analysis-2\/","datePublished": "2019-11-09T10:50:52+00:00","dateModified": "2019-11-09T10:50:52+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Typecho 源码分析（2）</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2019-11-09 10:50:52"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2019-11-09">2019-11-09</time></span>&nbsp;<span title="1986 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2000 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 10 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前情提要">前情提要</a></li>
+    <li><a href="#进入安装流程">进入安装流程</a>
+      <ul>
+        <li><a href="#安装第一步">安装第一步</a></li>
+        <li><a href="#进入配置">进入配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#结语">结语</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 class="heading-element" id="前情提要"><span>前情提要</span>
+  <a href="#%e5%89%8d%e6%83%85%e6%8f%90%e8%a6%81" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>上一篇我们分析到了 <code>install.php</code> 文件的 <code>set_include_path</code>。今天我们继续。</p>
+<h2 class="heading-element" id="进入安装流程"><span>进入安装流程</span>
+  <a href="#%e8%bf%9b%e5%85%a5%e5%ae%89%e8%a3%85%e6%b5%81%e7%a8%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>来到了引入 <code>Typecho/Common.php</code> 这样，也许你会很奇怪，找不到这个目录呢？不要忘了我们上面设置了好几个引入路径，所以我们要一个个的查找，最后我们会在 <code>var</code> 目录下，找到 <code>Typecho/Common.php</code>。你看用这种方法引入，找文件都不好弄。所以命名空间什么的才会愈发的重要，<code>set_include_path</code> 这种引入的方案也会逐渐减少使用。</p>
+<p>紧接着执行 <code>Typecho_Common::init();</code> 这行代码的方法就在刚才我们引入的文件中，我们进入这个方法。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * 自动载入类
+</span></span></span><span class="line"><span class="cl"><span class="sd">     *
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * @param $className
+</span></span></span><span class="line"><span class="cl"><span class="sd">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">__autoLoad</span><span class="p">(</span><span class="nv">$className</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="o">@</span><span class="k">include_once</span> <span class="nx">str_replace</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;\\&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">),</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="nv">$className</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * 程序初始化方法
+</span></span></span><span class="line"><span class="cl"><span class="sd">     *
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * @access public
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * @return void
+</span></span></span><span class="line"><span class="cl"><span class="sd">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">init</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="sd">/** 设置自动载入函数 */</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">spl_autoload_register</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;Typecho_Common&#39;</span><span class="p">,</span> <span class="s1">&#39;__autoLoad&#39;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="sd">/** 兼容php6 */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">function_exists</span><span class="p">(</span><span class="s1">&#39;get_magic_quotes_gpc&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">get_magic_quotes_gpc</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$_GET</span> <span class="o">=</span> <span class="nx">self</span><span class="o">::</span><span class="na">stripslashesDeep</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$_POST</span> <span class="o">=</span> <span class="nx">self</span><span class="o">::</span><span class="na">stripslashesDeep</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$_COOKIE</span> <span class="o">=</span> <span class="nx">self</span><span class="o">::</span><span class="na">stripslashesDeep</span><span class="p">(</span><span class="nv">$_COOKIE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="nx">reset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">reset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">reset</span><span class="p">(</span><span class="nv">$_COOKIE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="sd">/** 设置异常截获函数 */</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">set_exception_handler</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;Typecho_Common&#39;</span><span class="p">,</span> <span class="s1">&#39;exceptionHandle&#39;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>先看 <code>if (function_exists('get_magic_quotes_gpc') &amp;&amp; get_magic_quotes_gpc()) {</code> 这段，这块在php5.4 以后永远都返回 false 了，所以这段在5.4 以后不会执行。如果是老版本呢，这块的处理就是把一些转义带有反斜线的字符给恢复过来，变成原始的内容。
+然后剩下的部分就是注册自动加载，和异常处理函数了。自动加载可以看我上一篇文章，然后自己理解一下。</p>
+<p>异常处理部分，就是根据是否是 <code>debug</code> 两种输出模式。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * 异常截获函数
+</span></span></span><span class="line"><span class="cl"><span class="sd">     *
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * @access public
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * @param $exception 截获的异常
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * @return void
+</span></span></span><span class="line"><span class="cl"><span class="sd">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">exceptionHandle</span><span class="p">(</span><span class="nv">$exception</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">defined</span><span class="p">(</span><span class="s1">&#39;__TYPECHO_DEBUG__&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">echo</span> <span class="s1">&#39;&lt;pre&gt;&lt;code&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">echo</span> <span class="s1">&#39;&lt;h1&gt;&#39;</span> <span class="o">.</span> <span class="nx">htmlspecialchars</span><span class="p">(</span><span class="nv">$exception</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">())</span> <span class="o">.</span> <span class="s1">&#39;&lt;/h1&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">echo</span> <span class="nx">htmlspecialchars</span><span class="p">(</span><span class="nv">$exception</span><span class="o">-&gt;</span><span class="na">__toString</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            <span class="k">echo</span> <span class="s1">&#39;&lt;/code&gt;&lt;/pre&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="o">@</span><span class="nx">ob_end_clean</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="mi">404</span> <span class="o">==</span> <span class="nv">$exception</span><span class="o">-&gt;</span><span class="na">getCode</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nx">self</span><span class="o">::</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">$exceptionHandle</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">$handleClass</span> <span class="o">=</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$exceptionHandle</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">new</span> <span class="nv">$handleClass</span><span class="p">(</span><span class="nv">$exception</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">self</span><span class="o">::</span><span class="na">error</span><span class="p">(</span><span class="nv">$exception</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">exit</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p><code>self::$exceptionHandle</code> 这个会在初始化的时候我们再说。
+如果没有 exceptionHandle 的时候会调用 <code>error</code> 方法，进行错误输出，并且记录 <code>error_log</code></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="3" style="--fi-max-shown-lines:10;--fi-line-digit:3;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * 输出错误页面
+</span></span></span><span class="line"><span class="cl"><span class="sd">     *
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * @access public
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * @param mixed $exception 错误信息
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * @return void
+</span></span></span><span class="line"><span class="cl"><span class="sd">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">error</span><span class="p">(</span><span class="nv">$exception</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$isException</span> <span class="o">=</span> <span class="nx">is_object</span><span class="p">(</span><span class="nv">$exception</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$message</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nv">$isException</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$code</span> <span class="o">=</span> <span class="nv">$exception</span><span class="o">-&gt;</span><span class="na">getCode</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$message</span> <span class="o">=</span> <span class="nv">$exception</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$code</span> <span class="o">=</span> <span class="nv">$exception</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nv">$charset</span> <span class="o">=</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$charset</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nv">$isException</span> <span class="o">&amp;&amp;</span> <span class="nv">$exception</span> <span class="nx">instanceof</span> <span class="nx">Typecho_Db_Exception</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$code</span> <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="o">@</span><span class="nx">error_log</span><span class="p">(</span><span class="nv">$message</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">//覆盖原始错误信息
+</span></span></span><span class="line"><span class="cl">            <span class="nv">$message</span> <span class="o">=</span> <span class="s1">&#39;Database Server Error&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="nv">$exception</span> <span class="nx">instanceof</span> <span class="nx">Typecho_Db_Adapter_Exception</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">$code</span> <span class="o">=</span> <span class="mi">503</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">$message</span> <span class="o">=</span> <span class="s1">&#39;Error establishing a database connection&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$exception</span> <span class="nx">instanceof</span> <span class="nx">Typecho_Db_Query_Exception</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">$message</span> <span class="o">=</span> <span class="s1">&#39;Database Query Error&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">switch</span> <span class="p">(</span><span class="nv">$code</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="mi">500</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="nv">$message</span> <span class="o">=</span> <span class="s1">&#39;Server Error&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">case</span> <span class="mi">404</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="nv">$message</span> <span class="o">=</span> <span class="s1">&#39;Page Not Found&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">default</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="nv">$code</span> <span class="o">=</span> <span class="s1">&#39;Error&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="sd">/** 设置http code */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">is_numeric</span><span class="p">(</span><span class="nv">$code</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nv">$code</span> <span class="o">&gt;</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">Typecho_Response</span><span class="o">::</span><span class="na">setStatus</span><span class="p">(</span><span class="nv">$code</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nv">$message</span> <span class="o">=</span> <span class="nx">nl2br</span><span class="p">(</span><span class="nv">$message</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">defined</span><span class="p">(</span><span class="s1">&#39;__TYPECHO_EXCEPTION_FILE__&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">require_once</span> <span class="nx">__TYPECHO_EXCEPTION_FILE__</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">echo</span>
+</span></span><span class="line"><span class="cl"><span class="s">&lt;&lt;&lt;</span><span class="dl">EOF</span><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">&lt;!DOCTYPE html&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">&lt;html lang=&#34;en&#34;&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">    &lt;head&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">        &lt;meta charset=&#34;{$charset}&#34;&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">        &lt;title&gt;{$code}&lt;/title&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">        &lt;style&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">            html {
+</span></span></span><span class="line"><span class="cl"><span class="s">                padding: 50px 10px;
+</span></span></span><span class="line"><span class="cl"><span class="s">                font-size: 16px;
+</span></span></span><span class="line"><span class="cl"><span class="s">                line-height: 1.4;
+</span></span></span><span class="line"><span class="cl"><span class="s">                color: #666;
+</span></span></span><span class="line"><span class="cl"><span class="s">                background: #F6F6F3;
+</span></span></span><span class="line"><span class="cl"><span class="s">                -webkit-text-size-adjust: 100%;
+</span></span></span><span class="line"><span class="cl"><span class="s">                -ms-text-size-adjust: 100%;
+</span></span></span><span class="line"><span class="cl"><span class="s">            }
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">            html,
+</span></span></span><span class="line"><span class="cl"><span class="s">            input { font-family: &#34;Helvetica Neue&#34;, Helvetica, Arial, sans-serif; }
+</span></span></span><span class="line"><span class="cl"><span class="s">            body {
+</span></span></span><span class="line"><span class="cl"><span class="s">                max-width: 500px;
+</span></span></span><span class="line"><span class="cl"><span class="s">                _width: 500px;
+</span></span></span><span class="line"><span class="cl"><span class="s">                padding: 30px 20px;
+</span></span></span><span class="line"><span class="cl"><span class="s">                margin: 0 auto;
+</span></span></span><span class="line"><span class="cl"><span class="s">                background: #FFF;
+</span></span></span><span class="line"><span class="cl"><span class="s">            }
+</span></span></span><span class="line"><span class="cl"><span class="s">            ul {
+</span></span></span><span class="line"><span class="cl"><span class="s">                padding: 0 0 0 40px;
+</span></span></span><span class="line"><span class="cl"><span class="s">            }
+</span></span></span><span class="line"><span class="cl"><span class="s">            .container {
+</span></span></span><span class="line"><span class="cl"><span class="s">                max-width: 380px;
+</span></span></span><span class="line"><span class="cl"><span class="s">                _width: 380px;
+</span></span></span><span class="line"><span class="cl"><span class="s">                margin: 0 auto;
+</span></span></span><span class="line"><span class="cl"><span class="s">            }
+</span></span></span><span class="line"><span class="cl"><span class="s">        &lt;/style&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">    &lt;/head&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">    &lt;body&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">        &lt;div class=&#34;container&#34;&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">            {$message}
+</span></span></span><span class="line"><span class="cl"><span class="s">        &lt;/div&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">    &lt;/body&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s">&lt;/html&gt;
+</span></span></span><span class="line"><span class="cl"><span class="dl">EOF</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">exit</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>到这里 <code>init</code> 方法已经执行完了，我们回到 <code>install.php</code> 文件继续往下看。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">// 挡掉可能的跨站请求
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">)</span> <span class="o">||</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_REFERER&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">exit</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$parts</span> <span class="o">=</span> <span class="nx">parse_url</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_REFERER&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$parts</span><span class="p">[</span><span class="s1">&#39;port&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$parts</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">{</span><span class="nv">$parts</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="nv">$parts</span><span class="p">[</span><span class="s1">&#39;port&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$parts</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_HOST&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="nv">$parts</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">exit</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这块就是挡掉跨域攻击，比如 iframe 的嵌套页面，为了安全，我们会判断 <code>referer</code> 如果跟请求的 <code>host</code> 不一致就阻挡掉</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$options</span> <span class="o">=</span> <span class="k">new</span> <span class="k">stdClass</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$options</span><span class="o">-&gt;</span><span class="na">generator</span> <span class="o">=</span> <span class="s1">&#39;Typecho &#39;</span> <span class="o">.</span> <span class="nx">Typecho_Common</span><span class="o">::</span><span class="na">VERSION</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">list</span><span class="p">(</span><span class="nv">$soft</span><span class="p">,</span> <span class="nv">$currentVersion</span><span class="p">)</span> <span class="o">=</span> <span class="nx">explode</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="nv">$options</span><span class="o">-&gt;</span><span class="na">generator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$options</span><span class="o">-&gt;</span><span class="na">software</span> <span class="o">=</span> <span class="nv">$soft</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$options</span><span class="o">-&gt;</span><span class="na">version</span> <span class="o">=</span> <span class="nv">$currentVersion</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">list</span><span class="p">(</span><span class="nv">$prefixVersion</span><span class="p">,</span> <span class="nv">$suffixVersion</span><span class="p">)</span> <span class="o">=</span> <span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="nv">$currentVersion</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="sd">/** 获取语言 */</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lang</span> <span class="o">=</span> <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;lang&#39;</span><span class="p">,</span> <span class="nx">Typecho_Cookie</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;__typecho_lang&#39;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$langs</span> <span class="o">=</span> <span class="nx">Widget_Options_General</span><span class="o">::</span><span class="na">getLangs</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$lang</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$langs</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$langs</span><span class="p">[</span><span class="nv">$lang</span><span class="p">])))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$lang</span> <span class="o">=</span> <span class="s1">&#39;zh_CN&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="s1">&#39;zh_CN&#39;</span> <span class="o">!=</span> <span class="nv">$lang</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$dir</span> <span class="o">=</span> <span class="nx">defined</span><span class="p">(</span><span class="s1">&#39;__TYPECHO_LANG_DIR__&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="nx">__TYPECHO_LANG_DIR__</span> <span class="o">:</span> <span class="nx">__TYPECHO_ROOT_DIR__</span> <span class="o">.</span> <span class="s1">&#39;/usr/langs&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Typecho_I18n</span><span class="o">::</span><span class="na">setLang</span><span class="p">(</span><span class="nv">$dir</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$lang</span> <span class="o">.</span> <span class="s1">&#39;.mo&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">Typecho_Cookie</span><span class="o">::</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;__typecho_lang&#39;</span><span class="p">,</span> <span class="nv">$lang</span><span class="p">);</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>设置版本，设置语言，顺便把语言写入到 <code>cookie</code> 中。</p>
+<p>剩下的部分就都是安装流程了，我们慢慢拆分来看。
+先说 安装文件 最后的部分</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">include</span> <span class="s1">&#39;admin/copyright.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">include</span> <span class="s1">&#39;admin/footer.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>因为这两个文件都因为开头</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">defined</span><span class="p">(</span><span class="s1">&#39;__TYPECHO_ADMIN__&#39;</span><span class="p">))</span> <span class="k">exit</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>由于没有定义那个常量而退出了，所以这两个部分都在我们用到的时候再说。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nx">li</span><span class="o">&lt;?</span><span class="nx">php</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;finish&#39;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]))</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="err"> class=&#34;current&#34;&lt;?php endif; ?&gt;&gt;&lt;span&gt;1&lt;/span&gt;&lt;?php _e(&#39;欢迎使用&#39;); ?&gt;&lt;/li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;li&lt;?php if (isset($_GET[&#39;config&#39;])) : ?&gt; class=&#34;current&#34;&lt;?php endif; ?&gt;&gt;&lt;span&gt;2&lt;/span&gt;&lt;?php _e(&#39;初始化配置&#39;); ?&gt;&lt;/li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;li&lt;?php if (isset($_GET[&#39;start&#39;])) : ?&gt; class=&#34;current&#34;&lt;?php endif; ?&gt;&gt;&lt;span&gt;3&lt;/span&gt;&lt;?php _e(&#39;开始安装&#39;); ?&gt;&lt;/li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;li&lt;?php if (isset($_GET[&#39;finish&#39;])) : ?&gt; class=&#34;current&#34;&lt;?php endif; ?&gt;&gt;&lt;span&gt;4&lt;/span&gt;&lt;?php _e(&#39;安装成功&#39;); ?&gt;&lt;/li&gt;
+</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这块就是根据 <code>url</code> 的参数状态决定显示的问题 <code>_e</code> 和 <code>_t</code> 都是 一个是翻译并 <code>echo</code> 另一个是翻译。
+注意哦，<code>start</code> 这个状态，在正常状态时看不到的哦，只有失败才会看得到。</p>
+<h3 class="heading-element" id="安装第一步"><span>安装第一步</span>
+  <a href="#%e5%ae%89%e8%a3%85%e7%ac%ac%e4%b8%80%e6%ad%a5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>显示一些说明文件，如果语言配置有多个，那么就出现语言选择列表框，不过默认就只有一个简体中文。然后点击下一步以后会跳转到当前 <code>url</code> ，增加<code>config</code> 参数。</p>
+<h3 class="heading-element" id="进入配置"><span>进入配置</span>
+  <a href="#%e8%bf%9b%e5%85%a5%e9%85%8d%e7%bd%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>点击下一步以后我们就进入到了配置的步骤，当我们输入完相关数据参数，以及管理员信息以后点击下一步，会 <code>post</code> 方法跳转到当前 <code>config</code> 网址。这里有个主要注意的地方是，当我们改变数据库的适配器以后，会跳转到切换相应的数据库适配器配置页面。而且会在页面加载的时候判定支持什么数据。这两段在下面的代码中</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$adapters</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;Mysql&#39;</span><span class="p">,</span> <span class="s1">&#39;Mysqli&#39;</span><span class="p">,</span> <span class="s1">&#39;Pdo_Mysql&#39;</span><span class="p">,</span> <span class="s1">&#39;SQLite&#39;</span><span class="p">,</span> <span class="s1">&#39;Pdo_SQLite&#39;</span><span class="p">,</span> <span class="s1">&#39;Pgsql&#39;</span><span class="p">,</span> <span class="s1">&#39;Pdo_Pgsql&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$adapters</span> <span class="k">as</span> <span class="nv">$firstAdapter</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">_p</span><span class="p">(</span><span class="nv">$firstAdapter</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$adapter</span> <span class="o">=</span> <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;dbAdapter&#39;</span><span class="p">,</span> <span class="nv">$firstAdapter</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$parts</span> <span class="o">=</span> <span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="nv">$adapter</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">$type</span> <span class="o">=</span> <span class="nv">$adapter</span> <span class="o">==</span> <span class="s1">&#39;Mysqli&#39;</span> <span class="o">?</span> <span class="s1">&#39;Mysql&#39;</span> <span class="o">:</span> <span class="nx">array_pop</span><span class="p">(</span><span class="nv">$parts</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php require_once &#39;./install/&#39; . $type . &#39;.php&#39;; ?&gt;
+</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">_select</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">dbAdapter</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">_select</span><span class="p">.</span><span class="nx">onchange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">setTimeout</span><span class="p">(</span><span class="s2">&#34;window.location.href = &#39;install.php?config&amp;dbAdapter=&#34;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">value</span> <span class="o">+</span> <span class="s2">&#34;&#39;; &#34;</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="err">/script&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>不同的适配器会加载不同的数据库配置页面，我们这边用的是 <code>mysql</code> ，我们进入 <code>install/mysql.php</code> 页面，里面有很多环境的判断 sae、gae、bae 什么的判定。这些我们都跳过，直接看下面。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>  <span class="k">else</span><span class="o">:</span> <span class="cp">?&gt;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;label class=&#34;typecho-label&#34; for=&#34;dbHost&#34;&gt;&lt;?php _e(&#39;数据库地址&#39;); ?&gt;&lt;/label&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;input type=&#34;text&#34; class=&#34;text&#34; name=&#34;dbHost&#34; id=&#34;dbHost&#34; value=&#34;&lt;?php _v(&#39;dbHost&#39;, &#39;localhost&#39;); ?&gt;&#34;/&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;p class=&#34;description&#34;&gt;&lt;?php _e(&#39;您可能会使用 &#34;%s&#34;&#39;, &#39;localhost&#39;); ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;/li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;label class=&#34;typecho-label&#34; for=&#34;dbPort&#34;&gt;&lt;?php _e(&#39;数据库端口&#39;); ?&gt;&lt;/label&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;input type=&#34;text&#34; class=&#34;text&#34; name=&#34;dbPort&#34; id=&#34;dbPort&#34; value=&#34;&lt;?php _v(&#39;dbPort&#39;, &#39;3306&#39;); ?&gt;&#34;/&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;p class=&#34;description&#34;&gt;&lt;?php _e(&#39;如果您不知道此选项的意义, 请保留默认设置&#39;); ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;/li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;label class=&#34;typecho-label&#34; for=&#34;dbUser&#34;&gt;&lt;?php _e(&#39;数据库用户名&#39;); ?&gt;&lt;/label&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;input type=&#34;text&#34; class=&#34;text&#34; name=&#34;dbUser&#34; id=&#34;dbUser&#34; value=&#34;&lt;?php _v(&#39;dbUser&#39;, &#39;root&#39;); ?&gt;&#34; /&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;p class=&#34;description&#34;&gt;&lt;?php _e(&#39;您可能会使用 &#34;%s&#34;&#39;, &#39;root&#39;); ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;/li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;label class=&#34;typecho-label&#34; for=&#34;dbPassword&#34;&gt;&lt;?php _e(&#39;数据库密码&#39;); ?&gt;&lt;/label&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;input type=&#34;password&#34; class=&#34;text&#34; name=&#34;dbPassword&#34; id=&#34;dbPassword&#34; value=&#34;&lt;?php _v(&#39;dbPassword&#39;); ?&gt;&#34; /&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;/li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;label class=&#34;typecho-label&#34; for=&#34;dbDatabase&#34;&gt;&lt;?php _e(&#39;数据库名&#39;); ?&gt;&lt;/label&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;input type=&#34;text&#34; class=&#34;text&#34; name=&#34;dbDatabase&#34; id=&#34;dbDatabase&#34; value=&#34;&lt;?php _v(&#39;dbDatabase&#39;, &#39;typecho&#39;); ?&gt;&#34; /&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;p class=&#34;description&#34;&gt;&lt;?php _e(&#39;请您指定数据库名称&#39;); ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;/li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php  endif; ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;input type=&#34;hidden&#34; name=&#34;dbCharset&#34; value=&#34;&lt;?php _e(&#39;utf8&#39;); ?&gt;&#34; /&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;label class=&#34;typecho-label&#34; for=&#34;dbCharset&#34;&gt;&lt;?php _e(&#39;数据库编码&#39;); ?&gt;&lt;/label&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;select name=&#34;dbCharset&#34; id=&#34;dbCharset&#34;&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;option value=&#34;utf8&#34;&lt;?php if (_r(&#39;dbCharset&#39;) == &#39;utf8&#39;): ?&gt; selected&lt;?php endif; ?&gt;&gt;utf8&lt;/option&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;option value=&#34;utf8mb4&#34;&lt;?php if (_r(&#39;dbCharset&#39;) == &#39;utf8mb4&#39;): ?&gt; selected&lt;?php endif; ?&gt;&gt;utf8mb4&lt;/option&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;/select&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;p class=&#34;description&#34;&gt;&lt;?php _e(&#39;选择 utf8mb4 编码至少需要 MySQL 5.5.3 版本&#39;); ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;/li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;li&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;label class=&#34;typecho-label&#34; for=&#34;dbEngine&#34;&gt;&lt;?php _e(&#39;数据库引擎&#39;); ?&gt;&lt;/label&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;select name=&#34;dbEngine&#34; id=&#34;dbEngine&#34;&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;option value=&#34;MyISAM&#34;&lt;?php if (_r(&#39;dbEngine&#39;) == &#39;MyISAM&#39;): ?&gt; selected&lt;?php endif; ?&gt;&gt;MyISAM&lt;/option&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;option value=&#34;InnoDB&#34;&lt;?php if (_r(&#39;dbEngine&#39;) == &#39;InnoDB&#39;): ?&gt; selected&lt;?php endif; ?&gt;&gt;InnoDB&lt;/option&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;/select&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;/li&gt;
+</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这块就是我们显示配置的位置哟。
+我们填写完配置信息以后，<code>post</code> 提交当前页面，进入各种判定的部分。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;created&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">file_exists</span><span class="p">(</span><span class="s1">&#39;./config.inc.php&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s1">&#39;&lt;p class=&#34;message error&#34;&gt;&#39;</span> <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;没有检测到您手动创建的配置文件, 请检查后再次创建&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$success</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="k">NULL</span> <span class="o">==</span> <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;userUrl&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$success</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s1">&#39;&lt;p class=&#34;message error&#34;&gt;&#39;</span> <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;请填写您的网站地址&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">NULL</span> <span class="o">==</span> <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;userName&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$success</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s1">&#39;&lt;p class=&#34;message error&#34;&gt;&#39;</span> <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;请填写您的用户名&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">NULL</span> <span class="o">==</span> <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;userMail&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$success</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s1">&#39;&lt;p class=&#34;message error&#34;&gt;&#39;</span> <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;请填写您的邮箱地址&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="mi">32</span> <span class="o">&lt;</span> <span class="nx">strlen</span><span class="p">(</span><span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;userName&#39;</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$success</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s1">&#39;&lt;p class=&#34;message error&#34;&gt;&#39;</span> <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;用户名长度超过限制, 请不要超过 32 个字符&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="mi">200</span> <span class="o">&lt;</span> <span class="nx">strlen</span><span class="p">(</span><span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;userMail&#39;</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$success</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s1">&#39;&lt;p class=&#34;message error&#34;&gt;&#39;</span> <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;邮箱长度超过限制, 请不要超过 200 个字符&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这部分会进行一些判定相关的东西。不符合规范的会进行报错 <code>if (_r('created') &amp;&amp; !file_exists('./config.inc.php')) {</code> 注意这块，我们后面再说。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$_dbConfig</span> <span class="o">=</span> <span class="nx">_rFrom</span><span class="p">(</span><span class="s1">&#39;dbHost&#39;</span><span class="p">,</span> <span class="s1">&#39;dbUser&#39;</span><span class="p">,</span> <span class="s1">&#39;dbPassword&#39;</span><span class="p">,</span> <span class="s1">&#39;dbCharset&#39;</span><span class="p">,</span> <span class="s1">&#39;dbPort&#39;</span><span class="p">,</span> <span class="s1">&#39;dbDatabase&#39;</span><span class="p">,</span> <span class="s1">&#39;dbFile&#39;</span><span class="p">,</span> <span class="s1">&#39;dbDsn&#39;</span><span class="p">,</span> <span class="s1">&#39;dbEngine&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$_dbConfig</span> <span class="o">=</span> <span class="nx">array_filter</span><span class="p">(</span><span class="nv">$_dbConfig</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$dbConfig</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span> <span class="p">(</span><span class="nv">$_dbConfig</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$dbConfig</span><span class="p">[</span><span class="nx">strtolower</span><span class="p">(</span><span class="nx">substr</span><span class="p">(</span><span class="nv">$key</span><span class="p">,</span> <span class="mi">2</span><span class="p">))]</span> <span class="o">=</span> <span class="nv">$val</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 在特殊服务器上的特殊安装过程处理
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$replace</span> <span class="o">=</span> <span class="nx">array_keys</span><span class="p">(</span><span class="nv">$dbConfig</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$replace</span> <span class="k">as</span> <span class="o">&amp;</span><span class="nv">$key</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$key</span> <span class="o">=</span> <span class="s1">&#39;{&#39;</span> <span class="o">.</span> <span class="nv">$key</span> <span class="o">.</span> <span class="s1">&#39;}&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_dbConfig</span><span class="p">[</span><span class="s1">&#39;dbDsn&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$dbConfig</span><span class="p">[</span><span class="s1">&#39;dsn&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">str_replace</span><span class="p">(</span><span class="nv">$replace</span><span class="p">,</span> <span class="nx">array_values</span><span class="p">(</span><span class="nv">$dbConfig</span><span class="p">),</span> <span class="nv">$dbConfig</span><span class="p">[</span><span class="s1">&#39;dsn&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$config</span> <span class="o">=</span> <span class="nx">str_replace</span><span class="p">(</span><span class="nv">$replace</span><span class="p">,</span> <span class="nx">array_values</span><span class="p">(</span><span class="nv">$dbConfig</span><span class="p">),</span> <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$config</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nv">$success</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;created&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$installDb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Typecho_Db</span><span class="p">(</span><span class="nv">$adapter</span><span class="p">,</span> <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;dbPrefix&#39;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$installDb</span><span class="o">-&gt;</span><span class="na">addServer</span><span class="p">(</span><span class="nv">$dbConfig</span><span class="p">,</span> <span class="nx">Typecho_Db</span><span class="o">::</span><span class="na">READ</span> <span class="o">|</span> <span class="nx">Typecho_Db</span><span class="o">::</span><span class="na">WRITE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="sd">/** 检测数据库配置 */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$installDb</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s1">&#39;SELECT 1=1&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">Typecho_Db_Adapter_Exception</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$success</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s1">&#39;&lt;p class=&#34;message error&#34;&gt;&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;对不起, 无法连接数据库, 请先检查数据库配置再继续进行安装&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">Typecho_Db_Exception</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$success</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s1">&#39;&lt;p class=&#34;message error&#34;&gt;&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;安装程序捕捉到以下错误: &#34; %s &#34;. 程序被终止, 请检查您的配置信息.&#39;</span><span class="p">,</span><span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">())</span> <span class="o">.</span> <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这块是获取数据库连接配置，然后对数据库进行连接，数据库相关的代码是 <code>typecho</code> 自己的封装的，大家可以自己看一下，很厉害。如果连接失败，会进行报错。
+如果成功了，就重置数据库相关信息，这块应该是应对重复安装的。然后 <code>cookie</code> 写入数据库配置信息</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">// 重置原有数据库状态
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$installDb</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$installDb</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="nv">$installDb</span><span class="o">-&gt;</span><span class="na">update</span><span class="p">(</span><span class="s1">&#39;table.options&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">-&gt;</span><span class="na">rows</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;value&#39;</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">))</span><span class="o">-&gt;</span><span class="na">where</span><span class="p">(</span><span class="s1">&#39;name = ?&#39;</span><span class="p">,</span> <span class="s1">&#39;installed&#39;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">Exception</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// do nothing
+</span></span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">Typecho_Cookie</span><span class="o">::</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;__typecho_config&#39;</span><span class="p">,</span> <span class="nx">base64_encode</span><span class="p">(</span><span class="nx">serialize</span><span class="p">(</span><span class="nx">array_merge</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;prefix&#39;</span>    <span class="o">=&gt;</span>  <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;dbPrefix&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;userName&#39;</span>  <span class="o">=&gt;</span>  <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;userName&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;userPassword&#39;</span>  <span class="o">=&gt;</span>  <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;userPassword&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;userMail&#39;</span>  <span class="o">=&gt;</span>  <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;userMail&#39;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;adapter&#39;</span>   <span class="o">=&gt;</span>  <span class="nv">$adapter</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;siteUrl&#39;</span>   <span class="o">=&gt;</span>  <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;userUrl&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">),</span> <span class="nv">$dbConfig</span><span class="p">))));</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>注意下面这段</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;created&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">header</span><span class="p">(</span><span class="s1">&#39;Location: ./install.php?start&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">exit</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这段什么意思？我们后面再说</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/** 初始化配置文件 */</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lines</span> <span class="o">=</span> <span class="nx">array_slice</span><span class="p">(</span><span class="nx">file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">31</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$lines</span><span class="p">[]</span> <span class="o">=</span> <span class="s2">&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">/** 定义数据库参数 */
+</span></span></span><span class="line"><span class="cl"><span class="se">\$</span><span class="s2">db = new Typecho_Db(&#39;</span><span class="si">{</span><span class="nv">$adapter</span><span class="si">}</span><span class="s2">&#39;, &#39;&#34;</span> <span class="o">.</span> <span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;dbPrefix&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&#34;&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="se">\$</span><span class="s2">db-&gt;addServer(&#34;</span> <span class="o">.</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$config</span><span class="p">)</span> <span class="o">?</span> <span class="nx">var_export</span><span class="p">(</span><span class="nv">$dbConfig</span><span class="p">,</span> <span class="k">true</span><span class="p">)</span> <span class="o">:</span> <span class="nv">$config</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&#34;, Typecho_Db::READ | Typecho_Db::WRITE);
+</span></span></span><span class="line"><span class="cl"><span class="s2">Typecho_Db::set(</span><span class="se">\$</span><span class="s2">db);
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$contents</span> <span class="o">=</span> <span class="nx">implode</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$lines</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">Typecho_Common</span><span class="o">::</span><span class="na">isAppEngine</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">@</span><span class="nx">file_put_contents</span><span class="p">(</span><span class="s1">&#39;./config.inc.php&#39;</span><span class="p">,</span> <span class="nv">$contents</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这段就写入配置文件了。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">file_exists</span><span class="p">(</span><span class="s1">&#39;./config.inc.php&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                                    <span class="cp">?&gt;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;div class=&#34;message notice&#34;&gt;&lt;p&gt;&lt;?php _e(&#39;安装程序无法自动创建 &lt;strong&gt;config.inc.php&lt;/strong&gt; 文件&#39;); ?&gt;&lt;br /&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php _e(&#39;您可以在网站根目录下手动创建 &lt;strong&gt;config.inc.php&lt;/strong&gt; 文件, 并复制如下代码至其中&#39;); ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;&lt;textarea rows=&#34;5&#34; onmouseover=&#34;this.select();&#34; class=&#34;w-100 mono&#34; readonly&gt;&lt;?php echo htmlspecialchars($contents); ?&gt;&lt;/textarea&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;&lt;button name=&#34;created&#34; value=&#34;1&#34; type=&#34;submit&#34; class=&#34;btn primary&#34;&gt;创建完毕, 继续安装 &amp;raquo;&lt;/button&gt;&lt;/p&gt;&lt;/div&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php
+</span></span></span><span class="line"><span class="cl"><span class="err">} else {
+</span></span></span><span class="line"><span class="cl"><span class="err">    header(&#39;Location: ./install.php?start&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="err">    exit;
+</span></span></span><span class="line"><span class="cl"><span class="err">}
+</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>如果写入文件失败了，就会跳转到当前页面了并且携带 <code>created</code> 参数，就应对上一步的判定了。如果写入成功了，就跳转到 <code>start</code>。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">// 安装不成功删除配置文件
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nv">$success</span> <span class="o">&amp;&amp;</span> <span class="nx">file_exists</span><span class="p">(</span><span class="nx">__TYPECHO_ROOT_DIR__</span> <span class="o">.</span> <span class="s1">&#39;/config.inc.php&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">@</span><span class="nx">unlink</span><span class="p">(</span><span class="nx">__TYPECHO_ROOT_DIR__</span> <span class="o">.</span> <span class="s1">&#39;/config.inc.php&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">安装失败了，就删除文件。</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">### 来到 `start`
+</span></span></span><span class="line"><span class="cl"><span class="nx">这一步就到了比较关键的一步了。</span>
+</span></span><span class="line"><span class="cl"><span class="sb">``</span><span class="err">`</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">require_once</span> <span class="nx">dirname</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;/config.inc.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//判断是否已经安装
+</span></span></span><span class="line"><span class="cl"><span class="nv">$db</span> <span class="o">=</span> <span class="nx">Typecho_Db</span><span class="o">::</span><span class="na">get</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="k">try</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$installed</span> <span class="o">=</span> <span class="nv">$db</span><span class="o">-&gt;</span><span class="na">fetchRow</span><span class="p">(</span><span class="nv">$db</span><span class="o">-&gt;</span><span class="na">select</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">from</span><span class="p">(</span><span class="s1">&#39;table.options&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">where</span><span class="p">(</span><span class="s1">&#39;name = ?&#39;</span><span class="p">,</span> <span class="s1">&#39;installed&#39;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$installed</span><span class="p">)</span> <span class="o">||</span> <span class="nv">$installed</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Typecho_Response</span><span class="o">::</span><span class="na">setStatus</span><span class="p">(</span><span class="mi">404</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">exit</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">Exception</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// do nothing
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这块就应对上前面说得了，如果包含了配置文件，就会链接数据库，并且查询是否已安装了，如果已安装了就报错 <code>404</code>。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$db</span><span class="p">))</span> <span class="o">:</span> <span class="cp">?&gt;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">                &lt;h1 class=&#34;typecho-install-title&#34;&gt;&lt;?php _e(&#39;安装失败!&#39;); ?&gt;&lt;/h1&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">                &lt;div class=&#34;typecho-install-body&#34;&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">                    &lt;form method=&#34;post&#34; action=&#34;?config&#34; name=&#34;config&#34;&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">                    &lt;p class=&#34;message error&#34;&gt;&lt;?php _e(&#39;您没有上传 config.inc.php 文件, 请您重新安装!&#39;); ?&gt; &lt;button class=&#34;btn primary&#34; type=&#34;submit&#34;&gt;&lt;?php _e(&#39;重新安装 &amp;raquo;&#39;); ?&gt;&lt;/button&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">                    &lt;/form&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">                &lt;/div&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">                &lt;?php else : ?&gt;
+</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>如果没有连接 <code>db</code> 就报错。
+如果一切顺利就执行创建数据库，初始化配置文件。如果失败了就报错安装失败，如果成功了，就跳转到，安装成功。
+上面说的看不到 安装过程 页面就是因为太快了，所以就一闪而过了，上面表述的不清楚，这里在说明一下。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"> <span class="k">if</span><span class="p">((</span><span class="s1">&#39;Mysql&#39;</span> <span class="o">==</span> <span class="nv">$type</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="mi">1050</span> <span class="o">==</span> <span class="nv">$code</span> <span class="o">||</span> <span class="s1">&#39;42S01&#39;</span> <span class="o">==</span> <span class="nv">$code</span><span class="p">))</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="s1">&#39;SQLite&#39;</span> <span class="o">==</span> <span class="nv">$type</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="s1">&#39;HY000&#39;</span> <span class="o">==</span> <span class="nv">$code</span> <span class="o">||</span> <span class="mi">1</span> <span class="o">==</span> <span class="nv">$code</span><span class="p">))</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="s1">&#39;Pgsql&#39;</span> <span class="o">==</span> <span class="nv">$type</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;42P07&#39;</span> <span class="o">==</span> <span class="nv">$code</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;delete&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//删除原有数据
+</span></span></span><span class="line"><span class="cl">        <span class="nv">$dbPrefix</span> <span class="o">=</span> <span class="nv">$config</span><span class="p">[</span><span class="s1">&#39;prefix&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$tableArray</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$dbPrefix</span> <span class="o">.</span> <span class="s1">&#39;comments&#39;</span><span class="p">,</span> <span class="nv">$dbPrefix</span> <span class="o">.</span> <span class="s1">&#39;contents&#39;</span><span class="p">,</span> <span class="nv">$dbPrefix</span> <span class="o">.</span> <span class="s1">&#39;fields&#39;</span><span class="p">,</span> <span class="nv">$dbPrefix</span> <span class="o">.</span> <span class="s1">&#39;metas&#39;</span><span class="p">,</span> <span class="nv">$dbPrefix</span> <span class="o">.</span> <span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="nv">$dbPrefix</span> <span class="o">.</span> <span class="s1">&#39;relationships&#39;</span><span class="p">,</span> <span class="nv">$dbPrefix</span> <span class="o">.</span> <span class="s1">&#39;users&#39;</span><span class="p">,);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">foreach</span><span class="p">(</span><span class="nv">$tableArray</span> <span class="k">as</span> <span class="nv">$table</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span><span class="p">(</span><span class="nv">$type</span> <span class="o">==</span> <span class="s1">&#39;Mysql&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">$installDb</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&#34;DROP TABLE IF EXISTS `</span><span class="si">{</span><span class="nv">$table</span><span class="si">}</span><span class="s2">`&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">elseif</span><span class="p">(</span><span class="nv">$type</span> <span class="o">==</span> <span class="s1">&#39;Pgsql&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">$installDb</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&#34;DROP TABLE </span><span class="si">{</span><span class="nv">$table</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">elseif</span><span class="p">(</span><span class="nv">$type</span> <span class="o">==</span> <span class="s1">&#39;SQLite&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">$installDb</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&#34;DROP TABLE </span><span class="si">{</span><span class="nv">$table</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s1">&#39;&lt;p class=&#34;message success&#34;&gt;&#39;</span> <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;已经删除完原有数据&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;&lt;br /&gt;&lt;br /&gt;&lt;button class=&#34;btn primary&#34; type=&#34;submit&#34; class=&#34;primary&#34;&gt;&#39;</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;继续安装 &amp;raquo;&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;&lt;/button&gt;&lt;/p&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nx">_r</span><span class="p">(</span><span class="s1">&#39;goahead&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//使用原有数据
+</span></span></span><span class="line"><span class="cl">        <span class="c1">//但是要更新用户网站
+</span></span></span><span class="line"><span class="cl">        <span class="nv">$installDb</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="nv">$installDb</span><span class="o">-&gt;</span><span class="na">update</span><span class="p">(</span><span class="s1">&#39;table.options&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">rows</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;value&#39;</span> <span class="o">=&gt;</span> <span class="nv">$config</span><span class="p">[</span><span class="s1">&#39;siteUrl&#39;</span><span class="p">]))</span><span class="o">-&gt;</span><span class="na">where</span><span class="p">(</span><span class="s1">&#39;name = ?&#39;</span><span class="p">,</span> <span class="s1">&#39;siteUrl&#39;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">unset</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;typecho&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">header</span><span class="p">(</span><span class="s1">&#39;Location: ./install.php?finish&amp;use_old&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">exit</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">echo</span> <span class="s1">&#39;&lt;p class=&#34;message error&#34;&gt;&#39;</span> <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;安装程序检查到原有数据表已经存在.&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span> <span class="s1">&#39;&lt;br /&gt;&lt;br /&gt;&#39;</span> <span class="o">.</span> <span class="s1">&#39;&lt;button type=&#34;submit&#34; name=&#34;delete&#34; value=&#34;1&#34; class=&#34;btn btn-warn&#34;&gt;&#39;</span> <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;删除原有数据&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;&lt;/button&gt; &#39;</span>
+</span></span><span class="line"><span class="cl">            <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;或者&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39; &lt;button type=&#34;submit&#34; name=&#34;goahead&#34; value=&#34;1&#34; class=&#34;btn primary&#34;&gt;&#39;</span> <span class="o">.</span> <span class="nx">_t</span><span class="p">(</span><span class="s1">&#39;使用原有数据&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;&lt;/button&gt;&lt;/p&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这块就是在异常的时候如果数据库存在，的判断过程。删库或者使用原有数据库，然后等我们决策后，在决定安装流程。</p>
+<h2 class="heading-element" id="结语"><span>结语</span>
+  <a href="#%e7%bb%93%e8%af%ad" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>至此，安装全部搞定了，我们分析完了一个安装模块，接下来说些什么呢，先说前台，部分，然后在说明上面没说明的 <code>db</code> 部分，最后说后台。我们下次再见</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2019-11-09 10:50:52">更新于 2019-11-09&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/typecho-source-code-analysis-2/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/Typecho%20%e6%ba%90%e7%a0%81%e5%88%86%e6%9e%90%ef%bc%882%ef%bc%89.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/typecho-source-code-analysis-2/" data-title="Typecho 源码分析（2）" data-hashtags="Typecho 源码分析"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/typecho-source-code-analysis-2/" data-hashtag="Typecho 源码分析"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/typecho-source-code-analysis-2/" data-title="Typecho 源码分析（2）"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/typecho-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-tag" title="标签 - Typecho 源码分析">Typecho 源码分析</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/talk-about-the-loading-of-php-files/" class="post-nav-item" rel="prev" title="说说 Php 文件的加载"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>说说 Php 文件的加载</a><a href="/posts/typecho-source-code-analysis-3/" class="post-nav-item" rel="next" title="Typecho 源码分析（3）">Typecho 源码分析（3）<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog">
+      <div class="toc">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#前情提要">前情提要</a></li>
+    <li><a href="#进入安装流程">进入安装流程</a>
+      <ul>
+        <li><a href="#安装第一步">安装第一步</a></li>
+        <li><a href="#进入配置">进入配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#结语">结语</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div><div id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" role="button" aria-label="目录"><i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/ea4ad7dc35dcee7f75adb9e1efecec26.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

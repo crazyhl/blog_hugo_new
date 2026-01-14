@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Slim3使用Eloquent自定义分页 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="最近一年私下里写东西一直都是在使用 slim 框架，其实说是一直在写东西，可是到现在真的一点输出都没有，不过小技巧倒是学会了不少，自己写个小验证器啊什么的，并且对于框架的一些理解也加深了，最好的是工作中很多都把这些小技巧用到了。
+好了，吐槽了这么多，我又要说句废话了，写了一年的东西才写到分页你敢信？不过这是真的，写了一年了，代码终于累计300行了，可以进入分页的过程了。
+以前用 laravel 的时候觉得 Eloquent 麻烦的很，麻烦不是指使用，而是指看代码麻烦，不过用起来还是很爽的。所以当我在使用 slim 需要连接数据库的时候毫不犹豫就继续用了 Eloquent。
+当我写到分页的时候，发现调用方法失败，那么就继续引入 illuminate/pagination 好了。这下查询有问题不能正确获取页码，还有一些其他的参数也都是不对的，而且到前端的时候由于使用的模板是 twig，不能像 blade 模板那样在代码用调用 model 的相关方法，想要调用就得扩展 twig，那又是一桩麻烦事，既然如此，我就在代码中调用好了，然后在输出到模板中去，但是当我想偷懒使用 links 输出分页部分的时候报错了，在看报错，发现又得引入 blade 等一系列的东西，那引入了这么多，还不如直接使用 laravel 算了。所以，在使用 slim 不变的情况下，我们就自己扩展一个分页方法吧。
+最初我是想继承 model 然后在里面写方法的，后来发现不行，不行的原因是，model代用的大部分方法其实都是在 new 一个 builder 之后链式调用的，这里我又得多说一句了奥，laravel 中同一个类名，会在很多个包下都有的，自己查看的时候要小心别看错了。（其实，集成 model 也是可以的，就是太麻烦了，而且没法链式调用）
+所以在继承 model 行不通之后，我们就从 builder 入手，通过 google 和看代码可以找到这个方法
+1 2 3 4 5 6 7 8 9 10 /** * Create a new Eloquent query builder for the model. * * @param \Illuminate\Database\Query\Builder $query * @return \Illuminate\Database\Eloquent\Builder|static */ public function newEloquentBuilder($query) { return new Builder($query); } 这个方法就是 model 里面产生新 builder 用的，那我们就在我们的 model 中 覆盖这个方法就好了。
+"><meta name="keywords" content='slim, Eloquent, 分页'>
+  <meta itemprop="name" content="slim3使用Eloquent自定义分页">
+  <meta itemprop="description" content="最近一年私下里写东西一直都是在使用 slim 框架，其实说是一直在写东西，可是到现在真的一点输出都没有，不过小技巧倒是学会了不少，自己写个小验证器啊什么的，并且对于框架的一些理解也加深了，最好的是工作中很多都把这些小技巧用到了。
+好了，吐槽了这么多，我又要说句废话了，写了一年的东西才写到分页你敢信？不过这是真的，写了一年了，代码终于累计300行了，可以进入分页的过程了。
+以前用 laravel 的时候觉得 Eloquent 麻烦的很，麻烦不是指使用，而是指看代码麻烦，不过用起来还是很爽的。所以当我在使用 slim 需要连接数据库的时候毫不犹豫就继续用了 Eloquent。
+当我写到分页的时候，发现调用方法失败，那么就继续引入 illuminate/pagination 好了。这下查询有问题不能正确获取页码，还有一些其他的参数也都是不对的，而且到前端的时候由于使用的模板是 twig，不能像 blade 模板那样在代码用调用 model 的相关方法，想要调用就得扩展 twig，那又是一桩麻烦事，既然如此，我就在代码中调用好了，然后在输出到模板中去，但是当我想偷懒使用 links 输出分页部分的时候报错了，在看报错，发现又得引入 blade 等一系列的东西，那引入了这么多，还不如直接使用 laravel 算了。所以，在使用 slim 不变的情况下，我们就自己扩展一个分页方法吧。
+最初我是想继承 model 然后在里面写方法的，后来发现不行，不行的原因是，model代用的大部分方法其实都是在 new 一个 builder 之后链式调用的，这里我又得多说一句了奥，laravel 中同一个类名，会在很多个包下都有的，自己查看的时候要小心别看错了。（其实，集成 model 也是可以的，就是太麻烦了，而且没法链式调用）
+所以在继承 model 行不通之后，我们就从 builder 入手，通过 google 和看代码可以找到这个方法
+1 2 3 4 5 6 7 8 9 10 /** * Create a new Eloquent query builder for the model. * * @param \Illuminate\Database\Query\Builder $query * @return \Illuminate\Database\Eloquent\Builder|static */ public function newEloquentBuilder($query) { return new Builder($query); } 这个方法就是 model 里面产生新 builder 用的，那我们就在我们的 model 中 覆盖这个方法就好了。">
+  <meta itemprop="datePublished" content="2019-07-09T14:44:20+00:00">
+  <meta itemprop="dateModified" content="2019-07-09T14:44:20+00:00">
+  <meta itemprop="wordCount" content="274">
+  <meta itemprop="keywords" content="Slim,Eloquent,分页"><meta property="og:url" content="http://localhost:1313/posts/slim3-uses-eloquent-custom-paging/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="slim3使用Eloquent自定义分页">
+  <meta property="og:description" content="最近一年私下里写东西一直都是在使用 slim 框架，其实说是一直在写东西，可是到现在真的一点输出都没有，不过小技巧倒是学会了不少，自己写个小验证器啊什么的，并且对于框架的一些理解也加深了，最好的是工作中很多都把这些小技巧用到了。
+好了，吐槽了这么多，我又要说句废话了，写了一年的东西才写到分页你敢信？不过这是真的，写了一年了，代码终于累计300行了，可以进入分页的过程了。
+以前用 laravel 的时候觉得 Eloquent 麻烦的很，麻烦不是指使用，而是指看代码麻烦，不过用起来还是很爽的。所以当我在使用 slim 需要连接数据库的时候毫不犹豫就继续用了 Eloquent。
+当我写到分页的时候，发现调用方法失败，那么就继续引入 illuminate/pagination 好了。这下查询有问题不能正确获取页码，还有一些其他的参数也都是不对的，而且到前端的时候由于使用的模板是 twig，不能像 blade 模板那样在代码用调用 model 的相关方法，想要调用就得扩展 twig，那又是一桩麻烦事，既然如此，我就在代码中调用好了，然后在输出到模板中去，但是当我想偷懒使用 links 输出分页部分的时候报错了，在看报错，发现又得引入 blade 等一系列的东西，那引入了这么多，还不如直接使用 laravel 算了。所以，在使用 slim 不变的情况下，我们就自己扩展一个分页方法吧。
+最初我是想继承 model 然后在里面写方法的，后来发现不行，不行的原因是，model代用的大部分方法其实都是在 new 一个 builder 之后链式调用的，这里我又得多说一句了奥，laravel 中同一个类名，会在很多个包下都有的，自己查看的时候要小心别看错了。（其实，集成 model 也是可以的，就是太麻烦了，而且没法链式调用）
+所以在继承 model 行不通之后，我们就从 builder 入手，通过 google 和看代码可以找到这个方法
+1 2 3 4 5 6 7 8 9 10 /** * Create a new Eloquent query builder for the model. * * @param \Illuminate\Database\Query\Builder $query * @return \Illuminate\Database\Eloquent\Builder|static */ public function newEloquentBuilder($query) { return new Builder($query); } 这个方法就是 model 里面产生新 builder 用的，那我们就在我们的 model 中 覆盖这个方法就好了。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2019-07-09T14:44:20+00:00">
+    <meta property="article:modified_time" content="2019-07-09T14:44:20+00:00">
+    <meta property="article:tag" content="Slim">
+    <meta property="article:tag" content="Eloquent">
+    <meta property="article:tag" content="分页">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="slim3使用Eloquent自定义分页">
+  <meta name="twitter:description" content="最近一年私下里写东西一直都是在使用 slim 框架，其实说是一直在写东西，可是到现在真的一点输出都没有，不过小技巧倒是学会了不少，自己写个小验证器啊什么的，并且对于框架的一些理解也加深了，最好的是工作中很多都把这些小技巧用到了。
+好了，吐槽了这么多，我又要说句废话了，写了一年的东西才写到分页你敢信？不过这是真的，写了一年了，代码终于累计300行了，可以进入分页的过程了。
+以前用 laravel 的时候觉得 Eloquent 麻烦的很，麻烦不是指使用，而是指看代码麻烦，不过用起来还是很爽的。所以当我在使用 slim 需要连接数据库的时候毫不犹豫就继续用了 Eloquent。
+当我写到分页的时候，发现调用方法失败，那么就继续引入 illuminate/pagination 好了。这下查询有问题不能正确获取页码，还有一些其他的参数也都是不对的，而且到前端的时候由于使用的模板是 twig，不能像 blade 模板那样在代码用调用 model 的相关方法，想要调用就得扩展 twig，那又是一桩麻烦事，既然如此，我就在代码中调用好了，然后在输出到模板中去，但是当我想偷懒使用 links 输出分页部分的时候报错了，在看报错，发现又得引入 blade 等一系列的东西，那引入了这么多，还不如直接使用 laravel 算了。所以，在使用 slim 不变的情况下，我们就自己扩展一个分页方法吧。
+最初我是想继承 model 然后在里面写方法的，后来发现不行，不行的原因是，model代用的大部分方法其实都是在 new 一个 builder 之后链式调用的，这里我又得多说一句了奥，laravel 中同一个类名，会在很多个包下都有的，自己查看的时候要小心别看错了。（其实，集成 model 也是可以的，就是太麻烦了，而且没法链式调用）
+所以在继承 model 行不通之后，我们就从 builder 入手，通过 google 和看代码可以找到这个方法
+1 2 3 4 5 6 7 8 9 10 /** * Create a new Eloquent query builder for the model. * * @param \Illuminate\Database\Query\Builder $query * @return \Illuminate\Database\Eloquent\Builder|static */ public function newEloquentBuilder($query) { return new Builder($query); } 这个方法就是 model 里面产生新 builder 用的，那我们就在我们的 model 中 覆盖这个方法就好了。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/slim3-uses-eloquent-custom-paging/" title="slim3使用Eloquent自定义分页 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/handson-use-electron-to-develop-your-own-upyun-file-upload-client/" title="手把手使用 electron 自己动手开发 upyun 文件上传客户端" /><link rel="next" type="text/html" href="http://localhost:1313/posts/slim3-custom-twig-template-extension-method/" title="slim3 自定义twig模板扩展方法" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/slim3-uses-eloquent-custom-paging/index.md" title="slim3使用Eloquent自定义分页 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "slim3使用Eloquent自定义分页",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/slim3-uses-eloquent-custom-paging\/"
+    },"genre": "posts","keywords": "slim, Eloquent, 分页","wordcount":  274 ,
+    "url": "http:\/\/localhost:1313\/posts\/slim3-uses-eloquent-custom-paging\/","datePublished": "2019-07-09T14:44:20+00:00","dateModified": "2019-07-09T14:44:20+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Slim3使用Eloquent自定义分页</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2019-07-09 14:44:20"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2019-07-09">2019-07-09</time></span>&nbsp;<span title="274 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>最近一年私下里写东西一直都是在使用 slim 框架，其实说是一直在写东西，可是到现在真的一点输出都没有，不过小技巧倒是学会了不少，自己写个小验证器啊什么的，并且对于框架的一些理解也加深了，最好的是工作中很多都把这些小技巧用到了。</p>
+<p>好了，吐槽了这么多，我又要说句废话了，写了一年的东西才写到分页你敢信？不过这是真的，写了一年了，代码终于累计300行了，可以进入分页的过程了。</p>
+<p>以前用 laravel 的时候觉得 Eloquent 麻烦的很，麻烦不是指使用，而是指看代码麻烦，不过用起来还是很爽的。所以当我在使用 slim 需要连接数据库的时候毫不犹豫就继续用了 Eloquent。</p>
+<p>当我写到分页的时候，发现调用方法失败，那么就继续引入 illuminate/pagination 好了。这下查询有问题不能正确获取页码，还有一些其他的参数也都是不对的，而且到前端的时候由于使用的模板是 twig，不能像 blade 模板那样在代码用调用 model 的相关方法，想要调用就得扩展 twig，那又是一桩麻烦事，既然如此，我就在代码中调用好了，然后在输出到模板中去，但是当我想偷懒使用 links 输出分页部分的时候报错了，在看报错，发现又得引入 blade 等一系列的东西，那引入了这么多，还不如直接使用 laravel 算了。所以，在使用 slim 不变的情况下，我们就自己扩展一个分页方法吧。</p>
+<p>最初我是想继承 model 然后在里面写方法的，后来发现不行，不行的原因是，model代用的大部分方法其实都是在 new 一个 builder 之后链式调用的，这里我又得多说一句了奥，laravel 中同一个类名，会在很多个包下都有的，自己查看的时候要小心别看错了。（其实，集成 model 也是可以的，就是太麻烦了，而且没法链式调用）</p>
+<p>所以在继承 model 行不通之后，我们就从 builder 入手，通过 google 和看代码可以找到这个方法</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd">  * Create a new Eloquent query builder for the model.
+</span></span></span><span class="line"><span class="cl"><span class="sd">  *
+</span></span></span><span class="line"><span class="cl"><span class="sd">  * @param  \Illuminate\Database\Query\Builder  $query
+</span></span></span><span class="line"><span class="cl"><span class="sd">  * @return \Illuminate\Database\Eloquent\Builder|static
+</span></span></span><span class="line"><span class="cl"><span class="sd">  */</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span> <span class="k">function</span> <span class="nf">newEloquentBuilder</span><span class="p">(</span><span class="nv">$query</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">new</span> <span class="nx">Builder</span><span class="p">(</span><span class="nv">$query</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这个方法就是 model 里面产生新 builder 用的，那我们就在我们的 model 中 覆盖这个方法就好了。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="nx">App\Model</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">App\Model\Builder\CustomBuilder</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Illuminate\Database\Eloquent\Model</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Base</span> <span class="k">extends</span> <span class="nx">Model</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * Create a new Eloquent query builder for the model.
+</span></span></span><span class="line"><span class="cl"><span class="sd">     *
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * @param \Illuminate\Database\Query\Builder $query
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * @return \Illuminate\Database\Eloquent\Builder|static
+</span></span></span><span class="line"><span class="cl"><span class="sd">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">function</span> <span class="nf">newEloquentBuilder</span><span class="p">(</span><span class="nv">$query</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="k">new</span> <span class="nx">CustomBuilder</span><span class="p">(</span><span class="nv">$query</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>注意代码里面的 builder 引用，别引用错了哦。</p>
+<p>好了，CustomBuilder 就是我们自定义的 builder 了，</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="nx">App\Model\Builder</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">App\Utils\Paginate</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Illuminate\Database\Eloquent\Builder</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">CustomBuilder</span> <span class="k">extends</span> <span class="nx">Builder</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">function</span> <span class="nf">myPaginate</span><span class="p">(</span><span class="nv">$perPage</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="nv">$columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;*&#39;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 获取页码
+</span></span></span><span class="line"><span class="cl">        <span class="nv">$page</span> <span class="o">=</span> <span class="nx">Paginate</span><span class="o">::</span><span class="na">getPageNum</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 获取 总数 和 条目
+</span></span></span><span class="line"><span class="cl">        <span class="nv">$results</span> <span class="o">=</span> <span class="p">(</span><span class="nv">$total</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">toBase</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">getCountForPagination</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="o">?</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">forPage</span><span class="p">(</span><span class="nv">$page</span><span class="p">,</span> <span class="nv">$perPage</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="nv">$columns</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">:</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">model</span><span class="o">-&gt;</span><span class="na">newCollection</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 计算总页数
+</span></span></span><span class="line"><span class="cl">        <span class="nv">$totalPage</span> <span class="o">=</span> <span class="nv">$total</span> <span class="o">?</span> <span class="nx">ceil</span><span class="p">(</span><span class="nv">$total</span> <span class="o">/</span> <span class="nv">$page</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 输出
+</span></span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">(</span><span class="nx">object</span><span class="p">)[</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;currentPage&#39;</span> <span class="o">=&gt;</span> <span class="nv">$page</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;perPage&#39;</span> <span class="o">=&gt;</span> <span class="nv">$perPage</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;totalCount&#39;</span> <span class="o">=&gt;</span> <span class="nv">$total</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;totalPage&#39;</span> <span class="o">=&gt;</span> <span class="nv">$totalPage</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s1">&#39;data&#39;</span> <span class="o">=&gt;</span> <span class="nv">$results</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>可以看到我们定义了一个 <code>myPaginate</code> 方法实现我们的分页，其实这么做的目的只有一个覆盖自带分页在输出时候的一些操作，输出我们想要的各种数据。接下来我们就可以在代码和模板的任何地方使用我们输出的数据，哪怕想实现 laravel 中 <code>links</code> 的方法，只要我们扩展一下 twig 就ok了，具体怎么做呢，可以等着看下一篇文章了。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2019-07-09 14:44:20">更新于 2019-07-09&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/slim3-uses-eloquent-custom-paging/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/slim3%e4%bd%bf%e7%94%a8Eloquent%e8%87%aa%e5%ae%9a%e4%b9%89%e5%88%86%e9%a1%b5.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/slim3-uses-eloquent-custom-paging/" data-title="Slim3使用Eloquent自定义分页" data-hashtags="slim,Eloquent,分页"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/slim3-uses-eloquent-custom-paging/" data-hashtag="slim"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/slim3-uses-eloquent-custom-paging/" data-title="Slim3使用Eloquent自定义分页"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/slim/" class="post-tag" title="标签 - Slim">Slim</a><a href="/tags/eloquent/" class="post-tag" title="标签 - Eloquent">Eloquent</a><a href="/tags/%E5%88%86%E9%A1%B5/" class="post-tag" title="标签 - 分页">分页</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/handson-use-electron-to-develop-your-own-upyun-file-upload-client/" class="post-nav-item" rel="prev" title="手把手使用 Electron 自己动手开发 Upyun 文件上传客户端"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>手把手使用 Electron 自己动手开发 Upyun 文件上传客户端</a><a href="/posts/slim3-custom-twig-template-extension-method/" class="post-nav-item" rel="next" title="Slim3 自定义twig模板扩展方法">Slim3 自定义twig模板扩展方法<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/125cae4b893a67a47730163050de3470.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

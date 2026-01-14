@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>争取能让大家都能看懂的 DFA 算法 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="为什么要学习这个算法 我们公司一直都有的一个敏感词检测服务，前一段时间遇到了瓶颈，因为词库太多了导致会有一些速度过慢，而且一个正则表达式已经放不下了，需要进行拆分正则才可以。
+">
+  <meta itemprop="name" content="争取能让大家都能看懂的 DFA 算法">
+  <meta itemprop="description" content="为什么要学习这个算法 我们公司一直都有的一个敏感词检测服务，前一段时间遇到了瓶颈，因为词库太多了导致会有一些速度过慢，而且一个正则表达式已经放不下了，需要进行拆分正则才可以。">
+  <meta itemprop="datePublished" content="2020-03-29T16:42:08+08:00">
+  <meta itemprop="dateModified" content="2020-03-29T16:42:08+08:00">
+  <meta itemprop="wordCount" content="442">
+  <meta itemprop="keywords" content="PHP"><meta property="og:url" content="http://localhost:1313/posts/dfa-with-php/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="争取能让大家都能看懂的 DFA 算法">
+  <meta property="og:description" content="为什么要学习这个算法 我们公司一直都有的一个敏感词检测服务，前一段时间遇到了瓶颈，因为词库太多了导致会有一些速度过慢，而且一个正则表达式已经放不下了，需要进行拆分正则才可以。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2020-03-29T16:42:08+08:00">
+    <meta property="article:modified_time" content="2020-03-29T16:42:08+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="争取能让大家都能看懂的 DFA 算法">
+  <meta name="twitter:description" content="为什么要学习这个算法 我们公司一直都有的一个敏感词检测服务，前一段时间遇到了瓶颈，因为词库太多了导致会有一些速度过慢，而且一个正则表达式已经放不下了，需要进行拆分正则才可以。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/dfa-with-php/" title="争取能让大家都能看懂的 DFA 算法 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/%E6%B5%85%E8%B0%88aopioc/" title="浅谈AOP、IOC" /><link rel="next" type="text/html" href="http://localhost:1313/posts/jenkins-and-github-auto-deploy-hugo-blog/" title="利用Jenkins&#43;Github自动部署hugo博客" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/dfa-with-php/index.md" title="争取能让大家都能看懂的 DFA 算法 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "争取能让大家都能看懂的 DFA 算法",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/dfa-with-php\/"
+    },"genre": "posts","wordcount":  442 ,
+    "url": "http:\/\/localhost:1313\/posts\/dfa-with-php\/","datePublished": "2020-03-29T16:42:08+08:00","dateModified": "2020-03-29T16:42:08+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>争取能让大家都能看懂的 DFA 算法</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2020-03-29 16:42:08"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2020-03-29">2020-03-29</time></span>&nbsp;<span title="442 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 500 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么要学习这个算法">为什么要学习这个算法</a></li>
+    <li><a href="#什么是-dfa">什么是 dfa</a></li>
+    <li><a href="#我的理解">我的理解</a>
+      <ul>
+        <li><a href="#什么是组织好的关键词树">什么是组织好的关键词树</a></li>
+        <li><a href="#待检测的字符串">待检测的字符串</a></li>
+        <li><a href="#为什么要组织好那样的一棵树算法思路">为什么要组织好那样的一棵树（算法思路）</a></li>
+      </ul>
+    </li>
+    <li><a href="#结论">结论</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 class="heading-element" id="为什么要学习这个算法"><span>为什么要学习这个算法</span>
+  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%ad%a6%e4%b9%a0%e8%bf%99%e4%b8%aa%e7%ae%97%e6%b3%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>我们公司一直都有的一个敏感词检测服务，前一段时间遇到了瓶颈，因为词库太多了导致会有一些速度过慢，而且一个正则表达式已经放不下了，需要进行拆分正则才可以。</p>
+<p>正好我以前看过有关 <code>dfa</code> 的介绍，但是并没有深入的进行研究，所以就趁着周末好好的了解一下这个东西。跟 <code>php</code> 的正则进行一下对比，看看速度如何，如果表现较好，说不定还能用得上。</p>
+<h2 class="heading-element" id="什么是-dfa"><span>什么是 dfa</span>
+  <a href="#%e4%bb%80%e4%b9%88%e6%98%af-dfa" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>通过百度可以知道 <code>dfa</code> 是 <code>确定有穷自动机</code> 的缩写。
+应该还会见到类似下面图的说明
+<img loading="lazy" src='https://www.cimple.ink/images/2020/03/29/b3afacefa9dcdd7d7fb929dd824c7bd1.png' alt="https://www.cimple.ink/images/2020/03/29/b3afacefa9dcdd7d7fb929dd824c7bd1.png">
+原谅我实在一些，我这人数学不好不说，貌似看图能力也不行，这个图恕我直言我没看懂。所以关于精准的解释，请大家去百度或者 google 自行查阅了。</p>
+<h2 class="heading-element" id="我的理解"><span>我的理解</span>
+  <a href="#%e6%88%91%e7%9a%84%e7%90%86%e8%a7%a3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>说明之前，我们先看看做检测需要准备的东西</p>
+<ul>
+<li>一个组织好的关键词树</li>
+<li>待检测的字符串</li>
+</ul>
+<h3 class="heading-element" id="什么是组织好的关键词树"><span>什么是组织好的关键词树</span>
+  <a href="#%e4%bb%80%e4%b9%88%e6%98%af%e7%bb%84%e7%bb%87%e5%a5%bd%e7%9a%84%e5%85%b3%e9%94%ae%e8%af%8d%e6%a0%91" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>我们一批需要检测词库，比如下面这些</p>
+<blockquote>
+<p>日本人，日本鬼子，日本人傻，破解*版</p>
+</blockquote>
+<p>先做个解释，前三个大家都能看懂，那么 <code>*</code> 是什么，这个是我定义的通配符，代表着 <code>*</code> 可以是 0 - n 个占位符用来替代在关键词中间插入混淆字符。至于可以替换几个我们可以在代码中进行定义，需要注意 n 越大，速度就会越慢。</p>
+<p>说明完了，来看看构造好的树是什么一样的，应该是跟下图差不多的。
+<img loading="lazy" src='https://www.cimple.ink/images/2020/03/29/d81c2be9b6a49d571d9ae1522ad715db.jpg' alt="https://www.cimple.ink/images/2020/03/29/d81c2be9b6a49d571d9ae1522ad715db.jpg">
+为什么要手动画一个，因为需要对比，我的理解跟程序是否一致，如果不一致，就要找出程序是不是写的不对了。那么我们来看看程序生成的是啥样的。
+<img loading="lazy" src='https://www.cimple.ink/images/2020/03/29/d5c6185a5a9cd2c11e7d0e10f4e6e76e.png' alt="https://www.cimple.ink/images/2020/03/29/d5c6185a5a9cd2c11e7d0e10f4e6e76e.png">
+程序生成的跟图片一致，到这里还都是正确的。</p>
+<h3 class="heading-element" id="待检测的字符串"><span>待检测的字符串</span>
+  <a href="#%e5%be%85%e6%a3%80%e6%b5%8b%e7%9a%84%e5%ad%97%e7%ac%a6%e4%b8%b2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>这个就很容易理解了，就是我们需要检测的字符串。</p>
+<h3 class="heading-element" id="为什么要组织好那样的一棵树算法思路"><span>为什么要组织好那样的一棵树（算法思路）</span>
+  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e7%bb%84%e7%bb%87%e5%a5%bd%e9%82%a3%e6%a0%b7%e7%9a%84%e4%b8%80%e6%a3%b5%e6%a0%91%e7%ae%97%e6%b3%95%e6%80%9d%e8%b7%af" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>这块需要先说一个概念</p>
+<blockquote>
+<p>它是是通过event和当前的state得到下一个state，即event+state=nextstate</p>
+</blockquote>
+<p>这句话，或者类似的话你会在绝大多数的解释文章里面看到。而我的理解就是，一个字符一个字符的检测，如果检测的字符在我们的树种，就进入命中的树，看下一个字在不在树里面，如果持续的命中就持续进入，最后完全命中了，也就是那个字的子树只有一个元素，并且元素的键是 end （这里是在我们的这个例子中，看图就明白了）。就是完全命中了关键词，就可以记录命中，或者准备替换了。</p>
+<p>这里说一个可以优化的点，看我们的例子有两个词 <code>日本人，日本鬼子</code> 这两个，如果为了快，完全可以去掉第二个词，质保流一个就行了，这样当检测到 end 就可以直接屏蔽或者记录了，而在我们的例子中，还需要判断元素数量，不是 1 的情况下还得继续深入，看看是不是命中了长尾。</p>
+<p>这样的长尾检测会引发一个问题，那就是 <code>回滚</code>，当我们命中了前置的词，后续的没有命中的时候就得记录并且回滚，这个回滚的长度是是多少呢？其实不仅仅是没有命中长尾的回滚，还有一个 <code>回滚</code> 操作，就是检测率几个字之后就没命中率额，就得回顾，这个回滚的长度是，<code>已检测字符长度 - 1</code> 的长度 。那么没有命中长尾的长度我们就知道了，<code>已检测字符长度 - 上次命中的长度</code> 就可以了。</p>
+<p>下面我们来看看代码实现。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">// 通配符的数量
+</span></span></span><span class="line"><span class="cl"><span class="nv">$maskMin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$maskMax</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 关键词词典字符串，这个部分的处理自己可以替换
+</span></span></span><span class="line"><span class="cl"><span class="nv">$dict</span> <span class="o">=</span> <span class="s2">&#34;傻瓜&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$checkDfaTree</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$dictArr</span> <span class="o">=</span> <span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="nv">$dict</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 重组一下带有 * 通配符的数组
+</span></span></span><span class="line"><span class="cl"><span class="nv">$fullDictArr</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span> <span class="p">(</span><span class="nv">$dictArr</span> <span class="k">as</span> <span class="nv">$word</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">mb_strpos</span><span class="p">(</span><span class="nv">$word</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">)</span> <span class="o">!==</span> <span class="k">false</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 带有通配符就把通配符去掉
+</span></span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="nv">$maskIndex</span> <span class="o">=</span> <span class="nv">$maskMin</span><span class="p">;</span> <span class="nv">$maskIndex</span> <span class="o">&lt;=</span> <span class="nv">$maskMax</span><span class="p">;</span> <span class="nv">$maskIndex</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$maskString</span> <span class="o">=</span> <span class="nx">str_pad</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$maskIndex</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$inputWord</span> <span class="o">=</span> <span class="nx">str_replace</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="nv">$maskString</span><span class="p">,</span> <span class="nv">$word</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$fullDictArr</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$inputWord</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$fullDictArr</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$word</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span> <span class="p">(</span><span class="nv">$fullDictArr</span> <span class="k">as</span> <span class="nv">$word</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 每次开始新词都要回到树的根部
+</span></span></span><span class="line"><span class="cl">    <span class="nv">$treeStart</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$checkDfaTree</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$wordLen</span> <span class="o">=</span> <span class="nx">mb_strlen</span><span class="p">(</span><span class="nv">$word</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$wordLen</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$char</span> <span class="o">=</span> <span class="nx">mb_substr</span><span class="p">(</span><span class="nv">$word</span><span class="p">,</span> <span class="nv">$i</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$treeStart</span><span class="p">[</span><span class="nv">$char</span><span class="p">]</span> <span class="o">=</span> <span class="nx">isset</span><span class="p">(</span><span class="nv">$treeStart</span><span class="p">[</span><span class="nv">$char</span><span class="p">])</span> <span class="o">?</span> <span class="nv">$treeStart</span><span class="p">[</span><span class="nv">$char</span><span class="p">]</span> <span class="o">:</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="nv">$wordLen</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 如果已经是次的结尾了就设置null
+</span></span></span><span class="line"><span class="cl">            <span class="nv">$treeStart</span><span class="p">[</span><span class="nv">$char</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 移动指针到下一个
+</span></span></span><span class="line"><span class="cl">        <span class="nv">$treeStart</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$treeStart</span><span class="p">[</span><span class="nv">$char</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">// 遍历str
+</span></span></span><span class="line"><span class="cl"><span class="nv">$start</span> <span class="o">=</span> <span class="nx">microtime</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$checkMessageLen</span> <span class="o">=</span> <span class="nx">mb_strlen</span><span class="p">(</span><span class="nv">$checkMessage</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$wordArr</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$checkTreeStart</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$checkDfaTree</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$hasPrefixLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$targetWord</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$checkMessageLen</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 获取一个字符
+</span></span></span><span class="line"><span class="cl">    <span class="nv">$char</span> <span class="o">=</span> <span class="nx">mb_substr</span><span class="p">(</span><span class="nv">$checkMessage</span><span class="p">,</span> <span class="nv">$i</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$checkTreeStart</span><span class="p">[</span><span class="nv">$char</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 如果有这个字就进入子树里面
+</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$checkTreeStart</span><span class="p">[</span><span class="nv">$char</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nv">$checkTreeStart</span><span class="p">[</span><span class="nv">$char</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">===</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 如果包含这个标识，就记录标识
+</span></span></span><span class="line"><span class="cl">            <span class="nv">$hasPrefixLength</span> <span class="o">=</span> <span class="nx">mb_strlen</span><span class="p">(</span><span class="nv">$targetWord</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$checkTreeStart</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$checkTreeStart</span><span class="p">[</span><span class="nv">$char</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$targetWord</span> <span class="o">.=</span> <span class="nv">$char</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$checkTreeStart</span><span class="p">[</span><span class="s1">&#39;*&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 如果有通配符就进入子树
+</span></span></span><span class="line"><span class="cl">        <span class="nv">$checkTreeStart</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$checkTreeStart</span><span class="p">[</span><span class="s1">&#39;*&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$targetWord</span> <span class="o">.=</span> <span class="nv">$char</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nv">$hasPrefixLength</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$wordArr</span><span class="p">[]</span> <span class="o">=</span> <span class="nx">mb_substr</span><span class="p">(</span><span class="nv">$targetWord</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">$hasPrefixLength</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 回滚
+</span></span></span><span class="line"><span class="cl">            <span class="nv">$i</span> <span class="o">-=</span> <span class="nx">mb_strlen</span><span class="p">(</span><span class="nv">$targetWord</span><span class="p">)</span> <span class="o">-</span> <span class="nv">$hasPrefixLength</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 回滚
+</span></span></span><span class="line"><span class="cl">            <span class="nv">$i</span> <span class="o">-=</span> <span class="nx">mb_strlen</span><span class="p">(</span><span class="nv">$targetWord</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 回到头部
+</span></span></span><span class="line"><span class="cl">        <span class="nv">$checkTreeStart</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$checkDfaTree</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$targetWord</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$hasPrefixLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">count</span><span class="p">(</span><span class="nv">$checkTreeStart</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">isset</span><span class="p">(</span><span class="nv">$checkTreeStart</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nv">$checkTreeStart</span><span class="p">[</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">===</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 子树只有一个并且是end 就说明是命中了
+</span></span></span><span class="line"><span class="cl">        <span class="c1">// 赋值
+</span></span></span><span class="line"><span class="cl">        <span class="nv">$wordArr</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$targetWord</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 清空
+</span></span></span><span class="line"><span class="cl">        <span class="nv">$targetWord</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 回到头部
+</span></span></span><span class="line"><span class="cl">        <span class="nv">$checkTreeStart</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$checkDfaTree</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$hasPrefixLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">var_dump</span><span class="p">(</span><span class="nv">$wordArr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="s2">&#34;&lt;br /&gt; useTime:&#34;</span> <span class="o">.</span> <span class="p">(</span><span class="nx">microtime</span><span class="p">(</span><span class="k">true</span><span class="p">)</span> <span class="o">-</span> <span class="nv">$start</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">;</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>下面这个就是匹配加测试了，目前我能想到的都测试通过了，如果有问题，可以回复我。</p>
+<h2 class="heading-element" id="结论"><span>结论</span>
+  <a href="#%e7%bb%93%e8%ae%ba" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>目前来看，效率是比正则要好一些，命中的情况下速度差不多，没命中的情况下表现要优于正则。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2020-03-29 16:42:08">更新于 2020-03-29&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/dfa-with-php/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/%e4%ba%89%e5%8f%96%e8%83%bd%e8%ae%a9%e5%a4%a7%e5%ae%b6%e9%83%bd%e8%83%bd%e7%9c%8b%e6%87%82%e7%9a%84%20DFA%20%e7%ae%97%e6%b3%95.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/dfa-with-php/" data-title="争取能让大家都能看懂的 DFA 算法"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/dfa-with-php/"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/dfa-with-php/" data-title="争取能让大家都能看懂的 DFA 算法"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/%E6%B5%85%E8%B0%88aopioc/" class="post-nav-item" rel="prev" title="浅谈AOP、IOC"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>浅谈AOP、IOC</a><a href="/posts/jenkins-and-github-auto-deploy-hugo-blog/" class="post-nav-item" rel="next" title="利用Jenkins&#43;Github自动部署hugo博客">利用Jenkins&#43;Github自动部署hugo博客<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog">
+      <div class="toc">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#为什么要学习这个算法">为什么要学习这个算法</a></li>
+    <li><a href="#什么是-dfa">什么是 dfa</a></li>
+    <li><a href="#我的理解">我的理解</a>
+      <ul>
+        <li><a href="#什么是组织好的关键词树">什么是组织好的关键词树</a></li>
+        <li><a href="#待检测的字符串">待检测的字符串</a></li>
+        <li><a href="#为什么要组织好那样的一棵树算法思路">为什么要组织好那样的一棵树（算法思路）</a></li>
+      </ul>
+    </li>
+    <li><a href="#结论">结论</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div><div id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" role="button" aria-label="目录"><i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/cfbc2078219845ae2650d06b131cef49.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

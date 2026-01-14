@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Typecho 源码分析 - 标签 - Miracle Hao</title>
+    <link>http://localhost:1313/tags/typecho-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 29 Dec 2019 10:50:52 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/typecho-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Typecho 源码分析（10）-- DoAction 分析</title>
+      <link>http://localhost:1313/posts/typecho-source-code-analysis-10/</link>
+      <pubDate>Sun, 29 Dec 2019 10:50:52 +0000</pubDate>
+      <guid>http://localhost:1313/posts/typecho-source-code-analysis-10/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前情提要&#34;&gt;&lt;span&gt;前情提要&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e6%83%85%e6%8f%90%e8%a6%81&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;前面我们分析了插件列表，看到 html 部分，我们看到了请求的url 包含 action 我们这篇就分析这里。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Typecho 源码分析（9）-- 部分Security&amp;User 组件分析</title>
+      <link>http://localhost:1313/posts/typecho-source-code-analysis-9/</link>
+      <pubDate>Tue, 24 Dec 2019 10:50:52 +0000</pubDate>
+      <guid>http://localhost:1313/posts/typecho-source-code-analysis-9/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前情提要&#34;&gt;&lt;span&gt;前情提要&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e6%83%85%e6%8f%90%e8%a6%81&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;前面我们分析了插件列表，但是 &lt;code&gt;html&lt;/code&gt; 部分我们没有分析，今天我们就来分析一下 &lt;code&gt;url&lt;/code&gt; 生成部分。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Typecho 源码分析（8）-- 后台插件列表</title>
+      <link>http://localhost:1313/posts/typecho-source-code-analysis-8/</link>
+      <pubDate>Sat, 21 Dec 2019 10:50:52 +0000</pubDate>
+      <guid>http://localhost:1313/posts/typecho-source-code-analysis-8/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前情提要&#34;&gt;&lt;span&gt;前情提要&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e6%83%85%e6%8f%90%e8%a6%81&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;前面 7 篇文章基本上已经分析完成 &lt;code&gt;Typecho&lt;/code&gt; 的运行流程了，从本篇开始就开始分析各种模块了，原本是想分析路由的，但是我更对插件感兴趣，所以就从插件开始了。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Typecho 源码分析（7）</title>
+      <link>http://localhost:1313/posts/typecho-source-code-analysis-7/</link>
+      <pubDate>Sun, 15 Dec 2019 10:50:52 +0000</pubDate>
+      <guid>http://localhost:1313/posts/typecho-source-code-analysis-7/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;题外话&#34;&gt;&lt;span&gt;题外话&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e9%a2%98%e5%a4%96%e8%af%9d&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;两周之前搬了家，以前搬家从来没觉得东西这么多，收拾起来这么麻烦，基本上整理整理就可以过日子了。这次换了个整租，才发现屋子大了也不好，东西找不到，现在基本上算是步入正轨了，不过nas还没有就位，等我再整理整理在看看吧nas放到哪里。机械硬盘实在是太吵了，这次要放到一个安静的地方。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Typecho 源码分析（6）</title>
+      <link>http://localhost:1313/posts/typecho-source-code-analysis-6/</link>
+      <pubDate>Thu, 21 Nov 2019 10:50:52 +0000</pubDate>
+      <guid>http://localhost:1313/posts/typecho-source-code-analysis-6/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前情提要&#34;&gt;&lt;span&gt;前情提要&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e6%83%85%e6%8f%90%e8%a6%81&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;上一篇说了一下插件相关的东西，可是发现插件需要很多东西去说，于是就没说全，因为还是要抓紧把全部流程跑通，所以就省略下来了，这篇我们说一下路由相关的。等这个说完，等于就把全部流程跑通了。后面我们就可以展开来说各种模块了。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Typecho 源码分析（5）</title>
+      <link>http://localhost:1313/posts/typecho-source-code-analysis-5/</link>
+      <pubDate>Mon, 18 Nov 2019 10:50:52 +0000</pubDate>
+      <guid>http://localhost:1313/posts/typecho-source-code-analysis-5/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前情提要&#34;&gt;&lt;span&gt;前情提要&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e6%83%85%e6%8f%90%e8%a6%81&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;上一篇我们已经分析完了组件的初始化相关的东西，今天我们继续。插件部分。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Typecho 源码分析（4）</title>
+      <link>http://localhost:1313/posts/typecho-source-code-analysis-4/</link>
+      <pubDate>Thu, 14 Nov 2019 10:50:52 +0000</pubDate>
+      <guid>http://localhost:1313/posts/typecho-source-code-analysis-4/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;上篇文章忘记说的&#34;&gt;&lt;span&gt;上篇文章忘记说的&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e4%b8%8a%e7%af%87%e6%96%87%e7%ab%a0%e5%bf%98%e8%ae%b0%e8%af%b4%e7%9a%84&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;我们还是在入口文件徘徊，而且还是在初始化 &lt;code&gt;widget&lt;/code&gt; 的第一行。我们来到了初始化 &lt;code&gt;Widget_Init&lt;/code&gt; 的地方。在 &lt;code&gt;Init-&amp;gt;execute&lt;/code&gt; 方法中，我们到了初始化 &lt;code&gt;option&lt;/code&gt; 的地方。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Typecho 源码分析（3）</title>
+      <link>http://localhost:1313/posts/typecho-source-code-analysis-3/</link>
+      <pubDate>Wed, 13 Nov 2019 10:50:52 +0000</pubDate>
+      <guid>http://localhost:1313/posts/typecho-source-code-analysis-3/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前情提要&#34;&gt;&lt;span&gt;前情提要&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e6%83%85%e6%8f%90%e8%a6%81&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;通过之前我们的分析，我们已经把安装流程搞定了，本篇开始，我们分析前台相关的流程。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Typecho 源码分析（2）</title>
+      <link>http://localhost:1313/posts/typecho-source-code-analysis-2/</link>
+      <pubDate>Sat, 09 Nov 2019 10:50:52 +0000</pubDate>
+      <guid>http://localhost:1313/posts/typecho-source-code-analysis-2/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前情提要&#34;&gt;&lt;span&gt;前情提要&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e6%83%85%e6%8f%90%e8%a6%81&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;上一篇我们分析到了 &lt;code&gt;install.php&lt;/code&gt; 文件的 &lt;code&gt;set_include_path&lt;/code&gt;。今天我们继续。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Typecho 源码分析（1）</title>
+      <link>http://localhost:1313/posts/typecho-source-code-analysis-1/</link>
+      <pubDate>Thu, 07 Nov 2019 10:50:52 +0000</pubDate>
+      <guid>http://localhost:1313/posts/typecho-source-code-analysis-1/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;先说点前置的东西&#34;&gt;&lt;span&gt;先说点前置的东西&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%85%88%e8%af%b4%e7%82%b9%e5%89%8d%e7%bd%ae%e7%9a%84%e4%b8%9c%e8%a5%bf&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;从今天开始我要开始写源码分析的文章了，以前用 csdn 博客写过一些 android 和 java 的东西，后来脑袋抽筋被我删除了。所以这次等于是全新的开始，准备输出一些东西了。做了 5 年的开发，发现自己缺乏很多东西，所以这次从源码分析开始，输出东西以及补充自己的知识。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

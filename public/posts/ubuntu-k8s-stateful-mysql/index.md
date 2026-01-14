@@ -1,0 +1,108 @@
+# Ubuntu 20.04 K8s 单节点部署有状态 Mysql
+
+
+## 前言
+来了来了来了。这是续上一篇文章的第二部分，这篇文章简单说明了一下，如何在 k8s 中部署有状态的单节点 mysql 服务。
+注意：这个基本上只是实验环境，并不能应用于生产环境。当然了，谁会在生产环境中使用本地磁盘呢？
+
+## 正文
+本次全部操作都参照 [https://kubernetes.io/zh/docs/tasks/run-application/run-single-instance-stateful-application/](https://kubernetes.io/zh/docs/tasks/run-application/run-single-instance-stateful-application/) 的文档。
+
+首先部署 mysql 的pv
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/mysql"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+```
+这里完全参照官方的配置，只不过是把路径改为了 `/mnt/data/mysql`。
+
+剩下的 deployment 、 service 部分则完全参照了官方的配置。版本升级为8，然后把密码修改为自己的而已。
+另外如果像我一样升级了 mysql8 的，需要增加一个参数
+```
+args: ["--default-authentication-plugin=mysql_native_password"]
+```
+我还是贴一下完整的配置文件吧
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        env:
+          # Use secret in real usage
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        args: ["--default-authentication-plugin=mysql_native_password"]
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+
+```
+这样才会可以正常的连接上数据库，否则会报错。`ERROR 2059 (HY000): Authentication plugin 'caching_sha2_password' cannot be loaded` 这样类似的错误。
+
+剩下的参照文章部署即可，然后执行验证看看是否运行成功。
+
+如果不出意外，一切都跑通了。
+
+## 结语
+k8s 单集群部署相关的到这就结束了。毕竟在这个单机运行程序只是为了自用和验证相关学习成果。接下来的文章就是写程序了。告辞
+
+---
+
+> 作者:   
+> URL: http://localhost:1313/posts/ubuntu-k8s-stateful-mysql/  
+

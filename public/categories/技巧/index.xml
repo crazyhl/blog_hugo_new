@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>技巧 - 分类 - Miracle Hao</title>
+    <link>http://localhost:1313/categories/%E6%8A%80%E5%B7%A7/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 13 Apr 2019 16:35:19 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/%E6%8A%80%E5%B7%A7/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>docker-comopse 使用小总结</title>
+      <link>http://localhost:1313/posts/dockercomopse-uses-a-small-summary/</link>
+      <pubDate>Sat, 13 Apr 2019 16:35:19 +0000</pubDate>
+      <guid>http://localhost:1313/posts/dockercomopse-uses-a-small-summary/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E5%B7%A7/">技巧</category>
+      <description>&lt;p&gt;说句题外话，东西还得多用才能越来越明白啊。话说，今天休息在家用windows 的台式机弄docker，用来配置在台式机的开发环境，这次在台式机的配置目的就是在本地主机尽量不装任何开发用的相关软件，比如nginx、mysql、php这种。对了，这还得说句题外话，如果啥都不装，我连博客都写不了，不过为了台式机的干净，我依然选择在打开笔记本写博客。&lt;/p&gt;&#xA;&lt;p&gt;本地学习到的知识，主要原因是我我加了个node镜像用来编译vue写的代码。原本我都是使用&lt;code&gt;dokcer-compose up --build&lt;/code&gt; 这种方式编译加启动容器的，以前看 &lt;code&gt;laradock&lt;/code&gt; 文档的时候里面就没用过&lt;code&gt;docker-compose --build&lt;/code&gt; 编译加启动的方案，而是用 &lt;code&gt;docker-compose build xxx&lt;/code&gt; 然后在&lt;code&gt;docker-compose up xxx&lt;/code&gt; 这种方式，我以前始终不解，今天终于明白了，如果用 &lt;code&gt;dokcer-compose up --build&lt;/code&gt; 这种方式操作，会由于 &lt;code&gt;node&lt;/code&gt; 镜像不会持久化启动而反复报错，如果先 &lt;code&gt;build&lt;/code&gt; 在根据需要 &lt;code&gt;up&lt;/code&gt; 就不会造成这种问题了。当然如果配置了&lt;code&gt;restart: &amp;quot;no&amp;quot;&lt;/code&gt;之后也就启动一次然后退出，也并没有什么关系，不过为我还是选择遵从&lt;code&gt;laradock&lt;/code&gt;的方案，毕竟那么多人的经验还是值得参考的。&lt;/p&gt;&#xA;&lt;p&gt;当我们需要使用&lt;code&gt;node&lt;/code&gt; 的时候，就是用 &lt;code&gt;docker-compose run --rm node bash&lt;/code&gt; 这种就可以进入到容器内部了，加&lt;code&gt;--rm&lt;/code&gt;的原因是启动以后我们还得手工销毁，加了以后当我们退出的时候就自动销毁&lt;code&gt;container&lt;/code&gt;了，而且我们在&lt;code&gt;compose&lt;/code&gt; 的文件中配置了 &lt;code&gt;node&lt;/code&gt; 的 &lt;code&gt;restart: &amp;quot;no&amp;quot;&lt;/code&gt; 这样当我们停止以后也不会自己在跑起来。&lt;/p&gt;&#xA;&lt;p&gt;最后还得吐槽一下windows 的 crlf会让docker启动失败啊，很难受，把sublime配置为lf之后才解决。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>实战自动化部署hexo记录</title>
+      <link>http://localhost:1313/posts/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95/</link>
+      <pubDate>Thu, 28 Mar 2019 11:16:03 +0000</pubDate>
+      <guid>http://localhost:1313/posts/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E5%B7%A7/">技巧</category>
+      <description>&lt;p&gt;难受，两周前把自己的服务器换成自己弄得docker以后，就一直在折腾自己的博客，先是放弃了自己写的博客，换到typecho，然后在换到wordpress，最后换到了 hexo。&lt;/p&gt;&#xA;&lt;p&gt;先说说放弃自己博客的原因，因为自己是在不想在模板上花费太多的心思，其实后台我很满意的，毕竟自己写的，功能足够自己用就好了。&lt;/p&gt;&#xA;&lt;p&gt;再说说 typecho和 wordpress，前者轻量，但是可能因为我用的稳定版的的原因，有一些小问题，还懒得去弄，就放弃了。wordpress呢，太重了，太繁杂了。也弃了，其实我就是想要一个写字的地方，简简单单就好，不需要太多的东西，纠结了一圈之后，就用hexo把。&lt;/p&gt;&#xA;&lt;p&gt;我是这么做的，配置原文什么的我本地有一份，github上我存了一份，这样多台电脑也可以同步了。然后网站部署在了阿里云上面。&lt;/p&gt;&#xA;&lt;p&gt;下面就说说操作步骤。&lt;/p&gt;&#xA;&lt;p&gt;hexo 的安装配置以及主题相关我就不多说了，官方文档好得很，我就所说我的部署部分&lt;/p&gt;&#xA;&lt;p&gt;首先，先看服务器部分，我们首先配置 ssh 的自动登录，这样以后自己管理以及 &lt;code&gt;hexo d&lt;/code&gt; 的时候也会很省事&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;1. 在本机生成SSH密钥&#xA;ssh-keygen -t rsa&#xA;2. 然后将本地公钥拷贝到服务器&#xA;ssh-copy-id root@IP&#xA;注意 非 22端口 同样增加 -p参数&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;简单两步，以后就不用再输入密码了。&lt;/p&gt;&#xA;&lt;p&gt;然后在服务器上找一个地方存放我们的git相关的东西，其实就是配置一个钩子&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;git init --bare 你的文件夹名称&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;bare&lt;/code&gt; 的作用是创建一个裸仓库，我个人觉得这个目录就是我们以往的&lt;code&gt;.git&lt;/code&gt;文件夹。&lt;/p&gt;&#xA;&lt;p&gt;然后我们进入这个目录，进入 &lt;code&gt;hooks&lt;/code&gt; 文件夹,执行&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;vi post-receive&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个就是编辑我们的钩子，这个钩子就是收到推送的时候我们的操作。然后我们编辑这个文件&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;#! /bin/sh&#xA;git --work-tree=/home/docker-nmp/www/blog_hexo(真正存放我们网页的地方) --git-dir=/root/blog.git(这个就是我们上一步创建的git bare 文件夹) checkout -f&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;第一行就是表示是个&lt;code&gt;sh&lt;/code&gt;文件，这么说可能不准确，我们姑且这么认为。 然后 &lt;code&gt;work-tree&lt;/code&gt; 表示需要 &lt;code&gt;clone&lt;/code&gt; 的地方， &lt;code&gt;git-dir&lt;/code&gt; 是指我们的git配置的位置， &lt;code&gt;checkout&lt;/code&gt; 就不说了, &lt;code&gt;-f&lt;/code&gt; 就是强制的意思，忽略本地修改。&lt;/p&gt;&#xA;&lt;p&gt;然后执行&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt; chmod &amp;#43;x post-receive&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;把这个文件标记为可执行的，这里不要忘记&lt;/p&gt;&#xA;&lt;p&gt;这些都弄好后，一定要保证&lt;code&gt;work-tree&lt;/code&gt;是存在的，毕竟 git 又不帮我们创建文件夹。如果不存在，也会提示我们成功。这个很坑.&lt;/p&gt;&#xA;&lt;p&gt;服务器这边就搞定了&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>docker服务器实战部署以及wordpress开启cdn的一些注意点</title>
+      <link>http://localhost:1313/posts/docker-server-combat-deployment-and-wordpress-open-cdn-some-attention-points/</link>
+      <pubDate>Sat, 23 Mar 2019 17:53:44 +0000</pubDate>
+      <guid>http://localhost:1313/posts/docker-server-combat-deployment-and-wordpress-open-cdn-some-attention-points/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E5%B7%A7/">技巧</category>
+      <description>&lt;p&gt;虽然本地docker已经弄完了好几个月了，在最近也在持续的优化中，包括把能配置的部分转移到 &lt;code&gt;env&lt;/code&gt;文件中。&#xA;上周把自己的博客系统废弃了，因为当时写这个系统也仅仅是为了 &lt;code&gt;laravel&lt;/code&gt;的学习而已，用了将近2年，虽然很稳定，但是也有很多不满意的地方，虽然现在换到了 &lt;code&gt;wordpress&lt;/code&gt;也有一些不满意的地方，但是还好插件丰富，周边也很多，可以慢慢改造成自己满意的样子，下面主要就是记录一下这次服务器实战部署的踏坑情况。&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;mysql&lt;/code&gt;如果使用 &lt;code&gt;8&lt;/code&gt;及以上的版本的时候，需要进入 &lt;code&gt;msyql&lt;/code&gt;容器内部，修改一下密码方案，否则数据库连不上&lt;/li&gt;&lt;/li&gt;&#xA;&lt;li&gt;注意代码文件夹写入权限问题，目前 &lt;code&gt;docker&lt;/code&gt;设置的用户是 &lt;code&gt;www&lt;/code&gt;，所有如果不是 &lt;code&gt;www&lt;/code&gt;用户的话，可能会导致无法写入文件的&lt;/li&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;wordpress&lt;/code&gt;开启又拍 &lt;code&gt;cdn&lt;/code&gt;以后样式无法加载，在又拍后台设置 &lt;code&gt;缓存控制-&amp;amp;gt;参数跟随-&amp;amp;gt;全程跟随后&lt;/code&gt;之后就ok了。&lt;/li&gt;&lt;/li&gt;&#xA;&lt;li&gt;目前写代码还是比较习惯 &lt;code&gt;markdown&lt;/code&gt;，所以目前日志都会在印象笔记写好，然后在转换，由于代码高亮方便跟 &lt;code&gt;wordpress&lt;/code&gt;还有点不一致，所以自己写了个简单的转换器。&lt;/li&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;现在还有的小问题就是图片上传了，慢慢在弄一个图片上传工具就ok了。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>终于构建了一个自己可用的 docker 了</title>
+      <link>http://localhost:1313/posts/i-finally-built-a-docker-that-can-use-myself/</link>
+      <pubDate>Sat, 01 Jul 2017 12:15:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/i-finally-built-a-docker-that-can-use-myself/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E5%B7%A7/">技巧</category>
+      <description>&lt;p&gt;话说，想学习 docker 很久了，一直以来总是没有时间去实践，其实也不是没有时间，而是一直没有一个好的时机去实践。 这周重做了系统了以后就忘记弄 vagrant 了。然后昨天就想用心的看一下 laravel 的源码，以加深自己的理解。但是发现本地没有 vagrant 环境，正好趁机搞一下 docker 了，于是就搞了起来。&lt;/p&gt;&#xA;&lt;p&gt;主要参考了下面这两篇文章&lt;/p&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://segmentfault.com/a/1190000008833012&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://segmentfault.com/a/1190000008833012&lt;/a&gt;&#xA;&lt;a href=&#34;https://segmentfault.com/a/1190000008822648#articleHeader44&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://segmentfault.com/a/1190000008822648#articleHeader44&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;另外再进行 docker 写东西的时候，发现数据库连接不上了，所以查了一下，链接数据库的不用填写 localhost 或者 ip，直接填写 docker 的名字就 ok 了。这样就可以连接上了。&lt;/p&gt;&#xA;&lt;p&gt;还有想说了，不知道咋说了，先学习吧。就这样&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>deepin 添加 phpstorm 快捷方式到 application 目录</title>
+      <link>http://localhost:1313/posts/deepin-add-phpstorm-shortcut-to-the-application-directory/</link>
+      <pubDate>Sat, 29 Apr 2017 13:20:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/deepin-add-phpstorm-shortcut-to-the-application-directory/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E5%B7%A7/">技巧</category>
+      <description>&lt;p&gt;首先创建 Phpstorm.desktop 文件，并把下面的代码输入&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;[Desktop Entry]&#xA;Categories=Development;&#xA;Comment[zh_CN]=&#xA;Comment=&#xA;Exec=/opt/phpstorm/bin/phpstorm.sh&#xA;GenericName[zh_CN]=IDE&#xA;GenericName=IDE&#xA;Icon=/opt/phpstorm/bin/webide.png&#xA;Name[zh_CN]=phpStorm　　　　　　　　　　　&#xA;Name=phpStorm　　　　　　　&#xA;Path=&#xA;StartupNotify=true&#xA;Terminal=false&#xA;Type=Application&#xA;X-DBUS-ServiceName=&#xA;X-DBUS-StartupType=&#xA;X-KDE-SubstituteUID=false&#xA;X-KDE-Username=Learn Programming&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;说明一下 Exec 是执行文件的路径，Icon 是图标的路径，Categories 是分类，这个根据系统来就可以了&lt;/p&gt;&#xA;&lt;p&gt;然后执行下面两行代码&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;sudo mv Phpstorm.desktop /usr/share/applications/&#xA;sudo chmod &amp;#43;x Phpstorm.desktop&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这样就 ok 了，在 application 目录里面就会有 phpstorm了，就这么简单，这个适用于 debain 系列，其他应用也是这样添加就ok了&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

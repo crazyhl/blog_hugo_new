@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>容器 - 标签 - Miracle Hao</title>
+    <link>http://localhost:1313/tags/%E5%AE%B9%E5%99%A8/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 27 Mar 2017 22:44:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E5%AE%B9%E5%99%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Php依赖注入容器Pimple的笔记</title>
+      <link>http://localhost:1313/posts/php-dependency-injection-note-from-the-container-pimple/</link>
+      <pubDate>Mon, 27 Mar 2017 22:44:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/php-dependency-injection-note-from-the-container-pimple/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://www.cimple.ink/images/2019/03/06/0664506a46a7649adc31545165d08f41.jpg&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;话说许久没有写技术类的笔记了，也该写点东西了，距离上次说 container 已经过去4个月了，期间也一直在学习，但是不知道写点什么好，说实话还是很怀念 14 年下半年，那半年的进步真的很大，那时候自己愿意看东西，也愿意写东西，也许写东西能让自己进步更快吧，所以17年了也应该继续进步了，否则问题大大的啊，下班的时候跟小伙伴聊天，做技术的就应该一直学习，否则就会被拉下很远很远。好了，说了这么多废话，说点正文吧，其实，想写 laravel 的 container 的笔记的，可是，自己看了许久，也没有很好的理解，理解到的部分也是很片面的东西，不过 laravel 的 container 真的很强大，要比今天写的这个强大的多，不过强大的带来的问题，就是可能会慢，毕竟用到了反射，今天这个 Pimple 则相对简单的多了，没有那么多复杂的东西，用起来也很顺手而且比较容易理解，所以今天就用这个做笔记了。&lt;/p&gt;&#xA;&lt;p&gt;原本想分段做这个的笔记的，后来觉得应该吧知识点拆分开说明，然后再用整体代码在里面做注释的方式来解释这段更好一些，于是乎，准备开整，btw，过几天准备更新一下编辑器，现在这个自己搞得编辑器还是有些简陋的。好吧，进入正文了。&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;class Container implements \ArrayAccess&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个类实现了 ArrayAccess 接口，ArrayAccess 是个什么东西了，大家首先看一下 PHP 官网的手册 &lt;a href=&#34;http://php.net/manual/zh/class.arrayaccess.php&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;http://php.net/manual/zh/class.arrayaccess.php&lt;/a&gt; 好吧，我就简单说一句，就是让对象能够像数组一样操作了。具体需要实现的几个接口，大家看一下手册吧，我觉得我的说明肯定没有手册写得好，我更多理解的东西，会在代码注释中写一下。&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;public function __construct(array $values = array())&#xA;    {&#xA;        $this-&amp;gt;factories = new \SplObjectStorage();&#xA;        $this-&amp;gt;protected = new \SplObjectStorage();&#xA;&#xA;        foreach ($values as $key =&amp;gt; $value) {&#xA;            $this-&amp;gt;offsetSet($key, $value);&#xA;        }&#xA;    }&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在构造方法中又出现了 SplObjectStorage 类，那么这个 SplObjectStorage 是个什么东西呢，我们再去看一下手册 &lt;a href=&#34;http://php.net/manual/zh/class.splobjectstorage.php&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;http://php.net/manual/zh/class.splobjectstorage.php&lt;/a&gt;  这个在手册中可惜翻译的不完全（根本没有翻译），所以我就简单的说说，这个类其实是实现了 Countable , Iterator , Serializable , ArrayAccess 这4个接口，这4个接口大家也可以看一下手册，看完了就知道这个类是干什么的了，我再来拆分说下 Countable 就是让一个类可以用一个计数器， Iterator 就是可以用 foreach 这些去循环，Serializable 就是可以序列化，ArrayAccess 上面说过了就不多说了。其实刚开始很难理解这个类，不过多看看手册，别人的示例代码，自己在多写一些可能就了解了。这个如何理解我也说不太好。大家见谅。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>PHP 自动加载 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="做编程3年了，几乎每年一个转型 （java -&gt; android（web app） -&gt; php），这个节奏太不舒服了。想深入了解什么的时候，总是无奈的转型。现在自己也算是彻底的稳定下来了。可以安心的研究 php 了。php 也做了一年多了，一直在用框架，也就是最近几个月吧，认识到了自己的不足之处，开始逐步研究一些细节方面的东西。
+这个博客使用 laravel 弄的，里面很多的细节都是在以前的 java 的时候接触过，但是以前弄 java 的时候就没有太细致的研究。现在也就顺道一起弥补回来。
+今天要写的是自动加载， php 中如果想要加载一个类的话，一般采用 require 或者 include 但是呢，自动引入了命名空间以后，类名加上命名空间超级长，然后每个文件开头一排 require 外加一排 use 这个文件无疑太长，而且如果某一次忘记了引入文件，如果项目过大，那么结果就是两个字爆炸 boom shakalaka。排查起来超级麻烦。
+所以，就有了自动加载，以前用自动加载都是使用 __autoload 但是这个方法有一个bug，就是只能使用一次。这样造成的问题就是如果我们有多种状态的引用的话，就会产生很长的代码，这是我们所不想见到的。于是就有了 spl_autoload_register 其实，从文档上来看他就是 autoload 的一种实现，但是区别是，这个方法可以执行多次。但是以我这一段看代码来看，其实也就是使用了一次。但是安全第一，而且为了标准还是使用 spl_autoload_register 。
+上面说了一大堆没用，其实有用的就是一个方法 spl_autoload_register ，具体看文档： http://php.net/manual/zh/function.autoload.php。
+下面进入正题，开始我们的自动加载吧。我直接上代码了：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 &lt;?php use Test32\Test; spl_autoload_register(function ($class) { $path = str_replace(&#39;\\&#39;, DIRECTORY_SEPARATOR, $class); $path .= &#39;.php&#39;; if (file_exists($path)) { require_once ($path); } else { throw new Exception(&#39;Class not exist!&#39;); } }, true); $test = new Test(); $test-&gt;sayHello(); 现在来解释一下：这个方法会接受三个参数，第一个是一个回掉函数，后面两个是bool类型的参数。后面两个很少使用，所以我们就着重说一下第一个回掉函数，这个函数有一个参数是一个包含命名空间的类名，也就是我们use的那一个部分的名称，我们在这里是使用层次文件夹的方式，构造的目录和文件结构的。所以，在我们收到名称之后，先转换为路径在加上 .php 的文件名后缀，判断一下文件是否存在。如果存在就 require 进去。如果不存在就抛出一个异常，告知class不存在。这样要简单的自动加载器就完成了。
+"><meta name="keywords" content='自动加载, spl_autoload_register'>
+  <meta itemprop="name" content="PHP 自动加载">
+  <meta itemprop="description" content="做编程3年了，几乎每年一个转型 （java -&gt; android（web app） -&gt; php），这个节奏太不舒服了。想深入了解什么的时候，总是无奈的转型。现在自己也算是彻底的稳定下来了。可以安心的研究 php 了。php 也做了一年多了，一直在用框架，也就是最近几个月吧，认识到了自己的不足之处，开始逐步研究一些细节方面的东西。
+这个博客使用 laravel 弄的，里面很多的细节都是在以前的 java 的时候接触过，但是以前弄 java 的时候就没有太细致的研究。现在也就顺道一起弥补回来。
+今天要写的是自动加载， php 中如果想要加载一个类的话，一般采用 require 或者 include 但是呢，自动引入了命名空间以后，类名加上命名空间超级长，然后每个文件开头一排 require 外加一排 use 这个文件无疑太长，而且如果某一次忘记了引入文件，如果项目过大，那么结果就是两个字爆炸 boom shakalaka。排查起来超级麻烦。
+所以，就有了自动加载，以前用自动加载都是使用 __autoload 但是这个方法有一个bug，就是只能使用一次。这样造成的问题就是如果我们有多种状态的引用的话，就会产生很长的代码，这是我们所不想见到的。于是就有了 spl_autoload_register 其实，从文档上来看他就是 autoload 的一种实现，但是区别是，这个方法可以执行多次。但是以我这一段看代码来看，其实也就是使用了一次。但是安全第一，而且为了标准还是使用 spl_autoload_register 。
+上面说了一大堆没用，其实有用的就是一个方法 spl_autoload_register ，具体看文档： http://php.net/manual/zh/function.autoload.php。
+下面进入正题，开始我们的自动加载吧。我直接上代码了：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 &lt;?php use Test32\Test; spl_autoload_register(function ($class) { $path = str_replace(&#39;\\&#39;, DIRECTORY_SEPARATOR, $class); $path .= &#39;.php&#39;; if (file_exists($path)) { require_once ($path); } else { throw new Exception(&#39;Class not exist!&#39;); } }, true); $test = new Test(); $test-&gt;sayHello(); 现在来解释一下：这个方法会接受三个参数，第一个是一个回掉函数，后面两个是bool类型的参数。后面两个很少使用，所以我们就着重说一下第一个回掉函数，这个函数有一个参数是一个包含命名空间的类名，也就是我们use的那一个部分的名称，我们在这里是使用层次文件夹的方式，构造的目录和文件结构的。所以，在我们收到名称之后，先转换为路径在加上 .php 的文件名后缀，判断一下文件是否存在。如果存在就 require 进去。如果不存在就抛出一个异常，告知class不存在。这样要简单的自动加载器就完成了。">
+  <meta itemprop="datePublished" content="2016-09-18T22:52:00+00:00">
+  <meta itemprop="dateModified" content="2016-09-18T22:52:00+00:00">
+  <meta itemprop="wordCount" content="102">
+  <meta itemprop="keywords" content="自动加载,Spl_autoload_register"><meta property="og:url" content="http://localhost:1313/posts/php-autoloading/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="PHP 自动加载">
+  <meta property="og:description" content="做编程3年了，几乎每年一个转型 （java -&gt; android（web app） -&gt; php），这个节奏太不舒服了。想深入了解什么的时候，总是无奈的转型。现在自己也算是彻底的稳定下来了。可以安心的研究 php 了。php 也做了一年多了，一直在用框架，也就是最近几个月吧，认识到了自己的不足之处，开始逐步研究一些细节方面的东西。
+这个博客使用 laravel 弄的，里面很多的细节都是在以前的 java 的时候接触过，但是以前弄 java 的时候就没有太细致的研究。现在也就顺道一起弥补回来。
+今天要写的是自动加载， php 中如果想要加载一个类的话，一般采用 require 或者 include 但是呢，自动引入了命名空间以后，类名加上命名空间超级长，然后每个文件开头一排 require 外加一排 use 这个文件无疑太长，而且如果某一次忘记了引入文件，如果项目过大，那么结果就是两个字爆炸 boom shakalaka。排查起来超级麻烦。
+所以，就有了自动加载，以前用自动加载都是使用 __autoload 但是这个方法有一个bug，就是只能使用一次。这样造成的问题就是如果我们有多种状态的引用的话，就会产生很长的代码，这是我们所不想见到的。于是就有了 spl_autoload_register 其实，从文档上来看他就是 autoload 的一种实现，但是区别是，这个方法可以执行多次。但是以我这一段看代码来看，其实也就是使用了一次。但是安全第一，而且为了标准还是使用 spl_autoload_register 。
+上面说了一大堆没用，其实有用的就是一个方法 spl_autoload_register ，具体看文档： http://php.net/manual/zh/function.autoload.php。
+下面进入正题，开始我们的自动加载吧。我直接上代码了：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 &lt;?php use Test32\Test; spl_autoload_register(function ($class) { $path = str_replace(&#39;\\&#39;, DIRECTORY_SEPARATOR, $class); $path .= &#39;.php&#39;; if (file_exists($path)) { require_once ($path); } else { throw new Exception(&#39;Class not exist!&#39;); } }, true); $test = new Test(); $test-&gt;sayHello(); 现在来解释一下：这个方法会接受三个参数，第一个是一个回掉函数，后面两个是bool类型的参数。后面两个很少使用，所以我们就着重说一下第一个回掉函数，这个函数有一个参数是一个包含命名空间的类名，也就是我们use的那一个部分的名称，我们在这里是使用层次文件夹的方式，构造的目录和文件结构的。所以，在我们收到名称之后，先转换为路径在加上 .php 的文件名后缀，判断一下文件是否存在。如果存在就 require 进去。如果不存在就抛出一个异常，告知class不存在。这样要简单的自动加载器就完成了。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2016-09-18T22:52:00+00:00">
+    <meta property="article:modified_time" content="2016-09-18T22:52:00+00:00">
+    <meta property="article:tag" content="自动加载">
+    <meta property="article:tag" content="Spl_autoload_register">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PHP 自动加载">
+  <meta name="twitter:description" content="做编程3年了，几乎每年一个转型 （java -&gt; android（web app） -&gt; php），这个节奏太不舒服了。想深入了解什么的时候，总是无奈的转型。现在自己也算是彻底的稳定下来了。可以安心的研究 php 了。php 也做了一年多了，一直在用框架，也就是最近几个月吧，认识到了自己的不足之处，开始逐步研究一些细节方面的东西。
+这个博客使用 laravel 弄的，里面很多的细节都是在以前的 java 的时候接触过，但是以前弄 java 的时候就没有太细致的研究。现在也就顺道一起弥补回来。
+今天要写的是自动加载， php 中如果想要加载一个类的话，一般采用 require 或者 include 但是呢，自动引入了命名空间以后，类名加上命名空间超级长，然后每个文件开头一排 require 外加一排 use 这个文件无疑太长，而且如果某一次忘记了引入文件，如果项目过大，那么结果就是两个字爆炸 boom shakalaka。排查起来超级麻烦。
+所以，就有了自动加载，以前用自动加载都是使用 __autoload 但是这个方法有一个bug，就是只能使用一次。这样造成的问题就是如果我们有多种状态的引用的话，就会产生很长的代码，这是我们所不想见到的。于是就有了 spl_autoload_register 其实，从文档上来看他就是 autoload 的一种实现，但是区别是，这个方法可以执行多次。但是以我这一段看代码来看，其实也就是使用了一次。但是安全第一，而且为了标准还是使用 spl_autoload_register 。
+上面说了一大堆没用，其实有用的就是一个方法 spl_autoload_register ，具体看文档： http://php.net/manual/zh/function.autoload.php。
+下面进入正题，开始我们的自动加载吧。我直接上代码了：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 &lt;?php use Test32\Test; spl_autoload_register(function ($class) { $path = str_replace(&#39;\\&#39;, DIRECTORY_SEPARATOR, $class); $path .= &#39;.php&#39;; if (file_exists($path)) { require_once ($path); } else { throw new Exception(&#39;Class not exist!&#39;); } }, true); $test = new Test(); $test-&gt;sayHello(); 现在来解释一下：这个方法会接受三个参数，第一个是一个回掉函数，后面两个是bool类型的参数。后面两个很少使用，所以我们就着重说一下第一个回掉函数，这个函数有一个参数是一个包含命名空间的类名，也就是我们use的那一个部分的名称，我们在这里是使用层次文件夹的方式，构造的目录和文件结构的。所以，在我们收到名称之后，先转换为路径在加上 .php 的文件名后缀，判断一下文件是否存在。如果存在就 require 进去。如果不存在就抛出一个异常，告知class不存在。这样要简单的自动加载器就完成了。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/php-autoloading/" title="PHP 自动加载 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/mysql-batch-update-multiline-notes/" title="Mysql 批量更新多行笔记" /><link rel="next" type="text/html" href="http://localhost:1313/posts/redis-zsets-data-type-inconsistency/" title="Redis zSets 数据类型不一致踏坑记" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/php-autoloading/index.md" title="PHP 自动加载 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "PHP 自动加载",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/php-autoloading\/"
+    },"genre": "posts","keywords": "自动加载, spl_autoload_register","wordcount":  102 ,
+    "url": "http:\/\/localhost:1313\/posts\/php-autoloading\/","datePublished": "2016-09-18T22:52:00+00:00","dateModified": "2016-09-18T22:52:00+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>PHP 自动加载</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2016-09-18 22:52:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2016-09-18">2016-09-18</time></span>&nbsp;<span title="102 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 200 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>做编程3年了，几乎每年一个转型 （java -&gt; android（web app） -&gt; php），这个节奏太不舒服了。想深入了解什么的时候，总是无奈的转型。现在自己也算是彻底的稳定下来了。可以安心的研究 php 了。php 也做了一年多了，一直在用框架，也就是最近几个月吧，认识到了自己的不足之处，开始逐步研究一些细节方面的东西。</p>
+<p>这个博客使用 laravel 弄的，里面很多的细节都是在以前的 java 的时候接触过，但是以前弄 java 的时候就没有太细致的研究。现在也就顺道一起弥补回来。</p>
+<p>今天要写的是自动加载， php 中如果想要加载一个类的话，一般采用 require 或者 include 但是呢，自动引入了命名空间以后，类名加上命名空间超级长，然后每个文件开头一排 require 外加一排 use 这个文件无疑太长，而且如果某一次忘记了引入文件，如果项目过大，那么结果就是两个字爆炸 boom shakalaka。排查起来超级麻烦。</p>
+<p>所以，就有了自动加载，以前用自动加载都是使用 <code>__autoload</code> 但是这个方法有一个bug，就是只能使用一次。这样造成的问题就是如果我们有多种状态的引用的话，就会产生很长的代码，这是我们所不想见到的。于是就有了 <code>spl_autoload_register</code> 其实，从文档上来看他就是 autoload 的一种实现，但是区别是，这个方法可以执行多次。但是以我这一段看代码来看，其实也就是使用了一次。但是安全第一，而且为了标准还是使用 <code>spl_autoload_register</code> 。</p>
+<p>上面说了一大堆没用，其实有用的就是一个方法 <code>spl_autoload_register</code> ，具体看文档： <a href="http://php.net/manual/zh/function.autoload.php" target="_blank" rel="external nofollow noopener noreferrer">http://php.net/manual/zh/function.autoload.php</a>。</p>
+<p>下面进入正题，开始我们的自动加载吧。我直接上代码了：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Test32\Test</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">spl_autoload_register</span><span class="p">(</span><span class="k">function</span> <span class="p">(</span><span class="nv">$class</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$path</span> <span class="o">=</span> <span class="nx">str_replace</span><span class="p">(</span><span class="s1">&#39;\\&#39;</span><span class="p">,</span> <span class="nx">DIRECTORY_SEPARATOR</span><span class="p">,</span> <span class="nv">$class</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$path</span> <span class="o">.=</span> <span class="s1">&#39;.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">file_exists</span><span class="p">(</span><span class="nv">$path</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">require_once</span> <span class="p">(</span><span class="nv">$path</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">throw</span> <span class="k">new</span> <span class="nx">Exception</span><span class="p">(</span><span class="s1">&#39;Class not exist!&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">},</span> <span class="k">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$test</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Test</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$test</span><span class="o">-&gt;</span><span class="na">sayHello</span><span class="p">();</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>现在来解释一下：这个方法会接受三个参数，第一个是一个回掉函数，后面两个是bool类型的参数。后面两个很少使用，所以我们就着重说一下第一个回掉函数，这个函数有一个参数是一个包含命名空间的类名，也就是我们use的那一个部分的名称，我们在这里是使用层次文件夹的方式，构造的目录和文件结构的。所以，在我们收到名称之后，先转换为路径在加上 <code>.php</code> 的文件名后缀，判断一下文件是否存在。如果存在就 <code>require</code> 进去。如果不存在就抛出一个异常，告知class不存在。这样要简单的自动加载器就完成了。</p>
+<p>过一段会写composer的各种加载方式。今天就到这里了。后续还会继续写反射相关的东西。然后我自己的大轮子也会以这个自动加载作为一切的基础。逐步完善轮子</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2016-09-18 22:52:00">更新于 2016-09-18&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/php-autoloading/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/PHP-%e8%87%aa%e5%8a%a8%e5%8a%a0%e8%bd%bd.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/php-autoloading/" data-title="PHP 自动加载" data-hashtags="自动加载,spl_autoload_register"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/php-autoloading/" data-hashtag="自动加载"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/php-autoloading/" data-title="PHP 自动加载"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD/" class="post-tag" title="标签 - 自动加载">自动加载</a><a href="/tags/spl_autoload_register/" class="post-tag" title="标签 - Spl_autoload_register">Spl_autoload_register</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/mysql-batch-update-multiline-notes/" class="post-nav-item" rel="prev" title="Mysql 批量更新多行笔记"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Mysql 批量更新多行笔记</a><a href="/posts/redis-zsets-data-type-inconsistency/" class="post-nav-item" rel="next" title="Redis ZSets 数据类型不一致踏坑记">Redis ZSets 数据类型不一致踏坑记<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/afbd898a9262b98a0b08b3d6fe165bb3.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

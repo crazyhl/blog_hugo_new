@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>实战自动化部署hexo记录 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="难受，两周前把自己的服务器换成自己弄得docker以后，就一直在折腾自己的博客，先是放弃了自己写的博客，换到typecho，然后在换到wordpress，最后换到了 hexo。
+先说说放弃自己博客的原因，因为自己是在不想在模板上花费太多的心思，其实后台我很满意的，毕竟自己写的，功能足够自己用就好了。
+再说说 typecho和 wordpress，前者轻量，但是可能因为我用的稳定版的的原因，有一些小问题，还懒得去弄，就放弃了。wordpress呢，太重了，太繁杂了。也弃了，其实我就是想要一个写字的地方，简简单单就好，不需要太多的东西，纠结了一圈之后，就用hexo把。
+我是这么做的，配置原文什么的我本地有一份，github上我存了一份，这样多台电脑也可以同步了。然后网站部署在了阿里云上面。
+下面就说说操作步骤。
+hexo 的安装配置以及主题相关我就不多说了，官方文档好得很，我就所说我的部署部分
+首先，先看服务器部分，我们首先配置 ssh 的自动登录，这样以后自己管理以及 hexo d 的时候也会很省事
+1 2 3 4 5 1. 在本机生成SSH密钥 ssh-keygen -t rsa 2. 然后将本地公钥拷贝到服务器 ssh-copy-id root@IP 注意 非 22端口 同样增加 -p参数 简单两步，以后就不用再输入密码了。
+然后在服务器上找一个地方存放我们的git相关的东西，其实就是配置一个钩子
+1 git init --bare 你的文件夹名称 bare 的作用是创建一个裸仓库，我个人觉得这个目录就是我们以往的.git文件夹。
+"><meta name="keywords" content='hexo, 自动化部署'>
+  <meta itemprop="name" content="实战自动化部署hexo记录">
+  <meta itemprop="description" content="难受，两周前把自己的服务器换成自己弄得docker以后，就一直在折腾自己的博客，先是放弃了自己写的博客，换到typecho，然后在换到wordpress，最后换到了 hexo。
+先说说放弃自己博客的原因，因为自己是在不想在模板上花费太多的心思，其实后台我很满意的，毕竟自己写的，功能足够自己用就好了。
+再说说 typecho和 wordpress，前者轻量，但是可能因为我用的稳定版的的原因，有一些小问题，还懒得去弄，就放弃了。wordpress呢，太重了，太繁杂了。也弃了，其实我就是想要一个写字的地方，简简单单就好，不需要太多的东西，纠结了一圈之后，就用hexo把。
+我是这么做的，配置原文什么的我本地有一份，github上我存了一份，这样多台电脑也可以同步了。然后网站部署在了阿里云上面。
+下面就说说操作步骤。
+hexo 的安装配置以及主题相关我就不多说了，官方文档好得很，我就所说我的部署部分
+首先，先看服务器部分，我们首先配置 ssh 的自动登录，这样以后自己管理以及 hexo d 的时候也会很省事
+1 2 3 4 5 1. 在本机生成SSH密钥 ssh-keygen -t rsa 2. 然后将本地公钥拷贝到服务器 ssh-copy-id root@IP 注意 非 22端口 同样增加 -p参数 简单两步，以后就不用再输入密码了。
+然后在服务器上找一个地方存放我们的git相关的东西，其实就是配置一个钩子
+1 git init --bare 你的文件夹名称 bare 的作用是创建一个裸仓库，我个人觉得这个目录就是我们以往的.git文件夹。">
+  <meta itemprop="datePublished" content="2019-03-28T11:16:03+00:00">
+  <meta itemprop="dateModified" content="2019-03-28T11:16:03+00:00">
+  <meta itemprop="wordCount" content="110">
+  <meta itemprop="keywords" content="Hexo,自动化部署"><meta property="og:url" content="http://localhost:1313/posts/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="实战自动化部署hexo记录">
+  <meta property="og:description" content="难受，两周前把自己的服务器换成自己弄得docker以后，就一直在折腾自己的博客，先是放弃了自己写的博客，换到typecho，然后在换到wordpress，最后换到了 hexo。
+先说说放弃自己博客的原因，因为自己是在不想在模板上花费太多的心思，其实后台我很满意的，毕竟自己写的，功能足够自己用就好了。
+再说说 typecho和 wordpress，前者轻量，但是可能因为我用的稳定版的的原因，有一些小问题，还懒得去弄，就放弃了。wordpress呢，太重了，太繁杂了。也弃了，其实我就是想要一个写字的地方，简简单单就好，不需要太多的东西，纠结了一圈之后，就用hexo把。
+我是这么做的，配置原文什么的我本地有一份，github上我存了一份，这样多台电脑也可以同步了。然后网站部署在了阿里云上面。
+下面就说说操作步骤。
+hexo 的安装配置以及主题相关我就不多说了，官方文档好得很，我就所说我的部署部分
+首先，先看服务器部分，我们首先配置 ssh 的自动登录，这样以后自己管理以及 hexo d 的时候也会很省事
+1 2 3 4 5 1. 在本机生成SSH密钥 ssh-keygen -t rsa 2. 然后将本地公钥拷贝到服务器 ssh-copy-id root@IP 注意 非 22端口 同样增加 -p参数 简单两步，以后就不用再输入密码了。
+然后在服务器上找一个地方存放我们的git相关的东西，其实就是配置一个钩子
+1 git init --bare 你的文件夹名称 bare 的作用是创建一个裸仓库，我个人觉得这个目录就是我们以往的.git文件夹。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2019-03-28T11:16:03+00:00">
+    <meta property="article:modified_time" content="2019-03-28T11:16:03+00:00">
+    <meta property="article:tag" content="Hexo">
+    <meta property="article:tag" content="自动化部署">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="实战自动化部署hexo记录">
+  <meta name="twitter:description" content="难受，两周前把自己的服务器换成自己弄得docker以后，就一直在折腾自己的博客，先是放弃了自己写的博客，换到typecho，然后在换到wordpress，最后换到了 hexo。
+先说说放弃自己博客的原因，因为自己是在不想在模板上花费太多的心思，其实后台我很满意的，毕竟自己写的，功能足够自己用就好了。
+再说说 typecho和 wordpress，前者轻量，但是可能因为我用的稳定版的的原因，有一些小问题，还懒得去弄，就放弃了。wordpress呢，太重了，太繁杂了。也弃了，其实我就是想要一个写字的地方，简简单单就好，不需要太多的东西，纠结了一圈之后，就用hexo把。
+我是这么做的，配置原文什么的我本地有一份，github上我存了一份，这样多台电脑也可以同步了。然后网站部署在了阿里云上面。
+下面就说说操作步骤。
+hexo 的安装配置以及主题相关我就不多说了，官方文档好得很，我就所说我的部署部分
+首先，先看服务器部分，我们首先配置 ssh 的自动登录，这样以后自己管理以及 hexo d 的时候也会很省事
+1 2 3 4 5 1. 在本机生成SSH密钥 ssh-keygen -t rsa 2. 然后将本地公钥拷贝到服务器 ssh-copy-id root@IP 注意 非 22端口 同样增加 -p参数 简单两步，以后就不用再输入密码了。
+然后在服务器上找一个地方存放我们的git相关的东西，其实就是配置一个钩子
+1 git init --bare 你的文件夹名称 bare 的作用是创建一个裸仓库，我个人觉得这个目录就是我们以往的.git文件夹。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95/" title="实战自动化部署hexo记录 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/march-23-2019-gongwangfu-houhai/" title="2019年03月23日 恭王府后海" /><link rel="next" type="text/html" href="http://localhost:1313/posts/after-reading-the-code-farmers/" title="《码农翻身》读后感" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95/index.md" title="实战自动化部署hexo记录 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "实战自动化部署hexo记录",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95\/"
+    },"genre": "posts","keywords": "hexo, 自动化部署","wordcount":  110 ,
+    "url": "http:\/\/localhost:1313\/posts\/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95\/","datePublished": "2019-03-28T11:16:03+00:00","dateModified": "2019-03-28T11:16:03+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>实战自动化部署hexo记录</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%8A%80%E5%B7%A7/" class="post-category" title="分类 - 技巧"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 技巧</a></span></div><div class="post-meta-line"><span title="发布于 2019-03-28 11:16:03"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2019-03-28">2019-03-28</time></span>&nbsp;<span title="110 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 200 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>难受，两周前把自己的服务器换成自己弄得docker以后，就一直在折腾自己的博客，先是放弃了自己写的博客，换到typecho，然后在换到wordpress，最后换到了 hexo。</p>
+<p>先说说放弃自己博客的原因，因为自己是在不想在模板上花费太多的心思，其实后台我很满意的，毕竟自己写的，功能足够自己用就好了。</p>
+<p>再说说 typecho和 wordpress，前者轻量，但是可能因为我用的稳定版的的原因，有一些小问题，还懒得去弄，就放弃了。wordpress呢，太重了，太繁杂了。也弃了，其实我就是想要一个写字的地方，简简单单就好，不需要太多的东西，纠结了一圈之后，就用hexo把。</p>
+<p>我是这么做的，配置原文什么的我本地有一份，github上我存了一份，这样多台电脑也可以同步了。然后网站部署在了阿里云上面。</p>
+<p>下面就说说操作步骤。</p>
+<p>hexo 的安装配置以及主题相关我就不多说了，官方文档好得很，我就所说我的部署部分</p>
+<p>首先，先看服务器部分，我们首先配置 ssh 的自动登录，这样以后自己管理以及 <code>hexo d</code> 的时候也会很省事</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">1. 在本机生成SSH密钥
+</span></span><span class="line"><span class="cl">ssh-keygen -t rsa
+</span></span><span class="line"><span class="cl">2. 然后将本地公钥拷贝到服务器
+</span></span><span class="line"><span class="cl">ssh-copy-id root@IP
+</span></span><span class="line"><span class="cl">注意 非 22端口 同样增加 -p参数</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>简单两步，以后就不用再输入密码了。</p>
+<p>然后在服务器上找一个地方存放我们的git相关的东西，其实就是配置一个钩子</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">git init --bare 你的文件夹名称</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>bare</code> 的作用是创建一个裸仓库，我个人觉得这个目录就是我们以往的<code>.git</code>文件夹。</p>
+<p>然后我们进入这个目录，进入 <code>hooks</code> 文件夹,执行</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">vi post-receive</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这个就是编辑我们的钩子，这个钩子就是收到推送的时候我们的操作。然后我们编辑这个文件</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#! /bin/sh
+</span></span></span><span class="line"><span class="cl">git --work-tree<span class="o">=</span>/home/docker-nmp/www/blog_hexo<span class="o">(</span>真正存放我们网页的地方<span class="o">)</span> --git-dir<span class="o">=</span>/root/blog.git<span class="o">(</span>这个就是我们上一步创建的git bare 文件夹<span class="o">)</span> checkout -f</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>第一行就是表示是个<code>sh</code>文件，这么说可能不准确，我们姑且这么认为。 然后 <code>work-tree</code> 表示需要 <code>clone</code> 的地方， <code>git-dir</code> 是指我们的git配置的位置， <code>checkout</code> 就不说了, <code>-f</code> 就是强制的意思，忽略本地修改。</p>
+<p>然后执行</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"> chmod +x post-receive</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>把这个文件标记为可执行的，这里不要忘记</p>
+<p>这些都弄好后，一定要保证<code>work-tree</code>是存在的，毕竟 git 又不帮我们创建文件夹。如果不存在，也会提示我们成功。这个很坑.</p>
+<p>服务器这边就搞定了</p>
+<p>现在开始修改本地文件, 我们编辑根目录的<code>_config.yml</code> 文件。</p>
+<p>找到 <code>deploy</code>, 如下</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">deploy:
+</span></span><span class="line"><span class="cl">  type: git
+</span></span><span class="line"><span class="cl">  repo: 你的用户名@你的ip:就是上面你设置的git bare 目录</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>到这，全部搞定可以收工了，注意 用户名需要注意权限问题防止没权限写不进文件夹。</p>
+<p>然后我们执行 <code>hexo g; hexo d</code> 不出意外相关的文件夹就会有我们的文章了，这时候我们把 <code>nginx</code> 设置好，博客就可以访问咯，收工</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2019-03-28 11:16:03">更新于 2019-03-28&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/%e5%ae%9e%e6%88%98%e9%83%a8%e7%bd%b2hexo%e8%ae%b0%e5%bd%95.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95/" data-title="实战自动化部署hexo记录" data-hashtags="hexo,自动化部署"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95/" data-hashtag="hexo"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2hexo%E8%AE%B0%E5%BD%95/" data-title="实战自动化部署hexo记录"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/hexo/" class="post-tag" title="标签 - Hexo">Hexo</a><a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2/" class="post-tag" title="标签 - 自动化部署">自动化部署</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/march-23-2019-gongwangfu-houhai/" class="post-nav-item" rel="prev" title="2019年03月23日 恭王府后海"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>2019年03月23日 恭王府后海</a><a href="/posts/after-reading-the-code-farmers/" class="post-nav-item" rel="next" title="《码农翻身》读后感">《码农翻身》读后感<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/45e31870bc5b40ac7c06825c84026f4b.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

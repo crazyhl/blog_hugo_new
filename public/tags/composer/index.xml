@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Composer - 标签 - Miracle Hao</title>
+    <link>http://localhost:1313/tags/composer/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 08 Nov 2019 09:30:58 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/composer/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>说说 php 文件的加载</title>
+      <link>http://localhost:1313/posts/talk-about-the-loading-of-php-files/</link>
+      <pubDate>Fri, 08 Nov 2019 09:30:58 +0000</pubDate>
+      <guid>http://localhost:1313/posts/talk-about-the-loading-of-php-files/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;从-get_include_path-开始&#34;&gt;&lt;span&gt;从 &lt;code&gt;get_include_path&lt;/code&gt; 开始&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e4%bb%8e-get_include_path-%e5%bc%80%e5%a7%8b&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;&amp;lt;?php&#xA;$path = get_include_path();&#xA;var_dump($path);&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;输出&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>composer 源码小记录</title>
+      <link>http://localhost:1313/posts/composer-source-code-record/</link>
+      <pubDate>Tue, 20 Mar 2018 07:24:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/composer-source-code-record/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;p&gt;话说在住院的时候，想起来了以前看过的一个帖子有说在加载 psr4 的时候记录的 namespace 的长度是用来替换路径用的。&lt;/p&gt;&#xA;&lt;p&gt;但是在今天中午去看加载源码的时候发现已经没有这个替换了。于是赶紧翻看 github 上面的改动记录，发现已经不使用那种方式了，而是采用截取的方式去获取文件名什么的。然后路径就直接使用现存的了。&lt;/p&gt;&#xA;&lt;p&gt;代码如下图&lt;/p&gt;&#xA;&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#39;https://www.cimple.ink/images/2018/03/20/cdd27610e187292157e7744e6ac0d034.png&#39; alt=&#34;图片alt&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;估计等在过一段那个 namespace 的长度也可以不用了，但是看改动记录，还是存在，静待观察&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

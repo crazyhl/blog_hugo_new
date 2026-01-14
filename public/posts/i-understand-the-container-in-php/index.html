@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>我所理解PHP中的container - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="
+又用了一次老图片，这个图片我个人真的炒鸡喜欢呢。
+说正事吧，10天前，我开始着手写自己的php框架，目前仅仅把路由和mvc中的vc实现了出来，说实话写框架真的不是那么简单的事情，需要考虑的东西要比平时写逻辑多得多。也可能是我考虑的太多，就是那些有的没的很容易中断我的思路，而且总想用上最新的东西，让自己的框架看起来高达上一些，所以最先想实现出来的就是这个container了。框架也许会中断一阵，然后从小的组建弄起，先准备弄一个pdo的封装，然后这个pdo的封装就成为我框架重的m了。
+好吧，又跑偏了，继续说container，以前弄java的时候ssh框架就多次提到了ico啊di啊什么的，也许是当时自己的知识不够吧，仅仅是那么用而已，具体为什么却没有去考究，做开发3年多了，现在我也算是理解了。下面就说说我们为什么需要一个container作为全局容器呢。就是为了ioc/di。
+那么ioc/di是什么呢，这两个其实是一个意思，就是什么控制反转，依赖注入，这两个词描述的是一个事情，只不过是从不同的方向说的而已。以前我们在开发的时候需要一个什么东西，构造好，传递进去，为什么不说在类里面初始化呢，这也是解耦嘛。现在为什么要依赖注入呢，早年的php框架各自为政没有太多的需求，现在psr标准出来了，composer有了很多的组件让我们来使用，标准就越来越凸显了，大家的选择就有很多，我们在各种标准接口上实现自己的类，就可以无缝替换了。也许有朋友会说。上面的方式也ok啊，改个代码就行了，但是不得不说的是这是极度危险的，当有一处忘记改动了，就会有很大的问题。所以，有一个容器统一管理我们的各种组件就是很重要的了。然后我们修改config中的相关项就可以了，这样就会很安全。
+好吧，上面就是我的理解，没有一个代码，真的不愿意贴代码啊。
+btw，美好的周六这么过去了，没写代码，现在写点吧，开始弄pdo
+"><meta name="keywords" content='IOC, DI, Container'>
+  <meta itemprop="name" content="我所理解PHP中的container">
+  <meta itemprop="description" content="又用了一次老图片，这个图片我个人真的炒鸡喜欢呢。
+说正事吧，10天前，我开始着手写自己的php框架，目前仅仅把路由和mvc中的vc实现了出来，说实话写框架真的不是那么简单的事情，需要考虑的东西要比平时写逻辑多得多。也可能是我考虑的太多，就是那些有的没的很容易中断我的思路，而且总想用上最新的东西，让自己的框架看起来高达上一些，所以最先想实现出来的就是这个container了。框架也许会中断一阵，然后从小的组建弄起，先准备弄一个pdo的封装，然后这个pdo的封装就成为我框架重的m了。
+好吧，又跑偏了，继续说container，以前弄java的时候ssh框架就多次提到了ico啊di啊什么的，也许是当时自己的知识不够吧，仅仅是那么用而已，具体为什么却没有去考究，做开发3年多了，现在我也算是理解了。下面就说说我们为什么需要一个container作为全局容器呢。就是为了ioc/di。
+那么ioc/di是什么呢，这两个其实是一个意思，就是什么控制反转，依赖注入，这两个词描述的是一个事情，只不过是从不同的方向说的而已。以前我们在开发的时候需要一个什么东西，构造好，传递进去，为什么不说在类里面初始化呢，这也是解耦嘛。现在为什么要依赖注入呢，早年的php框架各自为政没有太多的需求，现在psr标准出来了，composer有了很多的组件让我们来使用，标准就越来越凸显了，大家的选择就有很多，我们在各种标准接口上实现自己的类，就可以无缝替换了。也许有朋友会说。上面的方式也ok啊，改个代码就行了，但是不得不说的是这是极度危险的，当有一处忘记改动了，就会有很大的问题。所以，有一个容器统一管理我们的各种组件就是很重要的了。然后我们修改config中的相关项就可以了，这样就会很安全。
+好吧，上面就是我的理解，没有一个代码，真的不愿意贴代码啊。
+btw，美好的周六这么过去了，没写代码，现在写点吧，开始弄pdo">
+  <meta itemprop="datePublished" content="2016-12-02T21:22:00+00:00">
+  <meta itemprop="dateModified" content="2016-12-02T21:22:00+00:00">
+  <meta itemprop="wordCount" content="6">
+  <meta itemprop="keywords" content="IOC,DI,Container"><meta property="og:url" content="http://localhost:1313/posts/i-understand-the-container-in-php/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="我所理解PHP中的container">
+  <meta property="og:description" content="又用了一次老图片，这个图片我个人真的炒鸡喜欢呢。
+说正事吧，10天前，我开始着手写自己的php框架，目前仅仅把路由和mvc中的vc实现了出来，说实话写框架真的不是那么简单的事情，需要考虑的东西要比平时写逻辑多得多。也可能是我考虑的太多，就是那些有的没的很容易中断我的思路，而且总想用上最新的东西，让自己的框架看起来高达上一些，所以最先想实现出来的就是这个container了。框架也许会中断一阵，然后从小的组建弄起，先准备弄一个pdo的封装，然后这个pdo的封装就成为我框架重的m了。
+好吧，又跑偏了，继续说container，以前弄java的时候ssh框架就多次提到了ico啊di啊什么的，也许是当时自己的知识不够吧，仅仅是那么用而已，具体为什么却没有去考究，做开发3年多了，现在我也算是理解了。下面就说说我们为什么需要一个container作为全局容器呢。就是为了ioc/di。
+那么ioc/di是什么呢，这两个其实是一个意思，就是什么控制反转，依赖注入，这两个词描述的是一个事情，只不过是从不同的方向说的而已。以前我们在开发的时候需要一个什么东西，构造好，传递进去，为什么不说在类里面初始化呢，这也是解耦嘛。现在为什么要依赖注入呢，早年的php框架各自为政没有太多的需求，现在psr标准出来了，composer有了很多的组件让我们来使用，标准就越来越凸显了，大家的选择就有很多，我们在各种标准接口上实现自己的类，就可以无缝替换了。也许有朋友会说。上面的方式也ok啊，改个代码就行了，但是不得不说的是这是极度危险的，当有一处忘记改动了，就会有很大的问题。所以，有一个容器统一管理我们的各种组件就是很重要的了。然后我们修改config中的相关项就可以了，这样就会很安全。
+好吧，上面就是我的理解，没有一个代码，真的不愿意贴代码啊。
+btw，美好的周六这么过去了，没写代码，现在写点吧，开始弄pdo">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2016-12-02T21:22:00+00:00">
+    <meta property="article:modified_time" content="2016-12-02T21:22:00+00:00">
+    <meta property="article:tag" content="IOC">
+    <meta property="article:tag" content="DI">
+    <meta property="article:tag" content="Container">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="我所理解PHP中的container">
+  <meta name="twitter:description" content="又用了一次老图片，这个图片我个人真的炒鸡喜欢呢。
+说正事吧，10天前，我开始着手写自己的php框架，目前仅仅把路由和mvc中的vc实现了出来，说实话写框架真的不是那么简单的事情，需要考虑的东西要比平时写逻辑多得多。也可能是我考虑的太多，就是那些有的没的很容易中断我的思路，而且总想用上最新的东西，让自己的框架看起来高达上一些，所以最先想实现出来的就是这个container了。框架也许会中断一阵，然后从小的组建弄起，先准备弄一个pdo的封装，然后这个pdo的封装就成为我框架重的m了。
+好吧，又跑偏了，继续说container，以前弄java的时候ssh框架就多次提到了ico啊di啊什么的，也许是当时自己的知识不够吧，仅仅是那么用而已，具体为什么却没有去考究，做开发3年多了，现在我也算是理解了。下面就说说我们为什么需要一个container作为全局容器呢。就是为了ioc/di。
+那么ioc/di是什么呢，这两个其实是一个意思，就是什么控制反转，依赖注入，这两个词描述的是一个事情，只不过是从不同的方向说的而已。以前我们在开发的时候需要一个什么东西，构造好，传递进去，为什么不说在类里面初始化呢，这也是解耦嘛。现在为什么要依赖注入呢，早年的php框架各自为政没有太多的需求，现在psr标准出来了，composer有了很多的组件让我们来使用，标准就越来越凸显了，大家的选择就有很多，我们在各种标准接口上实现自己的类，就可以无缝替换了。也许有朋友会说。上面的方式也ok啊，改个代码就行了，但是不得不说的是这是极度危险的，当有一处忘记改动了，就会有很大的问题。所以，有一个容器统一管理我们的各种组件就是很重要的了。然后我们修改config中的相关项就可以了，这样就会很安全。
+好吧，上面就是我的理解，没有一个代码，真的不愿意贴代码啊。
+btw，美好的周六这么过去了，没写代码，现在写点吧，开始弄pdo">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/i-understand-the-container-in-php/" title="我所理解PHP中的container - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/add-a-corner-to-the-page/" title="在网页上增加角标" /><link rel="next" type="text/html" href="http://localhost:1313/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/" title="从权限控制到合理分解系统的思考" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/i-understand-the-container-in-php/index.md" title="我所理解PHP中的container - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "我所理解PHP中的container",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/i-understand-the-container-in-php\/"
+    },"genre": "posts","keywords": "IOC, DI, Container","wordcount":  6 ,
+    "url": "http:\/\/localhost:1313\/posts\/i-understand-the-container-in-php\/","datePublished": "2016-12-02T21:22:00+00:00","dateModified": "2016-12-02T21:22:00+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>我所理解PHP中的container</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2016-12-02 21:22:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2016-12-02">2016-12-02</time></span>&nbsp;<span title="6 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p><img loading="lazy" src='https://www.cimple.ink/images/2019/03/06/0664506a46a7649adc31545165d08f41.jpg' alt="图片alt"></p>
+<p>又用了一次老图片，这个图片我个人真的炒鸡喜欢呢。</p>
+<p>说正事吧，10天前，我开始着手写自己的php框架，目前仅仅把路由和mvc中的vc实现了出来，说实话写框架真的不是那么简单的事情，需要考虑的东西要比平时写逻辑多得多。也可能是我考虑的太多，就是那些有的没的很容易中断我的思路，而且总想用上最新的东西，让自己的框架看起来高达上一些，所以最先想实现出来的就是这个container了。框架也许会中断一阵，然后从小的组建弄起，先准备弄一个pdo的封装，然后这个pdo的封装就成为我框架重的m了。</p>
+<p>好吧，又跑偏了，继续说container，以前弄java的时候ssh框架就多次提到了ico啊di啊什么的，也许是当时自己的知识不够吧，仅仅是那么用而已，具体为什么却没有去考究，做开发3年多了，现在我也算是理解了。下面就说说我们为什么需要一个container作为全局容器呢。就是为了ioc/di。</p>
+<p>那么ioc/di是什么呢，这两个其实是一个意思，就是什么控制反转，依赖注入，这两个词描述的是一个事情，只不过是从不同的方向说的而已。以前我们在开发的时候需要一个什么东西，构造好，传递进去，为什么不说在类里面初始化呢，这也是解耦嘛。现在为什么要依赖注入呢，早年的php框架各自为政没有太多的需求，现在psr标准出来了，composer有了很多的组件让我们来使用，标准就越来越凸显了，大家的选择就有很多，我们在各种标准接口上实现自己的类，就可以无缝替换了。也许有朋友会说。上面的方式也ok啊，改个代码就行了，但是不得不说的是这是极度危险的，当有一处忘记改动了，就会有很大的问题。所以，有一个容器统一管理我们的各种组件就是很重要的了。然后我们修改config中的相关项就可以了，这样就会很安全。</p>
+<p>好吧，上面就是我的理解，没有一个代码，真的不愿意贴代码啊。</p>
+<p>btw，美好的周六这么过去了，没写代码，现在写点吧，开始弄pdo</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2016-12-02 21:22:00">更新于 2016-12-02&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/i-understand-the-container-in-php/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/%e6%88%91%e6%89%80%e7%90%86%e8%a7%a3PHP%e4%b8%ad%e7%9a%84container.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/i-understand-the-container-in-php/" data-title="我所理解PHP中的container" data-hashtags="IOC,DI,Container"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/i-understand-the-container-in-php/" data-hashtag="IOC"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/i-understand-the-container-in-php/" data-title="我所理解PHP中的container"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/ioc/" class="post-tag" title="标签 - IOC">IOC</a><a href="/tags/di/" class="post-tag" title="标签 - DI">DI</a><a href="/tags/container/" class="post-tag" title="标签 - Container">Container</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/add-a-corner-to-the-page/" class="post-nav-item" rel="prev" title="在网页上增加角标"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>在网页上增加角标</a><a href="/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/" class="post-nav-item" rel="next" title="从权限控制到合理分解系统的思考">从权限控制到合理分解系统的思考<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/fe6d29a36234e842a33f589a65b5cfbd.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

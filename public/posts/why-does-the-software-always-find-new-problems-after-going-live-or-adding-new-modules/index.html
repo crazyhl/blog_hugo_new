@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>为什么软件在上线后或者添加新模块后总会发现新问题 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="问题 最近我司上线了一个新的模块，这个模块相当于是以前的模块的扩展。原始系统已经跑了三四年，且经过数次的迭代，始终很平稳的运行。 新模块上线后，原始的数据部分其实没有问题，出现问题的是新模块的一些操作会跟老模块的一些操作产生冲突，导致了问题的出现。 并且我最近在反思的时候，也发现了一些情况，明明在设计之初也规划好了一些测试用例。这些用例也覆盖的比较全面，但是有时候上线后，就会发生一些意想不到的问题。
+">
+  <meta itemprop="name" content="为什么软件在上线后或者添加新模块后总会发现新问题">
+  <meta itemprop="description" content="问题 最近我司上线了一个新的模块，这个模块相当于是以前的模块的扩展。原始系统已经跑了三四年，且经过数次的迭代，始终很平稳的运行。 新模块上线后，原始的数据部分其实没有问题，出现问题的是新模块的一些操作会跟老模块的一些操作产生冲突，导致了问题的出现。 并且我最近在反思的时候，也发现了一些情况，明明在设计之初也规划好了一些测试用例。这些用例也覆盖的比较全面，但是有时候上线后，就会发生一些意想不到的问题。">
+  <meta itemprop="datePublished" content="2024-11-23T21:09:28+08:00">
+  <meta itemprop="dateModified" content="2024-11-23T21:09:28+08:00">
+  <meta itemprop="wordCount" content="44"><meta property="og:url" content="http://localhost:1313/posts/why-does-the-software-always-find-new-problems-after-going-live-or-adding-new-modules/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="为什么软件在上线后或者添加新模块后总会发现新问题">
+  <meta property="og:description" content="问题 最近我司上线了一个新的模块，这个模块相当于是以前的模块的扩展。原始系统已经跑了三四年，且经过数次的迭代，始终很平稳的运行。 新模块上线后，原始的数据部分其实没有问题，出现问题的是新模块的一些操作会跟老模块的一些操作产生冲突，导致了问题的出现。 并且我最近在反思的时候，也发现了一些情况，明明在设计之初也规划好了一些测试用例。这些用例也覆盖的比较全面，但是有时候上线后，就会发生一些意想不到的问题。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-11-23T21:09:28+08:00">
+    <meta property="article:modified_time" content="2024-11-23T21:09:28+08:00">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="为什么软件在上线后或者添加新模块后总会发现新问题">
+  <meta name="twitter:description" content="问题 最近我司上线了一个新的模块，这个模块相当于是以前的模块的扩展。原始系统已经跑了三四年，且经过数次的迭代，始终很平稳的运行。 新模块上线后，原始的数据部分其实没有问题，出现问题的是新模块的一些操作会跟老模块的一些操作产生冲突，导致了问题的出现。 并且我最近在反思的时候，也发现了一些情况，明明在设计之初也规划好了一些测试用例。这些用例也覆盖的比较全面，但是有时候上线后，就会发生一些意想不到的问题。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/why-does-the-software-always-find-new-problems-after-going-live-or-adding-new-modules/" title="为什么软件在上线后或者添加新模块后总会发现新问题 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/from-software-development-to-ai-i-finally-think-of-makeup/" title="从软件开发到 AI 绘图 最后我居然联系到了美妆" /><link rel="next" type="text/html" href="http://localhost:1313/posts/laravel-modules-note/" title="2024 年 12 月 1 日 Laravel Modules 使用小记" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/why-does-the-software-always-find-new-problems-after-going-live-or-adding-new-modules/index.md" title="为什么软件在上线后或者添加新模块后总会发现新问题 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "为什么软件在上线后或者添加新模块后总会发现新问题",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/why-does-the-software-always-find-new-problems-after-going-live-or-adding-new-modules\/"
+    },"genre": "posts","wordcount":  44 ,
+    "url": "http:\/\/localhost:1313\/posts\/why-does-the-software-always-find-new-problems-after-going-live-or-adding-new-modules\/","datePublished": "2024-11-23T21:09:28+08:00","dateModified": "2024-11-23T21:09:28+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>为什么软件在上线后或者添加新模块后总会发现新问题</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span></div><div class="post-meta-line"><span title="发布于 2024-11-23 21:09:28"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-11-23">2024-11-23</time></span>&nbsp;<span title="44 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#问题">问题</a></li>
+    <li><a href="#ai-给的答案">AI 给的答案</a></li>
+    <li><a href="#思考">思考</a></li>
+    <li><a href="#接下来该如何解决问题">接下来该如何解决问题</a></li>
+    <li><a href="#标题的问题解决了吗">标题的问题解决了吗？</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 class="heading-element" id="问题"><span>问题</span>
+  <a href="#%e9%97%ae%e9%a2%98" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>最近我司上线了一个新的模块，这个模块相当于是以前的模块的扩展。原始系统已经跑了三四年，且经过数次的迭代，始终很平稳的运行。
+新模块上线后，原始的数据部分其实没有问题，出现问题的是新模块的一些操作会跟老模块的一些操作产生冲突，导致了问题的出现。
+并且我最近在反思的时候，也发现了一些情况，明明在设计之初也规划好了一些测试用例。这些用例也覆盖的比较全面，但是有时候上线后，就会发生一些意想不到的问题。</p>
+<p>那么这是什么情况造成的呢？</p>
+<h2 class="heading-element" id="ai-给的答案"><span>AI 给的答案</span>
+  <a href="#ai-%e7%bb%99%e7%9a%84%e7%ad%94%e6%a1%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>这是一个在软件开发中常见的现象，背后有多方面的原因。以下是一些可能的解释：</p>
+<ol>
+<li>局限的视角和经验
+当时的知识和经验限制：在初始设计阶段，团队的理解和知识是基于当时的业务需求和技术能力的，无法完全预测未来的变化或复杂性。
+未覆盖的使用场景：讨论时往往基于已知的需求和假设，但软件实际使用时可能会暴露出未预料的场景。</li>
+<li>需求变化和扩展
+业务需求的演变：随着时间推移，业务需求可能会发生变化，导致设计中原本不起眼的决策变得重要甚至成为障碍。
+新增模块的交互影响：每个新模块的加入都会增加系统的复杂性，可能会揭示设计中的不足。</li>
+<li>设计的权衡和折中
+初期的简化决策：为了快速推进项目，团队可能会选择权衡简化设计，而这些简化在初期是合理的，但随着规模扩大，可能成为问题。
+技术债务的积累：有些问题在设计时可能已经被注意到了，但被认为影响不大或留待后续解决，结果在后期暴露得更明显。</li>
+<li>缺乏全局视角
+局部优化问题：设计阶段可能偏重于解决局部问题，而忽略了系统整体的耦合性或扩展性问题。
+沟通的盲区：讨论时可能因为团队角色、经验背景不同，导致部分潜在问题未被充分关注。</li>
+<li>开发过程的动态性
+实现与设计偏差：实际开发过程中可能因为时间或资源限制，导致最终实现和原设计不一致，从而埋下问题。
+运行时复杂性暴露：许多问题只有在运行时才能显现，尤其是性能、并发、错误处理等方面。</li>
+<li>心理因素和认知偏差
+“隧道视野”现象：团队讨论时可能过于专注某些方面，而忽略了其他潜在问题。
+“正常化偏差”：设计时的小问题被视为无关紧要，甚至被默认接受，直到后期扩展中才发现它们变成了大问题。</li>
+</ol>
+<h2 class="heading-element" id="思考"><span>思考</span>
+  <a href="#%e6%80%9d%e8%80%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>上面的第一点是无法避免的，随着技术的积累升级和业务的不断变迁，肯定会出现未被覆盖的场景。
+第二点，确实是存在的情况，当复杂性增加的时候有时候确实会出现考虑不到的情况
+第三点，这个我们还好，不会为了某些东西而去做简化，只不会会受制于当先系统的真实情况做一些取舍。注意：取舍不是简化
+第四点，这个确实很明显，尤其是当沉浸某些东西时间长了以后，虽然思考问题会有深度，但是视角的局限性会大大减少
+第五点，这个我们也几乎不会存在，当实现的时候发现会有差异的时候，都会及时的进行讨论。
+第六点，这个也还好，我觉得更得力于我们的密切沟通和相关的取舍，尤其在取舍方面，我们都会进行很详细的记录。方便在后续的时候进行复盘。</p>
+<h2 class="heading-element" id="接下来该如何解决问题"><span>接下来该如何解决问题</span>
+  <a href="#%e6%8e%a5%e4%b8%8b%e6%9d%a5%e8%af%a5%e5%a6%82%e4%bd%95%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>可以看到，上面的六点中，我们会通过沟通和多轮讨论规避掉一些问题，但是一些问题还是显而易见的，比如第四点和第二点。这个是无论如何也无法避免的，那么在后续的开发中我应该如何解决呢？</p>
+<ol>
+<li>项目在不变增大的情况下，交合的部分会越来越多，边界也越来越不清晰。我觉得这时候就应该重新审视整个项目，重新划分编辑，对于交合比较大的模块，进行再次整理。做好更细节的记录</li>
+<li>关于视角方面，就应该对新人进行更多的培训。我们自己则要不断的在更多的视角中观察问题，其实解决问题很简单，但是要注意解决一个点以后不会引发更多的问题，或者说对使用这部分修改的其他位置保持安全，不会有其他问题的产生。</li>
+<li>及时更新测试用例。保持用例的使用能跟随当前版本。</li>
+</ol>
+<h2 class="heading-element" id="标题的问题解决了吗"><span>标题的问题解决了吗？</span>
+  <a href="#%e6%a0%87%e9%a2%98%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e5%86%b3%e4%ba%86%e5%90%97" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>貌似还是没有，一个新模块引入后，为什么会跟老系统处理平稳的数据产生冲突？由于没法举实例说明，我只能简单的复盘一下。
+其实两侧的逻辑都没问题。老的系统把数据处理完以后其实是可以的，但是新的系统来了以后，由于对老系统保持了自信，就开始疯狂的分析问题。最终得到了一个哭笑不得的问题，老系统整体来看逻辑没问题，运行没问题，但是会有一些隐形的问题。才使这次的问题暴露了出来。隐形问题是什么呢？就是状态其实并没有到达最终态，处于中间态的数据，在使用上没有任何问题。所以当时测试也没有发现这问题，另一个问题就是状态的判定，这是一个很复杂的系统，有一部分的数据的状态，跟一些中间态的状态其实是一致的，所以造成了我们把中间态的数据当做了最终态。</p>
+<p>那么来未来开发的时候，就要重新整理这部分的状态，做更细节的分离。每一步的状态保持唯一。其实也不算是中间态和最终态的问题，怎么说呢，就是没做好分离。模糊了一些状态。</p>
+<h2 class="heading-element" id="总结"><span>总结</span>
+  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>在如何解决问题的段落，我分析了一些情况和解决方案。后续总结就是加强评审和总结经验，把模糊的东西清晰起来。不要放过任何一出不清晰的地方。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2024-11-23 21:09:28">更新于 2024-11-23&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/why-does-the-software-always-find-new-problems-after-going-live-or-adding-new-modules/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/2024%20%e5%b9%b4%2011%20%e6%9c%88%2023%20%e6%97%a5%e4%b8%ba%e4%bb%80%e4%b9%88%e8%bd%af%e4%bb%b6%e5%9c%a8%e4%b8%8a%e7%ba%bf%e5%90%8e%e6%88%96%e8%80%85%e6%b7%bb%e5%8a%a0%e6%96%b0%e6%a8%a1%e5%9d%97%e5%90%8e%e6%80%bb%e4%bc%9a%e5%8f%91%e7%8e%b0%e6%96%b0%e9%97%ae%e9%a2%98.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/why-does-the-software-always-find-new-problems-after-going-live-or-adding-new-modules/" data-title="为什么软件在上线后或者添加新模块后总会发现新问题"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/why-does-the-software-always-find-new-problems-after-going-live-or-adding-new-modules/"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/why-does-the-software-always-find-new-problems-after-going-live-or-adding-new-modules/" data-title="为什么软件在上线后或者添加新模块后总会发现新问题"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/from-software-development-to-ai-i-finally-think-of-makeup/" class="post-nav-item" rel="prev" title="从软件开发到 AI 绘图 最后我居然联系到了美妆"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>从软件开发到 AI 绘图 最后我居然联系到了美妆</a><a href="/posts/laravel-modules-note/" class="post-nav-item" rel="next" title="2024 年 12 月 1 日 Laravel Modules 使用小记">2024 年 12 月 1 日 Laravel Modules 使用小记<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog">
+      <div class="toc">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#问题">问题</a></li>
+    <li><a href="#ai-给的答案">AI 给的答案</a></li>
+    <li><a href="#思考">思考</a></li>
+    <li><a href="#接下来该如何解决问题">接下来该如何解决问题</a></li>
+    <li><a href="#标题的问题解决了吗">标题的问题解决了吗？</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div><div id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" role="button" aria-label="目录"><i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/816d7aa78c8d252c116812a16a3188f2.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

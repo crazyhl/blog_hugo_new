@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Npm 以及 Webpack 的一些笔记 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="先说点没用的，工作了3年了，相关东西也都接触一些，但是前端呢，还是按照以前的套路，做页面模版，写 js，写 css，但是现代相关的东西却没有深入的了解过。这不好啊，趁着现在有些空闲时间就想学习一下vue，但是 vue-cli 是使用 webpack 打包的，所以第一步就应该学习一下 webpack 趁机了解一下现代前端的开发思想。
+本篇笔记总结自: http://www.jianshu.com/p/42e11515c10f，并针对笔记当日的最新版本对配置项进行响应的配置
+####安装 webpack
+1 2 3 4 //全局安装 npm install -g webpack //安装到你的项目目录 npm install --save-dev webpack ####编译项目
+1 webpack {entry file/入口文件} {destination for bundled file/存放bundle.js的地方} ####不适用繁杂的命令，使用配置文件编译项目
+"><meta name="keywords" content='webpack, npm, node, 模块化'>
+  <meta itemprop="name" content="npm 以及 webpack 的一些笔记">
+  <meta itemprop="description" content="先说点没用的，工作了3年了，相关东西也都接触一些，但是前端呢，还是按照以前的套路，做页面模版，写 js，写 css，但是现代相关的东西却没有深入的了解过。这不好啊，趁着现在有些空闲时间就想学习一下vue，但是 vue-cli 是使用 webpack 打包的，所以第一步就应该学习一下 webpack 趁机了解一下现代前端的开发思想。
+本篇笔记总结自: http://www.jianshu.com/p/42e11515c10f，并针对笔记当日的最新版本对配置项进行响应的配置
+####安装 webpack
+1 2 3 4 //全局安装 npm install -g webpack //安装到你的项目目录 npm install --save-dev webpack ####编译项目
+1 webpack {entry file/入口文件} {destination for bundled file/存放bundle.js的地方} ####不适用繁杂的命令，使用配置文件编译项目">
+  <meta itemprop="datePublished" content="2017-03-01T11:34:00+00:00">
+  <meta itemprop="dateModified" content="2017-03-01T11:34:00+00:00">
+  <meta itemprop="wordCount" content="117">
+  <meta itemprop="keywords" content="Webpack,Npm,Node,模块化"><meta property="og:url" content="http://localhost:1313/posts/npm-and-some-notes-from-webpack/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="npm 以及 webpack 的一些笔记">
+  <meta property="og:description" content="先说点没用的，工作了3年了，相关东西也都接触一些，但是前端呢，还是按照以前的套路，做页面模版，写 js，写 css，但是现代相关的东西却没有深入的了解过。这不好啊，趁着现在有些空闲时间就想学习一下vue，但是 vue-cli 是使用 webpack 打包的，所以第一步就应该学习一下 webpack 趁机了解一下现代前端的开发思想。
+本篇笔记总结自: http://www.jianshu.com/p/42e11515c10f，并针对笔记当日的最新版本对配置项进行响应的配置
+####安装 webpack
+1 2 3 4 //全局安装 npm install -g webpack //安装到你的项目目录 npm install --save-dev webpack ####编译项目
+1 webpack {entry file/入口文件} {destination for bundled file/存放bundle.js的地方} ####不适用繁杂的命令，使用配置文件编译项目">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2017-03-01T11:34:00+00:00">
+    <meta property="article:modified_time" content="2017-03-01T11:34:00+00:00">
+    <meta property="article:tag" content="Webpack">
+    <meta property="article:tag" content="Npm">
+    <meta property="article:tag" content="Node">
+    <meta property="article:tag" content="模块化">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="npm 以及 webpack 的一些笔记">
+  <meta name="twitter:description" content="先说点没用的，工作了3年了，相关东西也都接触一些，但是前端呢，还是按照以前的套路，做页面模版，写 js，写 css，但是现代相关的东西却没有深入的了解过。这不好啊，趁着现在有些空闲时间就想学习一下vue，但是 vue-cli 是使用 webpack 打包的，所以第一步就应该学习一下 webpack 趁机了解一下现代前端的开发思想。
+本篇笔记总结自: http://www.jianshu.com/p/42e11515c10f，并针对笔记当日的最新版本对配置项进行响应的配置
+####安装 webpack
+1 2 3 4 //全局安装 npm install -g webpack //安装到你的项目目录 npm install --save-dev webpack ####编译项目
+1 webpack {entry file/入口文件} {destination for bundled file/存放bundle.js的地方} ####不适用繁杂的命令，使用配置文件编译项目">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/npm-and-some-notes-from-webpack/" title="npm 以及 webpack 的一些笔记 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/" title="从权限控制到合理分解系统的思考" /><link rel="next" type="text/html" href="http://localhost:1313/posts/php-dependency-injection-note-from-the-container-pimple/" title="Php依赖注入容器Pimple的笔记" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/npm-and-some-notes-from-webpack/index.md" title="npm 以及 webpack 的一些笔记 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "npm 以及 webpack 的一些笔记",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/npm-and-some-notes-from-webpack\/"
+    },"genre": "posts","keywords": "webpack, npm, node, 模块化","wordcount":  117 ,
+    "url": "http:\/\/localhost:1313\/posts\/npm-and-some-notes-from-webpack\/","datePublished": "2017-03-01T11:34:00+00:00","dateModified": "2017-03-01T11:34:00+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Npm 以及 Webpack 的一些笔记</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%89%8D%E7%AB%AF/" class="post-category" title="分类 - 前端"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 前端</a></span></div><div class="post-meta-line"><span title="发布于 2017-03-01 11:34:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2017-03-01">2017-03-01</time></span>&nbsp;<span title="117 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 200 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p>先说点没用的，工作了3年了，相关东西也都接触一些，但是前端呢，还是按照以前的套路，做页面模版，写 js，写 css，但是现代相关的东西却没有深入的了解过。这不好啊，趁着现在有些空闲时间就想学习一下vue，但是 vue-cli 是使用 webpack 打包的，所以第一步就应该学习一下 webpack 趁机了解一下现代前端的开发思想。</p>
+<p>本篇笔记总结自:  <a href="http://www.jianshu.com/p/42e11515c10f" target="_blank" rel="external nofollow noopener noreferrer">http://www.jianshu.com/p/42e11515c10f</a>，并针对笔记当日的最新版本对配置项进行响应的配置</p>
+<p>####安装 webpack</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-shell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">//全局安装
+</span></span><span class="line"><span class="cl">npm install -g webpack
+</span></span><span class="line"><span class="cl">//安装到你的项目目录
+</span></span><span class="line"><span class="cl">npm install --save-dev webpack</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>####编译项目</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-shell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">webpack <span class="o">{</span>entry file/入口文件<span class="o">}</span> <span class="o">{</span>destination <span class="k">for</span> bundled file/存放bundle.js的地方<span class="o">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>####不适用繁杂的命令，使用配置文件编译项目</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-shell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">module.exports <span class="o">=</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  entry:  __dirname + <span class="s2">&#34;/app/main.js&#34;</span>,//已多次提及的唯一入口文件
+</span></span><span class="line"><span class="cl">  output: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    path: __dirname + <span class="s2">&#34;/public&#34;</span>,//打包后的文件存放的地方
+</span></span><span class="line"><span class="cl">    filename: <span class="s2">&#34;bundle.js&#34;</span>//打包后输出文件的文件名
+</span></span><span class="line"><span class="cl">  <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>####使用 node 的 package.json 设置 script 来执行编译</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-shell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">// 在package.json 的 scripts 里面添加下面的命令
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;build&#34;</span>: <span class="s2">&#34;webpack&#34;</span>
+</span></span><span class="line"><span class="cl">// 前面的是指在利用 npm run 后面执行的命令，问号后面的是真正执行的命令</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>####使用webpack构建本地服务器</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-shell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">// 在 webpck.config.js 加入下面的配置文件
+</span></span><span class="line"><span class="cl">devServer: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    contentBase: <span class="s2">&#34;./public&#34;</span>,//本地服务器所加载的页面所在的目录
+</span></span><span class="line"><span class="cl">    // colors: true,//终端中输出结果为彩色 新版本貌似不需要这个了
+</span></span><span class="line"><span class="cl">    historyApiFallback: true,//不跳转
+</span></span><span class="line"><span class="cl">    inline: true//实时刷新
+</span></span><span class="line"><span class="cl">  <span class="o">}</span> </span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>大概就这么多吧，Loader 和 Bable 没有总结，毕竟这两个扩展性比较强，需要用的时候，在查或者看文档就 ok 了，基本上 webpack 也就了解了一下了。</p>
+<p>嘿呀，好久没有写东西了，很爽啊，正在逐步找回节奏，慢慢笔记会更好的。加油</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2017-03-01 11:34:00">更新于 2017-03-01&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/npm-and-some-notes-from-webpack/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/npm-%e4%bb%a5%e5%8f%8a-webpack-%e7%9a%84%e4%b8%80%e4%ba%9b%e7%ac%94%e8%ae%b0.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/npm-and-some-notes-from-webpack/" data-title="Npm 以及 Webpack 的一些笔记" data-hashtags="webpack,npm,node,模块化"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/npm-and-some-notes-from-webpack/" data-hashtag="webpack"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/npm-and-some-notes-from-webpack/" data-title="Npm 以及 Webpack 的一些笔记"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/webpack/" class="post-tag" title="标签 - Webpack">Webpack</a><a href="/tags/npm/" class="post-tag" title="标签 - Npm">Npm</a><a href="/tags/node/" class="post-tag" title="标签 - Node">Node</a><a href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" class="post-tag" title="标签 - 模块化">模块化</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/thoughts-from-permission-control-to-reasonable-decomposition-system/" class="post-nav-item" rel="prev" title="从权限控制到合理分解系统的思考"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>从权限控制到合理分解系统的思考</a><a href="/posts/php-dependency-injection-note-from-the-container-pimple/" class="post-nav-item" rel="next" title="Php依赖注入容器Pimple的笔记">Php依赖注入容器Pimple的笔记<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/9380538a794e3c8259958dc339eb7ffd.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

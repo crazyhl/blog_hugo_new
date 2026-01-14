@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>基于 Laravel Livewire 的表单构造器 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="前言 从 10 月末研究完以后 livewire，就开始着手弄这个表单构造器了，其实前两年我的重心都在 go 上面，只不过今年下半年发现自己有些迷茫，于是就继续回到 php 的怀抱，其实做这个表单构造器是很久很久的计划了，一直想用 go 来实现，但是如果用 go 始终没有发现合适的模板，要么就做到最终版 - 前后端分离。
+"><meta name="keywords" content='laravel, livewire'>
+  <meta itemprop="name" content="基于 Laravel Livewire 的表单构造器">
+  <meta itemprop="description" content="前言 从 10 月末研究完以后 livewire，就开始着手弄这个表单构造器了，其实前两年我的重心都在 go 上面，只不过今年下半年发现自己有些迷茫，于是就继续回到 php 的怀抱，其实做这个表单构造器是很久很久的计划了，一直想用 go 来实现，但是如果用 go 始终没有发现合适的模板，要么就做到最终版 - 前后端分离。">
+  <meta itemprop="datePublished" content="2023-01-19T17:07:31+08:00">
+  <meta itemprop="dateModified" content="2023-01-19T17:07:31+08:00">
+  <meta itemprop="wordCount" content="76">
+  <meta itemprop="keywords" content="Laravel,Livewire"><meta property="og:url" content="http://localhost:1313/posts/laravel-livewire-based-form-builder/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="基于 Laravel Livewire 的表单构造器">
+  <meta property="og:description" content="前言 从 10 月末研究完以后 livewire，就开始着手弄这个表单构造器了，其实前两年我的重心都在 go 上面，只不过今年下半年发现自己有些迷茫，于是就继续回到 php 的怀抱，其实做这个表单构造器是很久很久的计划了，一直想用 go 来实现，但是如果用 go 始终没有发现合适的模板，要么就做到最终版 - 前后端分离。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-01-19T17:07:31+08:00">
+    <meta property="article:modified_time" content="2023-01-19T17:07:31+08:00">
+    <meta property="article:tag" content="Laravel">
+    <meta property="article:tag" content="Livewire">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="基于 Laravel Livewire 的表单构造器">
+  <meta name="twitter:description" content="前言 从 10 月末研究完以后 livewire，就开始着手弄这个表单构造器了，其实前两年我的重心都在 go 上面，只不过今年下半年发现自己有些迷茫，于是就继续回到 php 的怀抱，其实做这个表单构造器是很久很久的计划了，一直想用 go 来实现，但是如果用 go 始终没有发现合适的模板，要么就做到最终版 - 前后端分离。">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/laravel-livewire-based-form-builder/" title="基于 Laravel Livewire 的表单构造器 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/new-year-message-to-myself/" title="给自己的新年寄语" /><link rel="next" type="text/html" href="http://localhost:1313/posts/laravel-livewire-form-builder-update/" title="初步做完表单构造器后我又对它做了什么" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/laravel-livewire-based-form-builder/index.md" title="基于 Laravel Livewire 的表单构造器 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "基于 Laravel Livewire 的表单构造器",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/laravel-livewire-based-form-builder\/"
+    },"genre": "posts","keywords": "laravel, livewire","wordcount":  76 ,
+    "url": "http:\/\/localhost:1313\/posts\/laravel-livewire-based-form-builder\/","datePublished": "2023-01-19T17:07:31+08:00","dateModified": "2023-01-19T17:07:31+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>基于 Laravel Livewire 的表单构造器</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2023-01-19 17:07:31"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2023-01-19">2023-01-19</time></span>&nbsp;<span title="76 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#我都做了什么">我都做了什么</a></li>
+    <li><a href="#接下来要做什么">接下来要做什么</a></li>
+    <li><a href="#祝福">祝福</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 class="heading-element" id="前言"><span>前言</span>
+  <a href="#%e5%89%8d%e8%a8%80" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>从 10 月末研究完以后 <code>livewire</code>，就开始着手弄这个表单构造器了，其实前两年我的重心都在 <code>go</code> 上面，只不过今年下半年发现自己有些迷茫，于是就继续回到 <code>php</code> 的怀抱，其实做这个表单构造器是很久很久的计划了，一直想用 <code>go</code> 来实现，但是如果用 <code>go</code> 始终没有发现合适的模板，要么就做到最终版 - 前后端分离。</p>
+<p>但是那是不实际的，由于我是想投入到真实环境中使用的，如果直接做到最后，不仅脱离实际，也不好进行。</p>
+<p>既然回到了 <code>php</code> 就可以大展拳脚了，用 <code>laravel</code> 最初我想像 <code>laravel-admin</code> 和 <code>dcat</code> 那样来弄的，后来朋友给我推荐了 <code>livewire</code> 不得不说这个东西惊艳到了我。于是就有了前面的学习和使用笔记。</p>
+<p>最终，在相关东西都准备好以后再 2022年11月7号 提交了第一次代码。</p>
+<h2 class="heading-element" id="我都做了什么"><span>我都做了什么</span>
+  <a href="#%e6%88%91%e9%83%bd%e5%81%9a%e4%ba%86%e4%bb%80%e4%b9%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>最开始的半个月都是在进行各种实验，后来逐步开始写一些组件。中途还经历了从 <code>tailwindcss</code> 切换到 <code>adminlte</code> 的惨痛经历（恕我直言，如果我前度能力强一些，tailwind 会比 adminlte 使用起来让我更舒服）。</p>
+<p>那么到今天，我觉得我可以给自己一个相对满意的交代了。我实现了下面的基础组件</p>
+<ul>
+<li>TextInput (这个可以支持切换 input 的type，达到各种类型的支持)</li>
+<li>PasswordInput</li>
+<li>CheckList</li>
+<li>CheckBox 支持 toogle 开关样式</li>
+<li>Radio</li>
+<li>SelectMulti</li>
+<li>Select</li>
+<li>Textarea</li>
+<li>WangEditor</li>
+<li>FileUploader</li>
+</ul>
+<p>几乎把常用的组件都覆盖了。</p>
+<h2 class="heading-element" id="接下来要做什么"><span>接下来要做什么</span>
+  <a href="#%e6%8e%a5%e4%b8%8b%e6%9d%a5%e8%a6%81%e5%81%9a%e4%bb%80%e4%b9%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>准备用这个 form 来实现一个我计划需求的小项目，来测试是否可行，死皮赖脸找朋友在生产环境试用这个东西。</p>
+<p>继续打磨组件，目标就是看齐 <code>laravel-admin</code> 、 <code>dcat</code> 和 <code>filamentphp</code>。</p>
+<p>其实这个项目最初就是参照 <code>filamentphp</code> 的结构在做的，目前是第一个产品 form，后续会做 table。最后就是一个完整的后端项目了。</p>
+<h2 class="heading-element" id="祝福"><span>祝福</span>
+  <a href="#%e7%a5%9d%e7%a6%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>最后祝福大家新年快乐，年后在继续搞了。</p>
+<p>好多年没这么开心了，踏踏实实写代码，比停留在理论上要让我踏实的多。</p>
+<p>规划项目也得到了长足的提升，notion真是个好东西。</p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2023-01-19 17:07:31">更新于 2023-01-19&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/laravel-livewire-based-form-builder/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/2023%e5%b9%b401%e6%9c%8819%e6%97%a5%20%e5%8f%af%e4%bb%a5%e5%85%ac%e5%b8%83%e6%88%91%e6%9c%80%e8%bf%91%e5%81%9a%e7%9a%84%e4%b8%9c%e8%a5%bf%e4%ba%86%20-%20%e4%b8%80%e4%b8%aa%e5%9f%ba%e4%ba%8e%20laravel%20livewire%20%e7%9a%84%e8%a1%a8%e5%8d%95%e6%9e%84%e9%80%a0%e5%99%a8.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/laravel-livewire-based-form-builder/" data-title="基于 Laravel Livewire 的表单构造器" data-hashtags="laravel,livewire"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/laravel-livewire-based-form-builder/" data-hashtag="laravel"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/laravel-livewire-based-form-builder/" data-title="基于 Laravel Livewire 的表单构造器"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/laravel/" class="post-tag" title="标签 - Laravel">Laravel</a><a href="/tags/livewire/" class="post-tag" title="标签 - Livewire">Livewire</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/new-year-message-to-myself/" class="post-nav-item" rel="prev" title="给自己的新年寄语"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>给自己的新年寄语</a><a href="/posts/laravel-livewire-form-builder-update/" class="post-nav-item" rel="next" title="初步做完表单构造器后我又对它做了什么">初步做完表单构造器后我又对它做了什么<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog">
+      <div class="toc">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#我都做了什么">我都做了什么</a></li>
+    <li><a href="#接下来要做什么">接下来要做什么</a></li>
+    <li><a href="#祝福">祝福</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div><div id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" role="button" aria-label="目录"><i class="fa-solid fa-bars fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/51bf73da16afdac2641f4f6a97b85d73.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

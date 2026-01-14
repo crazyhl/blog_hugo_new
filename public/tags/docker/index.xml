@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker - 标签 - Miracle Hao</title>
+    <link>http://localhost:1313/tags/docker/</link>
+    <description>Miracle Hao</description>
+    <generator>Hugo 0.154.5 &amp; FixIt v0.4.2-20260114101213-fdfd7721</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 15 Feb 2020 11:57:35 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从构建镜像到发布到docker Hub</title>
+      <link>http://localhost:1313/posts/build-dockerfile-and-publish-to-docker-hub/</link>
+      <pubDate>Sat, 15 Feb 2020 11:57:35 +0800</pubDate>
+      <guid>http://localhost:1313/posts/build-dockerfile-and-publish-to-docker-hub/</guid>
+      <category domain="http://localhost:1313/categories/docker/">Docker</category>
+      <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前言&#34;&gt;&lt;span&gt;前言&lt;/span&gt;&#xA;  &lt;a href=&#34;#%e5%89%8d%e8%a8%80&#34; class=&#34;heading-mark&#34;&gt;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xA;  &lt;/a&gt;&#xA;&lt;/h2&gt;&lt;p&gt;以前自己弄过 &lt;code&gt;docker&lt;/code&gt; 镜像，不过一直都是自己在用。最近公司有了一些新的需求，正好自己可以完整的跑一边从构建镜像到发布。然后在阿里云那边弄 &lt;code&gt;k8s&lt;/code&gt; 和任务啥的。阿里云那边下篇再说，我们这边就先弄镜像相关。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>docker-comopse 使用小总结</title>
+      <link>http://localhost:1313/posts/dockercomopse-uses-a-small-summary/</link>
+      <pubDate>Sat, 13 Apr 2019 16:35:19 +0000</pubDate>
+      <guid>http://localhost:1313/posts/dockercomopse-uses-a-small-summary/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E5%B7%A7/">技巧</category>
+      <description>&lt;p&gt;说句题外话，东西还得多用才能越来越明白啊。话说，今天休息在家用windows 的台式机弄docker，用来配置在台式机的开发环境，这次在台式机的配置目的就是在本地主机尽量不装任何开发用的相关软件，比如nginx、mysql、php这种。对了，这还得说句题外话，如果啥都不装，我连博客都写不了，不过为了台式机的干净，我依然选择在打开笔记本写博客。&lt;/p&gt;&#xA;&lt;p&gt;本地学习到的知识，主要原因是我我加了个node镜像用来编译vue写的代码。原本我都是使用&lt;code&gt;dokcer-compose up --build&lt;/code&gt; 这种方式编译加启动容器的，以前看 &lt;code&gt;laradock&lt;/code&gt; 文档的时候里面就没用过&lt;code&gt;docker-compose --build&lt;/code&gt; 编译加启动的方案，而是用 &lt;code&gt;docker-compose build xxx&lt;/code&gt; 然后在&lt;code&gt;docker-compose up xxx&lt;/code&gt; 这种方式，我以前始终不解，今天终于明白了，如果用 &lt;code&gt;dokcer-compose up --build&lt;/code&gt; 这种方式操作，会由于 &lt;code&gt;node&lt;/code&gt; 镜像不会持久化启动而反复报错，如果先 &lt;code&gt;build&lt;/code&gt; 在根据需要 &lt;code&gt;up&lt;/code&gt; 就不会造成这种问题了。当然如果配置了&lt;code&gt;restart: &amp;quot;no&amp;quot;&lt;/code&gt;之后也就启动一次然后退出，也并没有什么关系，不过为我还是选择遵从&lt;code&gt;laradock&lt;/code&gt;的方案，毕竟那么多人的经验还是值得参考的。&lt;/p&gt;&#xA;&lt;p&gt;当我们需要使用&lt;code&gt;node&lt;/code&gt; 的时候，就是用 &lt;code&gt;docker-compose run --rm node bash&lt;/code&gt; 这种就可以进入到容器内部了，加&lt;code&gt;--rm&lt;/code&gt;的原因是启动以后我们还得手工销毁，加了以后当我们退出的时候就自动销毁&lt;code&gt;container&lt;/code&gt;了，而且我们在&lt;code&gt;compose&lt;/code&gt; 的文件中配置了 &lt;code&gt;node&lt;/code&gt; 的 &lt;code&gt;restart: &amp;quot;no&amp;quot;&lt;/code&gt; 这样当我们停止以后也不会自己在跑起来。&lt;/p&gt;&#xA;&lt;p&gt;最后还得吐槽一下windows 的 crlf会让docker启动失败啊，很难受，把sublime配置为lf之后才解决。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>docker服务器实战部署以及wordpress开启cdn的一些注意点</title>
+      <link>http://localhost:1313/posts/docker-server-combat-deployment-and-wordpress-open-cdn-some-attention-points/</link>
+      <pubDate>Sat, 23 Mar 2019 17:53:44 +0000</pubDate>
+      <guid>http://localhost:1313/posts/docker-server-combat-deployment-and-wordpress-open-cdn-some-attention-points/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E5%B7%A7/">技巧</category>
+      <description>&lt;p&gt;虽然本地docker已经弄完了好几个月了，在最近也在持续的优化中，包括把能配置的部分转移到 &lt;code&gt;env&lt;/code&gt;文件中。&#xA;上周把自己的博客系统废弃了，因为当时写这个系统也仅仅是为了 &lt;code&gt;laravel&lt;/code&gt;的学习而已，用了将近2年，虽然很稳定，但是也有很多不满意的地方，虽然现在换到了 &lt;code&gt;wordpress&lt;/code&gt;也有一些不满意的地方，但是还好插件丰富，周边也很多，可以慢慢改造成自己满意的样子，下面主要就是记录一下这次服务器实战部署的踏坑情况。&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;mysql&lt;/code&gt;如果使用 &lt;code&gt;8&lt;/code&gt;及以上的版本的时候，需要进入 &lt;code&gt;msyql&lt;/code&gt;容器内部，修改一下密码方案，否则数据库连不上&lt;/li&gt;&lt;/li&gt;&#xA;&lt;li&gt;注意代码文件夹写入权限问题，目前 &lt;code&gt;docker&lt;/code&gt;设置的用户是 &lt;code&gt;www&lt;/code&gt;，所有如果不是 &lt;code&gt;www&lt;/code&gt;用户的话，可能会导致无法写入文件的&lt;/li&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;wordpress&lt;/code&gt;开启又拍 &lt;code&gt;cdn&lt;/code&gt;以后样式无法加载，在又拍后台设置 &lt;code&gt;缓存控制-&amp;amp;gt;参数跟随-&amp;amp;gt;全程跟随后&lt;/code&gt;之后就ok了。&lt;/li&gt;&lt;/li&gt;&#xA;&lt;li&gt;目前写代码还是比较习惯 &lt;code&gt;markdown&lt;/code&gt;，所以目前日志都会在印象笔记写好，然后在转换，由于代码高亮方便跟 &lt;code&gt;wordpress&lt;/code&gt;还有点不一致，所以自己写了个简单的转换器。&lt;/li&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;现在还有的小问题就是图片上传了，慢慢在弄一个图片上传工具就ok了。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>laravel passport 用docker测试时候遇到的坑</title>
+      <link>http://localhost:1313/posts/laravel-passport-pits-encountered-when-testing-with-docker/</link>
+      <pubDate>Sun, 23 Sep 2018 13:01:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/laravel-passport-pits-encountered-when-testing-with-docker/</guid>
+      <category domain="http://localhost:1313/categories/php/">PHP</category>
+      <description>&lt;p&gt;最近在学习 laravel &lt;code&gt;psssport&lt;/code&gt; ，可是在本地使用 docker 测试的时候却遇到了一个报错。&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;cURL error 7: Failed to connect to movielaravel.test port 80: Connection refused (see http://curl.haxx.se/libcurl/c/libcurl-errors.html)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;想了很久，一开始以为是内循环了，但是使用 postman 却可以得到正确的结果，后来想到，是不是因为 docker 容器内部无法解析到 我的测试域名呢，搜索了一波，在 docker-compose 文件中配置了 &lt;code&gt;extra_hosts&lt;/code&gt; 问题的到解决，难受，活生生被阻挡了2个小时。&lt;/p&gt;&#xA;&lt;p&gt;在需要内部调用的地方，增加配置，示例如下&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;extra_hosts:&#xA;      - &amp;#34;movielaravel.test:172.28.12.3&amp;#34;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这样，就在docker的内部，做好host的映射了，也就能够正常访问了&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>终于构建了一个自己可用的 docker 了</title>
+      <link>http://localhost:1313/posts/i-finally-built-a-docker-that-can-use-myself/</link>
+      <pubDate>Sat, 01 Jul 2017 12:15:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/i-finally-built-a-docker-that-can-use-myself/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E5%B7%A7/">技巧</category>
+      <description>&lt;p&gt;话说，想学习 docker 很久了，一直以来总是没有时间去实践，其实也不是没有时间，而是一直没有一个好的时机去实践。 这周重做了系统了以后就忘记弄 vagrant 了。然后昨天就想用心的看一下 laravel 的源码，以加深自己的理解。但是发现本地没有 vagrant 环境，正好趁机搞一下 docker 了，于是就搞了起来。&lt;/p&gt;&#xA;&lt;p&gt;主要参考了下面这两篇文章&lt;/p&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://segmentfault.com/a/1190000008833012&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://segmentfault.com/a/1190000008833012&lt;/a&gt;&#xA;&lt;a href=&#34;https://segmentfault.com/a/1190000008822648#articleHeader44&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;https://segmentfault.com/a/1190000008822648#articleHeader44&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;另外再进行 docker 写东西的时候，发现数据库连接不上了，所以查了一下，链接数据库的不用填写 localhost 或者 ip，直接填写 docker 的名字就 ok 了。这样就可以连接上了。&lt;/p&gt;&#xA;&lt;p&gt;还有想说了，不知道咋说了，先学习吧。就这样&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

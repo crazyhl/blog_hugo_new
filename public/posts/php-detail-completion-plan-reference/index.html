@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>PHP 细节补全计划：引用 - Miracle Hao</title><meta name="author" content="">
+<meta name="description" content="
+最近在公司比较忙，以前有空闲的时候没有发现的东西，反而再忙的时候会加深体会。所以就动了心思准备写一个 php 细节补全的系列，不知道能写多少，慢慢来吧，这个就是第一篇了。
+其实，平时我个人觉得再使用引用的时候机会并没有那么多，但是呢，引用这个东西是绝对不可以忽略的。
+引用平时就我个人来说使用的场景有如下几个：
+有批量处理数组数据的时候会使用引用，这样再方法里面就不用在单独返回了，比较省事 再有递归调用的时候也会使用，但是使用的时候需要注意小心踩坑 剩下的貌似就不是很多了，但是这两天看过几个面试题，让我平时没注意的一些东西或者说没有深入考虑的东西，有了更深入的理解。
+先看下面这个题：
+"><meta name="keywords" content='php 细节补全'>
+  <meta itemprop="name" content="PHP 细节补全计划：引用">
+  <meta itemprop="description" content="最近在公司比较忙，以前有空闲的时候没有发现的东西，反而再忙的时候会加深体会。所以就动了心思准备写一个 php 细节补全的系列，不知道能写多少，慢慢来吧，这个就是第一篇了。
+其实，平时我个人觉得再使用引用的时候机会并没有那么多，但是呢，引用这个东西是绝对不可以忽略的。
+引用平时就我个人来说使用的场景有如下几个：
+有批量处理数组数据的时候会使用引用，这样再方法里面就不用在单独返回了，比较省事 再有递归调用的时候也会使用，但是使用的时候需要注意小心踩坑 剩下的貌似就不是很多了，但是这两天看过几个面试题，让我平时没注意的一些东西或者说没有深入考虑的东西，有了更深入的理解。
+先看下面这个题：">
+  <meta itemprop="datePublished" content="2017-09-19T22:50:00+00:00">
+  <meta itemprop="dateModified" content="2017-09-19T22:50:00+00:00">
+  <meta itemprop="wordCount" content="225">
+  <meta itemprop="keywords" content="Php 细节补全"><meta property="og:url" content="http://localhost:1313/posts/php-detail-completion-plan-reference/">
+  <meta property="og:site_name" content="Miracle Hao">
+  <meta property="og:title" content="PHP 细节补全计划：引用">
+  <meta property="og:description" content="最近在公司比较忙，以前有空闲的时候没有发现的东西，反而再忙的时候会加深体会。所以就动了心思准备写一个 php 细节补全的系列，不知道能写多少，慢慢来吧，这个就是第一篇了。
+其实，平时我个人觉得再使用引用的时候机会并没有那么多，但是呢，引用这个东西是绝对不可以忽略的。
+引用平时就我个人来说使用的场景有如下几个：
+有批量处理数组数据的时候会使用引用，这样再方法里面就不用在单独返回了，比较省事 再有递归调用的时候也会使用，但是使用的时候需要注意小心踩坑 剩下的貌似就不是很多了，但是这两天看过几个面试题，让我平时没注意的一些东西或者说没有深入考虑的东西，有了更深入的理解。
+先看下面这个题：">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2017-09-19T22:50:00+00:00">
+    <meta property="article:modified_time" content="2017-09-19T22:50:00+00:00">
+    <meta property="article:tag" content="Php 细节补全">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PHP 细节补全计划：引用">
+  <meta name="twitter:description" content="最近在公司比较忙，以前有空闲的时候没有发现的东西，反而再忙的时候会加深体会。所以就动了心思准备写一个 php 细节补全的系列，不知道能写多少，慢慢来吧，这个就是第一篇了。
+其实，平时我个人觉得再使用引用的时候机会并没有那么多，但是呢，引用这个东西是绝对不可以忽略的。
+引用平时就我个人来说使用的场景有如下几个：
+有批量处理数组数据的时候会使用引用，这样再方法里面就不用在单独返回了，比较省事 再有递归调用的时候也会使用，但是使用的时候需要注意小心踩坑 剩下的貌似就不是很多了，但是这两天看过几个面试题，让我平时没注意的一些东西或者说没有深入考虑的东西，有了更深入的理解。
+先看下面这个题：">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/posts/php-detail-completion-plan-reference/" title="PHP 细节补全计划：引用 - Miracle Hao" /><link rel="prev" type="text/html" href="http://localhost:1313/posts/analysis-of-slim-framework-middleware/" title="Slim Framework中间件的分析" /><link rel="next" type="text/html" href="http://localhost:1313/posts/upgraded-the-blog-successfully/" title="给博客升级成功了" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/posts/php-detail-completion-plan-reference/index.md" title="PHP 细节补全计划：引用 - Miracle Hao"><link rel="stylesheet" href="/css/config.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "PHP 细节补全计划：引用",
+    "inLanguage": "zh-cn",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/php-detail-completion-plan-reference\/"
+    },"genre": "posts","keywords": "php 细节补全","wordcount":  225 ,
+    "url": "http:\/\/localhost:1313\/posts\/php-detail-completion-plan-reference\/","datePublished": "2017-09-19T22:50:00+00:00","dateModified": "2017-09-19T22:50:00+00:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "作者"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" role="button" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="Miracle Hao"><span class="header-title-text">Miracle Hao</span></a><span class="header-subtitle"></span></div>
+      <div class="theme-switch" role="button" aria-label="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></div>
+      <div class="menu-toggle" id="menu-toggle-mobile" role="button" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/archives/"><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item"><a class="menu-link" href="/categories/"><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item"><a class="menu-link" href="/tags/"><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>PHP 细节补全计划：引用</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      Anonymous</span></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/php/" class="post-category" title="分类 - PHP"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> PHP</a></span></div><div class="post-meta-line"><span title="发布于 2017-09-19 22:50:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2017-09-19">2017-09-19</time></span>&nbsp;<span title="225 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="content" id="content"><p><img loading="lazy" src='https://www.cimple.ink/images/2019/03/06/0664506a46a7649adc31545165d08f41.jpg' alt="图片alt"></p>
+<p>最近在公司比较忙，以前有空闲的时候没有发现的东西，反而再忙的时候会加深体会。所以就动了心思准备写一个 php 细节补全的系列，不知道能写多少，慢慢来吧，这个就是第一篇了。</p>
+<p>其实，平时我个人觉得再使用<code>引用</code>的时候机会并没有那么多，但是呢，<code>引用</code>这个东西是绝对不可以忽略的。</p>
+<p>引用平时就我个人来说使用的场景有如下几个：</p>
+<ul>
+<li>有批量处理数组数据的时候会使用引用，这样再方法里面就不用在单独返回了，比较省事</li>
+<li>再有递归调用的时候也会使用，但是使用的时候需要注意小心踩坑</li>
+</ul>
+<p>剩下的貌似就不是很多了，但是这两天看过几个面试题，让我平时没注意的一些东西或者说没有深入考虑的东西，有了更深入的理解。</p>
+<p>先看下面这个题：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 下面的循环执行后数组的结果是多少
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$arr</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span> <span class="p">(</span><span class="nv">$arr</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$value</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$arr</span><span class="p">[</span><span class="nv">$key</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>先不说结果，先说说平时我们没有注意过的 <code>foreach</code>是如何执行的吧：</p>
+<ul>
+<li>首先执行到这里<code>foreach ($arr as $key =&gt; $value)</code> 到这里，系统会从数组里面取出当前的元素，把索引赋值给 <code>$key</code>，把值赋值给<code>value</code>, 如果代码没写<code>$key =&gt; $value</code>，这种形式，而是只有<code>$key</code>就只会把值赋值给<code>$key</code>。</li>
+<li>然后进入循环体，执行循环体的代码</li>
+<li>重新回到 for 那行，然后进入循环体。一直这样下去，直到循环结束</li>
+</ul>
+<p>上面的就是我个人总结的<code>foreach</code>的执行流程。很多时候我们并没有注意在 foreach 那行的 <code>$key</code> 和 <code>$value</code> 赋值的过程，所以再遇到引用问题的时候就毛骨悚然了。</p>
+<p>好了，下面再说说我所理解的引用，引用就是跟随所引用的变量，当修改任何一个变量的值的时候都会同步修改。可能说的很简单，但是刚才我想了一个更复杂的说法，发现很绕，我自己都理解不了，所以，最终还是用这个简单的版本来说明把。再后续的代码说明中，再具体说。</p>
+<p>好了，下面我们就进入上面代码代码一行一行的解释了</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$arr</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span> <span class="p">(</span><span class="nv">$arr</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$value</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$arr</span><span class="p">[</span><span class="nv">$key</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>经过数组的赋值后，我们首先执行到了 <code>foreach ($arr as $key =&gt; $value) {</code> 这行代码，我们首先从数组里面取出第一个元素，然后把第一个元素的索引 0 赋值给 <span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;，&quot; used in math mode [unicodeTextInMathMode] at position 4: key，̲再把这个元素的值 a 赋值给 " style="color:#ff4949">key，再把这个元素的值 a 赋值给 </span>value。
+这样这样代码就执行完毕了，此时数组 <span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;的&quot; used in math mode [unicodeTextInMathMode] at position 5: arr 的̲值还是 abc， " style="color:#ff4949">arr 的值还是 abc， </span>key 的值是 0，$value 的值是 a。</p>
+<p>然后我们执行到了 <code>$value = &amp;$arr[$key];</code> 这行代码，这行代码用到了索引，我们把 <span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;指&quot; used in math mode [unicodeTextInMathMode] at position 7: value 指̲向到了数组的第一个元素。注意，…" style="color:#ff4949">value 指向到了数组的第一个元素。注意，这里其实并不是赋值，而是把 </span>value 指向到了数组第一个元素的位置，虽然我们正常使用可以获取到值，但是实际上并不是一个赋值的操作，可以理解为关联的关系，<span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;和&quot; used in math mode [unicodeTextInMathMode] at position 7: value
+和̲数组的第一个元素关联起来了，当…" style="color:#ff4949">value
+和数组的第一个元素关联起来了，当我们修改 </span>value 的时候数组第一个元素的值也会被同步修改。</p>
+<p>这样循环体的代码也执行完毕了，我们又回到了 <code>foreach ($arr as $key =&gt; $value) {</code> 这行代码中，这时我们从数组中取出了第二个元素，然后把元素的索引 1 赋值给 <span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;，&quot; used in math mode [unicodeTextInMathMode] at position 4: key，̲把数组的值 b 赋值给 " style="color:#ff4949">key，把数组的值 b 赋值给 </span>value。到这依然跟上面一样，但是需要注意的是，此时 <span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;是&quot; used in math mode [unicodeTextInMathMode] at position 7: value 是̲有关联关系的，他跟数组的第一个…" style="color:#ff4949">value 是有关联关系的，他跟数组的第一个元素关联起来了，此时赋值给 </span>value 就会修改关联关系中数组第一个元素的值，所以此时 <span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;的&quot; used in math mode [unicodeTextInMathMode] at position 7: value 的̲值是 b 了，同时数组第一个元…" style="color:#ff4949">value 的值是 b 了，同时数组第一个元素的值也变为了 b。这行代码执行完毕，这时数组的值是 bcc，</span>key 是 1 ，$value 指向的是数组第一个元素 数组第一个元素的值是 b。</p>
+<p>解析来又进入了循环体，又是使用了索引，对了这里注意的是索引跟赋值有些不一样，赋值就是直接改变值了，但是索引操作可以理解为是一个箭头指向了另一个物体。我们把 $value 关联到了数组的第一个元素。</p>
+<p>紧接着有进入了 foreach 这行，此时我们取出了第三个元素，把元素的索引 2 赋值给 <span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;，&quot; used in math mode [unicodeTextInMathMode] at position 4: key，̲然后把数组的值 c 赋值给 " style="color:#ff4949">key，然后把数组的值 c 赋值给 </span>value。不巧了此时 <span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;关&quot; used in math mode [unicodeTextInMathMode] at position 7: value 关̲联了数组的第二个元素，所以此时…" style="color:#ff4949">value 关联了数组的第二个元素，所以此时赋值也会改变数组的第二个元素的值。所以此时数组 </span>arr 的值是 bcc，<span class="katex-error" title="ParseError: KaTeX parse error: LaTeX-incompatible input and strict mode is set to &#x27;error&#x27;: Unicode text character &quot;的&quot; used in math mode [unicodeTextInMathMode] at position 5: key 的̲值是2，" style="color:#ff4949">key 的值是2，</span>value 关联了数组的第二个元素 值是 c</p>
+<p>这是进入循环体，把 $value 关联到了数组的第三个元素。</p>
+<p>注意，这里还有一步，依然会回到 foreach 这行，我们继续从数组取值，发现数组已经没有元素可以获取了，所以退出循环，很多时候我们也会忽略最后这步的，虽然没什么实际上的影响，但是我们也最好要记住这个最后一步。</p>
+<p>好了，乱七八糟的说完了，起码我自己是明白了，希望看到的人也能有所启发，如果又不懂的，只能说抱歉了，评论系统一个接一个的挂了，你们也没地方评论，自己仔细看看引用的文档吧，然后再用笔纸画画可能就明白了呢。</p>
+<p>再来一个题把</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-php"><span class="code-title"><i class="arrow fa-solid fa-chevron-down fa-fw" aria-hidden="true"></i></span><span class="ellipses-btn" aria-label="Show more options" role="button"><i class="fa-solid fa-ellipsis-h fa-fw" aria-hidden="true"></i></span><span class="line-nos-btn" aria-label="切换行号" role="button" title="切换行号"><i class="fa-solid fa-list-ol fa-fw" aria-hidden="true"></i></span><span class="line-wrap-btn" aria-label="切换自动换行" role="button" title="切换自动换行"><i class="fa-solid fa-right-left fa-fw" aria-hidden="true"></i></span><span class="copy-btn" aria-label="复制到剪贴板" role="button" title="复制到剪贴板"><i class="fa-regular fa-clone fa-fw" aria-hidden="true"></i></span></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 下面的循环执行后数组的结果是多少
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$arr</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span> <span class="p">(</span><span class="nv">$arr</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="o">&amp;</span><span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">var_dump</span><span class="p">(</span><span class="nv">$arr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span> <span class="p">(</span><span class="nv">$arr</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">var_dump</span><span class="p">(</span><span class="nv">$arr</span><span class="p">);</span></span></span></code></pre></td></tr></table></div><div class="code-expand-btn" aria-label="展开或折叠代码块" role="button"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></div>
+</div>
+</div><p>这个我就不细说了，大家思考一下，我简单说一下吧，经过第一个循环以后，$value 关联了数组的最后一个元素，那么当执行第二个循环的时候会怎样呢？</p>
+<p>今天就到这吧，感觉很久不写东西，文笔果然不行了啊</p></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2017-09-19 22:50:00">更新于 2017-09-19&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="/posts/php-detail-completion-plan-reference/index.md" title="阅读原始文档" class="link-to-markdown">阅读原始文档</a></span><span><a href="vscode://file//Users/haoliang/blog_new/content/posts/PHP-%e7%bb%86%e8%8a%82%e8%a1%a5%e5%85%a8%e8%ae%a1%e5%88%92%ef%bc%9a%e5%bc%95%e7%94%a8.md" title="在编辑器中打开" target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/posts/php-detail-completion-plan-reference/" data-title="PHP 细节补全计划：引用" data-hashtags="php 细节补全"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/php-detail-completion-plan-reference/" data-hashtag="php 细节补全"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/php-detail-completion-plan-reference/" data-title="PHP 细节补全计划：引用"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/php-%E7%BB%86%E8%8A%82%E8%A1%A5%E5%85%A8/" class="post-tag" title="标签 - Php 细节补全">Php 细节补全</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/posts/analysis-of-slim-framework-middleware/" class="post-nav-item" rel="prev" title="Slim Framework中间件的分析"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Slim Framework中间件的分析</a><a href="/posts/upgraded-the-blog-successfully/" class="post-nav-item" rel="next" title="给博客升级成功了">给博客升级成功了<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.154.5"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.4.2-20260114101213-fdfd7721"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><div class="fixed-button back-to-top animate__faster d-none" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="preload" href="/lib/katex/katex.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/config/4e09a12185b41d5a82e749881e3481fb.js" defer></script><script src="/js/theme.min.js" defer></script></body>
+</html>

@@ -1,0 +1,65 @@
+---
+title: "聊聊 PHP 的 OPcache"
+date: 2021-09-26T09:21:45+08:00
+categories: [php]
+slug: php-opcache
+toc: false
+---
+
+前两天被问到了问题，关于 OPcache 我配置过有多少？当时简单的想了一下，貌似这个东西我没配置过几个，就说了调整了五六个选项。然后又大概说了一下这五六个都调整了什么，我就说了一下缓存时长，跳过文件，内存大小，文件数量什么的。因为自己印象里面貌似能记住的就这几个了，然后对方告诉我 OPcache 有 30 多个可调整选项。说实话，我当时都惊了，这么多!!! 事后回家翻了一下我自己的配置部分，发现我配置的也有十几个了，但是分类呢，也就是我上面说的那几个。所以呢，今天就重新翻了一波文档，并且结合自己的理解，说说自己配置过的部分。以及没有接触的东西。看看能不能也加入到自己的配置中去。
+
+OPcache 文档简介：
+> OPcache 通过将 PHP 脚本预编译的字节码存储到共享内存中来提升 PHP 的性能， 存储预编译字节码的好处就是 省去了每次加载和解析 PHP 脚本的开销。
+
+这是说啥呢，直白点就是空间换时间，把代码预编译并且存储到内存中。节省的时间就是解析 PHP 脚本的时间，但是加载部分虽然也有节省，但是依然还是有加载时间的，不过就是从磁盘换到了内存。另外加载到内存中是占用内存的哟，也就是说单机的处理能力随着缓存的增长会有变小。所以这个内存值的设置要根据实际逐步调整。
+
+另外，关于新增的 preloading，可以看这个文章，我觉得写的挺好的 [https://blog.csdn.net/qmhball/article/details/103503939](https://blog.csdn.net/qmhball/article/details/103503939) 
+
+[https://hdj.me/php74-preload/](https://hdj.me/php74-preload/)
+
+
+好了，配置开始
+
+配置过：
+* `opcache.enable` 开启 OPcache
+* `opcache.memory_consumption` OPcache 的共享内存大小，这个要根据机器情况来调节了，我自己的一个服务设置的512，因为几乎没有多少访问量，以及内存十分充裕，我就设置的很大
+* `opcache.interned_strings_buffer` 专门给字符串预留的空间，我自己的设置是 16
+* `opcache.validate_timestamps` 定期检测脚本更新，开启，除非代码更改频率实在是非常低，然后每次更新重启 fpm。说到这，我想到了聊天的时候，提到的，极致性能。这点我有些不认同，首先要保障安全和稳定，然后在此基础上在逐步提升性能，否则我觉得有些顾此失彼了，就如同 `use_cwd` 这个配置一样，难道每次提交代码的时候 CI 那边还要配置一个检测文件名冲突的服务么？
+* `opcache.revalidate_freq` 检测脚本检测更新周期，我这边设置的是 5。这个主要跟项目的实际有关，要及时更新就设置的低一点，但是不要用默认哦，默认是0。每个请求都检测的。
+* `opcache.save_comments` 缓存注释，如果不用那些依赖注释的注解的话，就关闭把。
+* `opcache.load_comments`  如果禁用，则即使文件中包含注释，也不会加载这些注释内容。已经被移除了。
+* `opcache.blacklist_filename` 不在 opcache 缓存的文件列表文件名
+* `opcache.error_log` OPcache 错误输出路径，默认是 stderr，所以这个还是要保存一下的。
+* `opcache.log_verbosity_level` 输出错误级别，这个看需求调整，我把 warning 也输出了 设置 2。
+* `opcache.file_update_protection` 如果文件的最后修改时间距现在不足此项配置指令所设定的秒数，那么这个文件不会进入到缓存中。 这是为了防止尚未完全修改完毕的文件进入到缓存。 如果你的应用中不存在部分修改文件的情况，把此项设置为 0 可以提高性能。默认值是 2，以前调整过，后来还是用默认值了。
+
+
+看过未配置：
+* `opcache.max_accelerated_files` 默认值已经很大了，我觉得默认值够用。
+* `opcache.use_cwd` 设置工作路径的，避免文件重名冲突，默认开始，还是开着吧，安全第一。
+* `opcache.enable_file_override` 如果启用，则在调用函数 file_exists()， is_file() 以及 is_readable() 的时候， 都会检查操作码缓存，无论文件是否已经被缓存。 如果应用中包含检查 PHP 脚本存在性和可读性的功能，这样可以提升性能。这个是否开启，就看是不是检测代码文件了，如果没有，就用上面的时间检查就ok了。
+* `opcache.max_file_size` 默认缓存全部文件，就没有更改。
+* `opcache.consistency_checks` 不建议在生产环境开启，就没调整过
+* `opcache.force_restart_timeout`
+* `opcache.preferred_memory_model` 自动就好
+* `opcache.mmap_base` windows 下用的，没调整过
+* `opcache.restrict_api` 仅允许路径是以指定字符串开始的 PHP 脚本调用 OPcache API 函数。 默认值为空字符串 ""，表示不做限制。由于没用过 OPcache API，所以这个也没有配置，极致安全下配置上ok。
+* `opcache.huge_code_pages` 新出的，感觉可能会有用，稍后看看
+* `opcache.lockfile_path` 用来存储共享锁文件的绝对路径（仅适用于 *nix 操作系统）。默认 /tmp 挺好。
+* `opcache.file_cache` 配置二级缓存目录并启用二级缓存。 启用二级缓存可以在 SHM 内存满了、服务器重启或者重置 SHM 的时候提高性能。 默认值为空字符串 ""，表示禁用基于文件的缓存。 (需要看看)
+
+
+未配置过:
+* `opcache.enable_cli` 针对 CLI 的缓存
+* `opcache.max_wasted_percentage` 浪费内存的上限，以百分比计。 如果达到此上限，那么 OPcache 将产生重新启动续发事件。没用过，看了一些文章，当内存不足的时候，浪费内存的上限百分比。OPCache的内存管理设计非常简单，快速读写，不释放内存，过期数据置为Wasted。当Wasted内存大于设定值时，自动重启OPCache机制，清空并重新生成缓存。这段文章来自 [http://liuxiaochun.cn/2018/08/php7%E5%8D%87%E7%BA%A7-opcache/](http://liuxiaochun.cn/2018/08/php7%E5%8D%87%E7%BA%A7-opcache/)
+* `opcache.revalidate_path` 
+* `opcache.fast_shutdown` 被移除了
+* `opcache.optimization_level`
+* `opcache.inherited_hack` 7.3 被移除了
+* `opcache.dups_fix`
+* `opcache.force_restart_timeout` 如果缓存处于非激活状态，等待多少秒之后计划重启。 如果超出了设定时间，则 OPcache 模块将杀除持有缓存锁的进程， 并进行重启。默认值是 180，这个还没看过，看说明会啥进程？那看样子可能要测试一波了。
+* `opcache.protect_memory` 内部调试用？
+* `opcache.opt_debug_level` 出于对不同阶段的优化情况进行调试的目的，生成操作码转储。 设置为 0x10000 会在进行优化之前输出编译器编译后的操作码， 设置为 0x20000 会输出优化后的操作码。 有机会看看
+
+
+重新看了一波，自己没看过的，没有很多了，新出的几个配置有机会还是要研究研究的，以后人家如果在问我，我只能说我配置了差不多三分之一，三分之一用的默认值把。
